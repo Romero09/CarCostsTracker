@@ -1,0 +1,14 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+target 'CarCostsTracker' do
+	pod 'Firebase/Core'
+	pod 'Firebase/Auth'
+	pod 'Firebase/Firestore'
+	pod 'Viperit'
+	pod 'Charts'
+	
+	target 'CarCostsTrackerTests' do
+		    inherit! :search_paths
+	end
+end
