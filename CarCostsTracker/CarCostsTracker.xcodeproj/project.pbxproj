@@ -8,11 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		280863869E3892E05FAC908D /* Pods_CarCostsTrackerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9C01295C286551236208E8 /* Pods_CarCostsTrackerTests.framework */; };
+		406D2F6F21635F29009A6586 /* AppModules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406D2F6E21635F29009A6586 /* AppModules.swift */; };
 		4094042E21624B1F00002636 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4094042D21624B1F00002636 /* AppDelegate.swift */; };
 		4094043521624B2000002636 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4094043421624B2000002636 /* Assets.xcassets */; };
 		4094043821624B2000002636 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4094043621624B2000002636 /* LaunchScreen.storyboard */; };
 		4094044321624B2000002636 /* CarCostsTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4094044221624B2000002636 /* CarCostsTrackerTests.swift */; };
 		4094044E21624BF500002636 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4094044D21624BF500002636 /* GoogleService-Info.plist */; };
+		40940456216265F200002636 /* History.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4094044F216265F200002636 /* History.storyboard */; };
+		40940457216265F200002636 /* HistoryDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40940450216265F200002636 /* HistoryDisplayData.swift */; };
+		40940458216265F200002636 /* HistoryPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40940451216265F200002636 /* HistoryPresenter.swift */; };
+		40940459216265F200002636 /* HistoryRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40940452216265F200002636 /* HistoryRouter.swift */; };
+		4094045A216265F200002636 /* HistoryModuleApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40940453216265F200002636 /* HistoryModuleApi.swift */; };
+		4094045B216265F200002636 /* HistoryInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40940454216265F200002636 /* HistoryInteractor.swift */; };
+		4094045C216265F200002636 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40940455216265F200002636 /* HistoryView.swift */; };
 		C9D39AA5E7C49BE4E7E0BD81 /* Pods_CarCostsTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA281969016F34CF2304D64 /* Pods_CarCostsTracker.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +39,7 @@
 		1CA281969016F34CF2304D64 /* Pods_CarCostsTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CarCostsTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2548E44A2F1FBE28849AB0C9 /* Pods-CarCostsTrackerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTrackerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTrackerTests/Pods-CarCostsTrackerTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D9C01295C286551236208E8 /* Pods_CarCostsTrackerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CarCostsTrackerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		406D2F6E21635F29009A6586 /* AppModules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModules.swift; sourceTree = "<group>"; };
 		4094042A21624B1F00002636 /* CarCostsTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CarCostsTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4094042D21624B1F00002636 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4094043421624B2000002636 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -40,6 +49,13 @@
 		4094044221624B2000002636 /* CarCostsTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarCostsTrackerTests.swift; sourceTree = "<group>"; };
 		4094044421624B2000002636 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4094044D21624BF500002636 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4094044F216265F200002636 /* History.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = History.storyboard; sourceTree = "<group>"; };
+		40940450216265F200002636 /* HistoryDisplayData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDisplayData.swift; sourceTree = "<group>"; };
+		40940451216265F200002636 /* HistoryPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPresenter.swift; sourceTree = "<group>"; };
+		40940452216265F200002636 /* HistoryRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRouter.swift; sourceTree = "<group>"; };
+		40940453216265F200002636 /* HistoryModuleApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModuleApi.swift; sourceTree = "<group>"; };
+		40940454216265F200002636 /* HistoryInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryInteractor.swift; sourceTree = "<group>"; };
+		40940455216265F200002636 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		53EBE42513C43B80F7DEEB60 /* Pods-CarCostsTrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTrackerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTrackerTests/Pods-CarCostsTrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F92AC99AFDE02AA40EE6A7E4 /* Pods-CarCostsTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTracker/Pods-CarCostsTracker.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -64,10 +80,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		406D2F6C21635EEF009A6586 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				40940452216265F200002636 /* HistoryRouter.swift */,
+				4094044F216265F200002636 /* History.storyboard */,
+				40940455216265F200002636 /* HistoryView.swift */,
+				40940450216265F200002636 /* HistoryDisplayData.swift */,
+				40940451216265F200002636 /* HistoryPresenter.swift */,
+				40940453216265F200002636 /* HistoryModuleApi.swift */,
+				40940454216265F200002636 /* HistoryInteractor.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		406D2F6D21635F10009A6586 /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				4094043621624B2000002636 /* LaunchScreen.storyboard */,
+				4094043921624B2000002636 /* Info.plist */,
+				4094044D21624BF500002636 /* GoogleService-Info.plist */,
+				4094042D21624B1F00002636 /* AppDelegate.swift */,
+				4094043421624B2000002636 /* Assets.xcassets */,
+			);
+			path = Supporting;
+			sourceTree = "<group>";
+		};
 		4094042121624B1F00002636 = {
 			isa = PBXGroup;
 			children = (
-				4094044D21624BF500002636 /* GoogleService-Info.plist */,
 				4094042C21624B1F00002636 /* CarCostsTracker */,
 				4094044121624B2000002636 /* CarCostsTrackerTests */,
 				4094042B21624B1F00002636 /* Products */,
@@ -88,10 +129,9 @@
 		4094042C21624B1F00002636 /* CarCostsTracker */ = {
 			isa = PBXGroup;
 			children = (
-				4094042D21624B1F00002636 /* AppDelegate.swift */,
-				4094043421624B2000002636 /* Assets.xcassets */,
-				4094043621624B2000002636 /* LaunchScreen.storyboard */,
-				4094043921624B2000002636 /* Info.plist */,
+				406D2F6C21635EEF009A6586 /* History */,
+				406D2F6D21635F10009A6586 /* Supporting */,
+				406D2F6E21635F29009A6586 /* AppModules.swift */,
 			);
 			path = CarCostsTracker;
 			sourceTree = "<group>";
@@ -212,6 +252,7 @@
 				4094043821624B2000002636 /* LaunchScreen.storyboard in Resources */,
 				4094043521624B2000002636 /* Assets.xcassets in Resources */,
 				4094044E21624BF500002636 /* GoogleService-Info.plist in Resources */,
+				40940456216265F200002636 /* History.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,7 +349,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4094045C216265F200002636 /* HistoryView.swift in Sources */,
 				4094042E21624B1F00002636 /* AppDelegate.swift in Sources */,
+				40940459216265F200002636 /* HistoryRouter.swift in Sources */,
+				4094045A216265F200002636 /* HistoryModuleApi.swift in Sources */,
+				4094045B216265F200002636 /* HistoryInteractor.swift in Sources */,
+				406D2F6F21635F29009A6586 /* AppModules.swift in Sources */,
+				40940458216265F200002636 /* HistoryPresenter.swift in Sources */,
+				40940457216265F200002636 /* HistoryDisplayData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,8 +513,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9G5T356VCK;
-				INFOPLIST_FILE = CarCostsTracker/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				INFOPLIST_FILE = "$(SRCROOT)/CarCostsTracker/Supporting/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ilyas-karshigabekov.CarCostsTracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
@@ -481,8 +532,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9G5T356VCK;
-				INFOPLIST_FILE = CarCostsTracker/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				INFOPLIST_FILE = "$(SRCROOT)/CarCostsTracker/Supporting/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ilyas-karshigabekov.CarCostsTracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
@@ -499,7 +553,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9G5T356VCK;
 				INFOPLIST_FILE = CarCostsTrackerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ilyas-karshigabekov.CarCostsTrackerTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
@@ -517,7 +575,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9G5T356VCK;
 				INFOPLIST_FILE = CarCostsTrackerTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ilyas-karshigabekov.CarCostsTrackerTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
