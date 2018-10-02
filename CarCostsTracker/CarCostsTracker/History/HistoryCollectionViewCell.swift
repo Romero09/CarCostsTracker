@@ -18,11 +18,36 @@ class HistoryCollectionViewCell: UICollectionViewCell {
     
     func fillCellData(historyData: HistoryCellData){
         
-        costsLogo.image = historyData.costImage
-        costsType.text = historyData.costType
+        costsLogo.image = historyData.costType.image()
+        costsType.text = historyData.costType.name()
         milage.text = historyData.mileage
         date.text = historyData.costDate
         detailedDescription.text = historyData.description
         
     }
+}
+
+fileprivate extension CostType {
+    func name() -> String {
+        switch self {
+        case .fuel:
+            return "Fuel"
+        case .repair:
+            return "Repair"
+        case .other:
+            return "Other"
+        }
+    }
+    
+    func image() -> UIImage? {
+        switch self {
+        case .fuel:
+            return UIImage(imageLiteralResourceName: "fuel_icon")		
+        case .repair:
+            return UIImage(imageLiteralResourceName: "repair_icon")
+        case .other:
+            return UIImage(imageLiteralResourceName: "other_icon")
+        }
+    }
+
 }

@@ -26,7 +26,7 @@ extension HistoryView: HistoryViewApi, UICollectionViewDelegate {
 extension HistoryView: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return 15
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -34,8 +34,6 @@ extension HistoryView: UICollectionViewDataSource{
         
         return hisotryCell
     }
-    
-    
 }
 
 // MARK: - HistoryView Viper Components API
