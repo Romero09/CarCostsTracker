@@ -15,6 +15,8 @@ final class HistoryPresenter: Presenter {
 
 // MARK: - HistoryPresenter API
 extension HistoryPresenter: HistoryPresenterApi {
+    
+    
 }
 
 // MARK: - History Viper Components

@@ -13,3 +13,41 @@ import Viperit
 final class HistoryDisplayData: DisplayData {
     
 }
+
+struct historyCellData{
+    let costType: String
+    let costImage: UIImage
+    let editImage: UIImage
+    let costDate: String
+    let mileage: String
+    let description: String
+}
+
+enum Costs{
+    case fuel
+    case repair
+    case other
+    
+    func costsName() -> String {
+        switch self {
+        case .fuel:
+            return "Repair"
+        case .repair:
+            return "Repair"
+        case .other:
+            return "Other"
+        }
+    }
+    
+    func costsPicture() -> UIImage {
+        switch self {
+        case .fuel:
+            return UIImage(named: "fuel_icon")!
+        case .repair:
+            return UIImage(named: "repair_icon")!
+        case .other:
+            return UIImage(named: "other_icon")!
+        }
+    }
+}
+
