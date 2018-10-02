@@ -30,7 +30,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="historyCell" id="p7u-Gf-vWQ">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="historyCell" id="p7u-Gf-vWQ" customClass="HistoryCollectionViewCell" customModule="CarCostsTracker" customModuleProvider="target">
                                         <rect key="frame" x="1.5" y="0.0" width="340" height="80"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -103,6 +103,13 @@
                                                 </imageView>
                                             </subviews>
                                         </view>
+                                        <connections>
+                                            <outlet property="costsLogo" destination="OYV-Cr-BAh" id="2HP-Tc-gPf"/>
+                                            <outlet property="costsType" destination="f2m-dc-ZAd" id="zMM-sa-BjE"/>
+                                            <outlet property="date" destination="Tvn-qv-xPs" id="Pp3-wQ-wcO"/>
+                                            <outlet property="detailedDescription" destination="VNs-b2-wYE" id="JkY-El-TDE"/>
+                                            <outlet property="milage" destination="FwN-vt-yjn" id="zen-Ba-VUG"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>

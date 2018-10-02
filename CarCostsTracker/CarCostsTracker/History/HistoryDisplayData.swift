@@ -14,7 +14,7 @@ final class HistoryDisplayData: DisplayData {
     
 }
 
-struct historyCellData{
+struct HistoryCellData{
     let costType: String
     let costImage: UIImage
     let editImage: UIImage
