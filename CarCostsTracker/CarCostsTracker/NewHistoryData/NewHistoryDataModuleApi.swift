@@ -19,7 +19,7 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var costPrice: UITextField! {get}
     var milage: UITextField! {get}
     var date: UITextField! {get set}
-    var costDescription: UITextField! {get}
+    var costDescription: UITextView! {get}
 }
 
 //MARK: - NewHistoryDataPresenter API

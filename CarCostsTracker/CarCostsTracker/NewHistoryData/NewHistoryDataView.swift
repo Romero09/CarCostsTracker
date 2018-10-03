@@ -10,7 +10,7 @@ import UIKit
 import Viperit
 
 //MARK: NewHistoryDataView Class
-final class NewHistoryDataView: UserInterface {
+final class NewHistoryDataView: UserInterface, UITextViewDelegate {
     
     @IBAction func costTypeSelection(_ sender: Any) {
         showActionSheet()
@@ -22,7 +22,7 @@ final class NewHistoryDataView: UserInterface {
     
     @IBOutlet weak var milage: UITextField!
     
-    @IBOutlet weak var costDescription: UITextField!
+    @IBOutlet weak var costDescription: UITextView!
     
     @IBOutlet weak var date: UITextField!
     
@@ -31,6 +31,7 @@ final class NewHistoryDataView: UserInterface {
     }
     
     var datePicker: UIDatePicker?
+    
     
     
     override func viewDidLoad() {
@@ -44,6 +45,13 @@ final class NewHistoryDataView: UserInterface {
         view.addGestureRecognizer(tapGesture)
         
         date.inputView = datePicker
+        
+        costDescription.delegate = self
+        costDescription.text = "Enter costs description..."
+        costDescription.textColor = UIColor.lightGray
+        costDescription.layer.borderWidth = 1
+        costDescription.layer.cornerRadius = 8
+        costDescription.layer.borderColor = UIColor.lightGray.cgColor
     }
     
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
@@ -54,6 +62,20 @@ final class NewHistoryDataView: UserInterface {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
         date.text = dateFormatter.string(from:datePicker.date)
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Enter costs description..."
+            textView.textColor = UIColor.lightGray
+        }
     }
     
     func showActionSheet(){
