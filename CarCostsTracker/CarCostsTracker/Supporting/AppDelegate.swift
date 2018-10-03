@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
 
         window = UIWindow(frame: UIScreen.main.bounds)
-        let module = AppModules.NewHistoryData.build()
+        let module = AppModules.Login.build()
         module.router.show(inWindow: window, embedInNavController: true, setupData: nil, makeKeyAndVisible: true)
         
         return true

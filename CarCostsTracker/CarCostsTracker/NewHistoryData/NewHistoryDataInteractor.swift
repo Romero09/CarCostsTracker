@@ -23,7 +23,10 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
     func storeData(type: String, price: Double, milage: Int, date: String, costDescription: String) {
         
         var ref: DocumentReference? = nil
-        ref = db.collection("userName").addDocument(data: [
+        guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
+            return print("Error user not Authorized")
+        }
+        ref = db.collection(userUID).addDocument(data: [
             "costType": type,
             "price": price,
             "milage": milage,
