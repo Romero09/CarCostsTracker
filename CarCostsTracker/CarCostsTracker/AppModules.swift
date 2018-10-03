@@ -10,4 +10,5 @@ import Viperit
 
 enum AppModules: String, ViperitModule {
     case History
+    case Login
 }

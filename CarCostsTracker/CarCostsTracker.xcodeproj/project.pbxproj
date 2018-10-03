@@ -21,6 +21,14 @@
 		4094045B216265F200002636 /* HistoryInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40940454216265F200002636 /* HistoryInteractor.swift */; };
 		4094045C216265F200002636 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40940455216265F200002636 /* HistoryView.swift */; };
 		410EB0F621649EEE00515C3E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 410EB0F521649EEE00515C3E /* GoogleService-Info.plist */; };
+		410EB1022164A66700515C3E /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 410EB0FB2164A66700515C3E /* Login.storyboard */; };
+		410EB1032164A66700515C3E /* LoginDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB0FC2164A66700515C3E /* LoginDisplayData.swift */; };
+		410EB1042164A66700515C3E /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB0FD2164A66700515C3E /* LoginPresenter.swift */; };
+		410EB1052164A66700515C3E /* LoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB0FE2164A66700515C3E /* LoginRouter.swift */; };
+		410EB1062164A66700515C3E /* LoginModuleApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB0FF2164A66700515C3E /* LoginModuleApi.swift */; };
+		410EB1072164A66700515C3E /* LoginInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB1002164A66700515C3E /* LoginInteractor.swift */; };
+		410EB1082164A66700515C3E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB1012164A66700515C3E /* LoginView.swift */; };
+		410EB10A2164B9CC00515C3E /* UserAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB1092164B9CC00515C3E /* UserAuth.swift */; };
 		41DB53432163A189009C8755 /* HistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */; };
 		C9D39AA5E7C49BE4E7E0BD81 /* Pods_CarCostsTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA281969016F34CF2304D64 /* Pods_CarCostsTracker.framework */; };
 /* End PBXBuildFile section */
@@ -57,6 +65,14 @@
 		40940454216265F200002636 /* HistoryInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryInteractor.swift; sourceTree = "<group>"; };
 		40940455216265F200002636 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		410EB0F521649EEE00515C3E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		410EB0FB2164A66700515C3E /* Login.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
+		410EB0FC2164A66700515C3E /* LoginDisplayData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDisplayData.swift; sourceTree = "<group>"; };
+		410EB0FD2164A66700515C3E /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
+		410EB0FE2164A66700515C3E /* LoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRouter.swift; sourceTree = "<group>"; };
+		410EB0FF2164A66700515C3E /* LoginModuleApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModuleApi.swift; sourceTree = "<group>"; };
+		410EB1002164A66700515C3E /* LoginInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInteractor.swift; sourceTree = "<group>"; };
+		410EB1012164A66700515C3E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		410EB1092164B9CC00515C3E /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
 		41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		53EBE42513C43B80F7DEEB60 /* Pods-CarCostsTrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTrackerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTrackerTests/Pods-CarCostsTrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F92AC99AFDE02AA40EE6A7E4 /* Pods-CarCostsTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTracker/Pods-CarCostsTracker.release.xcconfig"; sourceTree = "<group>"; };
@@ -105,6 +121,7 @@
 				410EB0F521649EEE00515C3E /* GoogleService-Info.plist */,
 				4094042D21624B1F00002636 /* AppDelegate.swift */,
 				4094043421624B2000002636 /* Assets.xcassets */,
+				410EB1092164B9CC00515C3E /* UserAuth.swift */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -132,6 +149,7 @@
 		4094042C21624B1F00002636 /* CarCostsTracker */ = {
 			isa = PBXGroup;
 			children = (
+				410EB0FA2164A65100515C3E /* Login */,
 				406D2F6C21635EEF009A6586 /* History */,
 				406D2F6D21635F10009A6586 /* Supporting */,
 				406D2F6E21635F29009A6586 /* AppModules.swift */,
@@ -146,6 +164,20 @@
 				4094044421624B2000002636 /* Info.plist */,
 			);
 			path = CarCostsTrackerTests;
+			sourceTree = "<group>";
+		};
+		410EB0FA2164A65100515C3E /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				410EB0FB2164A66700515C3E /* Login.storyboard */,
+				410EB0FC2164A66700515C3E /* LoginDisplayData.swift */,
+				410EB0FD2164A66700515C3E /* LoginPresenter.swift */,
+				410EB0FE2164A66700515C3E /* LoginRouter.swift */,
+				410EB0FF2164A66700515C3E /* LoginModuleApi.swift */,
+				410EB1002164A66700515C3E /* LoginInteractor.swift */,
+				410EB1012164A66700515C3E /* LoginView.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 		D95F62C56E4802A7A10C0640 /* Pods */ = {
@@ -180,6 +212,7 @@
 				4094042721624B1F00002636 /* Frameworks */,
 				4094042821624B1F00002636 /* Resources */,
 				5BE12A0CE6E906285E62FFF4 /* [CP] Embed Pods Frameworks */,
+				5EC2F1478DA46BBDC9778DF8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -255,6 +288,7 @@
 				4094043821624B2000002636 /* LaunchScreen.storyboard in Resources */,
 				410EB0F621649EEE00515C3E /* GoogleService-Info.plist in Resources */,
 				4094043521624B2000002636 /* Assets.xcassets in Resources */,
+				410EB1022164A66700515C3E /* Login.storyboard in Resources */,
 				40940456216265F200002636 /* History.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -294,11 +328,18 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-CarCostsTracker/Pods-CarCostsTracker-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Viperit/Viperit.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
@@ -309,11 +350,18 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Viperit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
@@ -325,6 +373,42 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CarCostsTracker/Pods-CarCostsTracker-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5EC2F1478DA46BBDC9778DF8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-CarCostsTracker/Pods-CarCostsTracker-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAnonymousAuthUI.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAuthUI.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseFacebookAuthUI.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseGoogleAuthUI.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebasePhoneAuthUI.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseTwitterAuthUI.bundle",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseAnonymousAuthUI.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseAuthUI.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseFacebookAuthUI.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseGoogleAuthUI.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebasePhoneAuthUI.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FirebaseTwitterAuthUI.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TwitterKitResources.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CarCostsTracker/Pods-CarCostsTracker-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B6984E8CAD5AC71BFBDD7DCF /* [CP] Check Pods Manifest.lock */ = {
@@ -354,12 +438,19 @@
 			files = (
 				4094045C216265F200002636 /* HistoryView.swift in Sources */,
 				4094042E21624B1F00002636 /* AppDelegate.swift in Sources */,
+				410EB1072164A66700515C3E /* LoginInteractor.swift in Sources */,
+				410EB1082164A66700515C3E /* LoginView.swift in Sources */,
+				410EB1052164A66700515C3E /* LoginRouter.swift in Sources */,
 				40940459216265F200002636 /* HistoryRouter.swift in Sources */,
 				4094045A216265F200002636 /* HistoryModuleApi.swift in Sources */,
+				410EB1042164A66700515C3E /* LoginPresenter.swift in Sources */,
 				4094045B216265F200002636 /* HistoryInteractor.swift in Sources */,
 				41DB53432163A189009C8755 /* HistoryCollectionViewCell.swift in Sources */,
+				410EB10A2164B9CC00515C3E /* UserAuth.swift in Sources */,
 				406D2F6F21635F29009A6586 /* AppModules.swift in Sources */,
 				40940458216265F200002636 /* HistoryPresenter.swift in Sources */,
+				410EB1032164A66700515C3E /* LoginDisplayData.swift in Sources */,
+				410EB1062164A66700515C3E /* LoginModuleApi.swift in Sources */,
 				40940457216265F200002636 /* HistoryDisplayData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
