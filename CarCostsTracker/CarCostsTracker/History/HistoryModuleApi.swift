@@ -18,8 +18,10 @@ protocol HistoryViewApi: UserInterfaceProtocol {
 
 //MARK: - HistoryPresenter API
 protocol HistoryPresenterApi: PresenterProtocol {
+    func getData()
 }
 
 //MARK: - HistoryInteractor API
 protocol HistoryInteractorApi: InteractorProtocol {
+    func fetchFromDB()
 }

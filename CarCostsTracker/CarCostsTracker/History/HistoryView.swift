@@ -22,7 +22,7 @@ extension HistoryView: HistoryViewApi, UICollectionViewDelegate {
     override func viewDidLoad() {
         costTable.delegate = self
         super.viewDidLoad()
-        
+        presenter.getData()
     }
 }
 

@@ -16,6 +16,9 @@ final class HistoryPresenter: Presenter {
 // MARK: - HistoryPresenter API
 extension HistoryPresenter: HistoryPresenterApi {
     
+    func getData(){
+        interactor.fetchFromDB()
+    }
     
 }
 

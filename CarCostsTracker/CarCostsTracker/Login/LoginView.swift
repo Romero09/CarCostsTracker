@@ -40,7 +40,7 @@ extension LoginView: FUIAuthDelegate{
             
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let window = appDelegate.window
-            let module = AppModules.NewHistoryData.build()
+            let module = AppModules.History.build()
             module.router.show(inWindow: window, embedInNavController: true, setupData: nil, makeKeyAndVisible: true)
         }
     }
