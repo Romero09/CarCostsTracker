@@ -29,6 +29,13 @@
 		410EB1072164A66700515C3E /* LoginInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB1002164A66700515C3E /* LoginInteractor.swift */; };
 		410EB1082164A66700515C3E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB1012164A66700515C3E /* LoginView.swift */; };
 		410EB10A2164B9CC00515C3E /* UserAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB1092164B9CC00515C3E /* UserAuth.swift */; };
+		410EB1132164DF3400515C3E /* NewHistoryData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 410EB10C2164DF3300515C3E /* NewHistoryData.storyboard */; };
+		410EB1142164DF3400515C3E /* NewHistoryDataDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB10D2164DF3300515C3E /* NewHistoryDataDisplayData.swift */; };
+		410EB1152164DF3400515C3E /* NewHistoryDataPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB10E2164DF3300515C3E /* NewHistoryDataPresenter.swift */; };
+		410EB1162164DF3400515C3E /* NewHistoryDataRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB10F2164DF3300515C3E /* NewHistoryDataRouter.swift */; };
+		410EB1172164DF3400515C3E /* NewHistoryDataModuleApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB1102164DF3300515C3E /* NewHistoryDataModuleApi.swift */; };
+		410EB1182164DF3400515C3E /* NewHistoryDataInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB1112164DF3300515C3E /* NewHistoryDataInteractor.swift */; };
+		410EB1192164DF3400515C3E /* NewHistoryDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB1122164DF3300515C3E /* NewHistoryDataView.swift */; };
 		41DB53432163A189009C8755 /* HistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */; };
 		C9D39AA5E7C49BE4E7E0BD81 /* Pods_CarCostsTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA281969016F34CF2304D64 /* Pods_CarCostsTracker.framework */; };
 /* End PBXBuildFile section */
@@ -73,6 +80,13 @@
 		410EB1002164A66700515C3E /* LoginInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInteractor.swift; sourceTree = "<group>"; };
 		410EB1012164A66700515C3E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		410EB1092164B9CC00515C3E /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
+		410EB10C2164DF3300515C3E /* NewHistoryData.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NewHistoryData.storyboard; sourceTree = "<group>"; };
+		410EB10D2164DF3300515C3E /* NewHistoryDataDisplayData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHistoryDataDisplayData.swift; sourceTree = "<group>"; };
+		410EB10E2164DF3300515C3E /* NewHistoryDataPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHistoryDataPresenter.swift; sourceTree = "<group>"; };
+		410EB10F2164DF3300515C3E /* NewHistoryDataRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHistoryDataRouter.swift; sourceTree = "<group>"; };
+		410EB1102164DF3300515C3E /* NewHistoryDataModuleApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHistoryDataModuleApi.swift; sourceTree = "<group>"; };
+		410EB1112164DF3300515C3E /* NewHistoryDataInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHistoryDataInteractor.swift; sourceTree = "<group>"; };
+		410EB1122164DF3300515C3E /* NewHistoryDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHistoryDataView.swift; sourceTree = "<group>"; };
 		41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		53EBE42513C43B80F7DEEB60 /* Pods-CarCostsTrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTrackerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTrackerTests/Pods-CarCostsTrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F92AC99AFDE02AA40EE6A7E4 /* Pods-CarCostsTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTracker/Pods-CarCostsTracker.release.xcconfig"; sourceTree = "<group>"; };
@@ -149,6 +163,7 @@
 		4094042C21624B1F00002636 /* CarCostsTracker */ = {
 			isa = PBXGroup;
 			children = (
+				410EB10B2164DE8700515C3E /* NewHistoryData */,
 				410EB0FA2164A65100515C3E /* Login */,
 				406D2F6C21635EEF009A6586 /* History */,
 				406D2F6D21635F10009A6586 /* Supporting */,
@@ -178,6 +193,20 @@
 				410EB1012164A66700515C3E /* LoginView.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		410EB10B2164DE8700515C3E /* NewHistoryData */ = {
+			isa = PBXGroup;
+			children = (
+				410EB10C2164DF3300515C3E /* NewHistoryData.storyboard */,
+				410EB10D2164DF3300515C3E /* NewHistoryDataDisplayData.swift */,
+				410EB10E2164DF3300515C3E /* NewHistoryDataPresenter.swift */,
+				410EB10F2164DF3300515C3E /* NewHistoryDataRouter.swift */,
+				410EB1102164DF3300515C3E /* NewHistoryDataModuleApi.swift */,
+				410EB1112164DF3300515C3E /* NewHistoryDataInteractor.swift */,
+				410EB1122164DF3300515C3E /* NewHistoryDataView.swift */,
+			);
+			path = NewHistoryData;
 			sourceTree = "<group>";
 		};
 		D95F62C56E4802A7A10C0640 /* Pods */ = {
@@ -285,6 +314,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				410EB1132164DF3400515C3E /* NewHistoryData.storyboard in Resources */,
 				4094043821624B2000002636 /* LaunchScreen.storyboard in Resources */,
 				410EB0F621649EEE00515C3E /* GoogleService-Info.plist in Resources */,
 				4094043521624B2000002636 /* Assets.xcassets in Resources */,
@@ -436,18 +466,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				410EB1152164DF3400515C3E /* NewHistoryDataPresenter.swift in Sources */,
 				4094045C216265F200002636 /* HistoryView.swift in Sources */,
+				410EB1162164DF3400515C3E /* NewHistoryDataRouter.swift in Sources */,
 				4094042E21624B1F00002636 /* AppDelegate.swift in Sources */,
 				410EB1072164A66700515C3E /* LoginInteractor.swift in Sources */,
 				410EB1082164A66700515C3E /* LoginView.swift in Sources */,
+				410EB1172164DF3400515C3E /* NewHistoryDataModuleApi.swift in Sources */,
 				410EB1052164A66700515C3E /* LoginRouter.swift in Sources */,
 				40940459216265F200002636 /* HistoryRouter.swift in Sources */,
 				4094045A216265F200002636 /* HistoryModuleApi.swift in Sources */,
 				410EB1042164A66700515C3E /* LoginPresenter.swift in Sources */,
 				4094045B216265F200002636 /* HistoryInteractor.swift in Sources */,
 				41DB53432163A189009C8755 /* HistoryCollectionViewCell.swift in Sources */,
+				410EB1182164DF3400515C3E /* NewHistoryDataInteractor.swift in Sources */,
 				410EB10A2164B9CC00515C3E /* UserAuth.swift in Sources */,
 				406D2F6F21635F29009A6586 /* AppModules.swift in Sources */,
+				410EB1192164DF3400515C3E /* NewHistoryDataView.swift in Sources */,
+				410EB1142164DF3400515C3E /* NewHistoryDataDisplayData.swift in Sources */,
 				40940458216265F200002636 /* HistoryPresenter.swift in Sources */,
 				410EB1032164A66700515C3E /* LoginDisplayData.swift in Sources */,
 				410EB1062164A66700515C3E /* LoginModuleApi.swift in Sources */,

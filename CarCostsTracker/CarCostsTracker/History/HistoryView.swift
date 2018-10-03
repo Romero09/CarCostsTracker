@@ -8,18 +8,21 @@
 
 import UIKit
 import Viperit
+import Firebase
 
 //MARK: HistoryView Class
 final class HistoryView: UserInterface {
     @IBOutlet weak var costTable: UICollectionView!
+    
 }
 
 //MARK: - HistoryView API
 extension HistoryView: HistoryViewApi, UICollectionViewDelegate {
-    
+
     override func viewDidLoad() {
         costTable.delegate = self
         super.viewDidLoad()
+        
     }
 }
 
