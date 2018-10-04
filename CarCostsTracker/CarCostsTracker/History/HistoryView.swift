@@ -14,6 +14,8 @@ import Firebase
 final class HistoryView: UserInterface {
     @IBOutlet weak var costTable: UICollectionView!
     
+    var historyArray: Array<HistoryCellData> = []
+    
 }
 
 //MARK: - HistoryView API
@@ -28,6 +30,11 @@ extension HistoryView: HistoryViewApi, UICollectionViewDelegate {
         presenter.getData()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        presenter.getData()
+    }
+    
     @objc func callSwitchToNewHistoryData(){
         presenter.switchSwitchToNewHistoryData()
     }
@@ -35,12 +42,18 @@ extension HistoryView: HistoryViewApi, UICollectionViewDelegate {
 
 extension HistoryView: UICollectionViewDataSource{
     
+    func reloadData(){
+        costTable.reloadData()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 15
+        return presenter.historyArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let hisotryCell = collectionView.dequeueReusableCell(withReuseIdentifier: "historyCell", for: indexPath)
+        let hisotryCell = collectionView.dequeueReusableCell(withReuseIdentifier: "historyCell", for: indexPath) as! HistoryCollectionViewCell
+        
+        hisotryCell.fillCellData(historyData: presenter.historyArray[indexPath.row])
         
         return hisotryCell
     }

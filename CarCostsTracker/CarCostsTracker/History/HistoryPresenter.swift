@@ -11,10 +11,43 @@ import Viperit
 
 // MARK: - HistoryPresenter Class
 final class HistoryPresenter: Presenter {
+    
+    var historyArray: Array<HistoryCellData> = []
 }
 
 // MARK: - HistoryPresenter API
 extension HistoryPresenter: HistoryPresenterApi {
+    
+    func transferData(history data: Array<HistoryDataModel>) {
+
+        historyArray = []
+        
+        for history in data {
+            let costsDescription = history.costsDescription
+            let costsPrice = String(format:"%.2f$", history.costsPrice)
+            let costsType = history.costsType
+            var costsTypeEnum: CostType = CostType.other
+            
+            switch costsType {
+            case "Fuel":
+                costsTypeEnum = CostType.fuel
+            case "Repair":
+                costsTypeEnum = CostType.repair
+            case "Other":
+                costsTypeEnum = CostType.other
+            default:
+                print("Error no such costs")
+            }
+            let date = history.date
+            let documentID = history.documentID
+            let milage = String(history.milage)+"km"
+        
+            let historyCellData = HistoryCellData(costType: costsTypeEnum, costDate: date, mileage: milage, description: costsDescription, price: costsPrice, documentID: documentID)
+        
+            self.historyArray.append(historyCellData)
+        }
+        view.reloadData()
+    }
     
     func getData(){
         interactor.fetchFromDB()

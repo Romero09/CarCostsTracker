@@ -14,6 +14,7 @@ class HistoryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var milage: UILabel!
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var detailedDescription: UILabel!
+    @IBOutlet weak var price: UILabel!
     
     
     func fillCellData(historyData: HistoryCellData){
@@ -22,7 +23,7 @@ class HistoryCollectionViewCell: UICollectionViewCell {
         costsType.text = historyData.costType.name()
         milage.text = historyData.mileage
         date.text = historyData.costDate
-        detailedDescription.text = historyData.description
+        price.text = historyData.price
         
     }
 }

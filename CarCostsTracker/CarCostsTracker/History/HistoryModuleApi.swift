@@ -16,12 +16,15 @@ protocol HistoryRouterApi: RouterProtocol {
 
 //MARK: - HistoryView API
 protocol HistoryViewApi: UserInterfaceProtocol {
+    func reloadData()
 }
 
 //MARK: - HistoryPresenter API
 protocol HistoryPresenterApi: PresenterProtocol {
+    var historyArray: Array<HistoryCellData> {get}
     func getData()
     func switchSwitchToNewHistoryData()
+    func transferData(history data: Array<HistoryDataModel>)
 }
 
 //MARK: - HistoryInteractor API

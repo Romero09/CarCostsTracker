@@ -44,6 +44,9 @@ extension HistoryInteractor: HistoryInteractorApi {
                     print("\(document.documentID) => \(document.data())")
                 }
             }
+            
+            self.presenter.transferData(history: historyArray)
+            
         }
         
         
