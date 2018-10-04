@@ -20,9 +20,16 @@ final class HistoryView: UserInterface {
 extension HistoryView: HistoryViewApi, UICollectionViewDelegate {
 
     override func viewDidLoad() {
+        self.title = "History"
+        self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(callSwitchToNewHistoryData)), animated: true)
+        
         costTable.delegate = self
         super.viewDidLoad()
         presenter.getData()
+    }
+    
+    @objc func callSwitchToNewHistoryData(){
+        presenter.switchSwitchToNewHistoryData()
     }
 }
 

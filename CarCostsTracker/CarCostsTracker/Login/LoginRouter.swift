@@ -15,6 +15,12 @@ final class LoginRouter: Router {
 
 // MARK: - LoginRouter API
 extension LoginRouter: LoginRouterApi {
+    
+    func showHistory() {
+        let module = AppModules.History.build()
+        let historyRouter =  module.router as! HistoryRouterApi
+        historyRouter.showHistory(from: _view)
+    }
 }
 
 // MARK: - Login Viper Components

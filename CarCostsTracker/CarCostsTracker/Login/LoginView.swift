@@ -31,17 +31,12 @@ extension LoginView: FUIAuthDelegate{
     
     func authUI(_ authUI: FUIAuth, didSignInWith user: User?, error: Error?) {
         // handle user and error as necessary
-        
         if let error = error {
             print(error)
         }
         if let _ = user {
             sharedUserAuth.authorizedUser = Auth.auth()
-            
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let window = appDelegate.window
-            let module = AppModules.History.build()
-            module.router.show(inWindow: window, embedInNavController: true, setupData: nil, makeKeyAndVisible: true)
+            presenter.switchToHistory()
         }
     }
     

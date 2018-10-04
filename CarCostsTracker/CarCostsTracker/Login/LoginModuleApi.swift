@@ -11,6 +11,7 @@ import FirebaseUI
 
 //MARK: - LoginRouter API
 protocol LoginRouterApi: RouterProtocol {
+    func showHistory()
 }
 
 //MARK: - LoginView API
@@ -20,6 +21,7 @@ protocol LoginViewApi: UserInterfaceProtocol{
 //MARK: - LoginPresenter API
 protocol LoginPresenterApi: PresenterProtocol {
     func signInUser() -> UINavigationController?
+    func switchToHistory()
 }
 
 //MARK: - LoginInteractor API

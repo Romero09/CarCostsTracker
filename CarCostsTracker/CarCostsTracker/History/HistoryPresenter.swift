@@ -20,6 +20,10 @@ extension HistoryPresenter: HistoryPresenterApi {
         interactor.fetchFromDB()
     }
     
+    func switchSwitchToNewHistoryData(){
+        router.showNewHistoryData()
+    }
+    
 }
 
 // MARK: - History Viper Components

@@ -10,6 +10,7 @@ import Viperit
 
 //MARK: - NewHistoryDataRouter API
 protocol NewHistoryDataRouterApi: RouterProtocol {
+    func showNewHistoryData(from view: UserInterface)
 }
 
 //MARK: - NewHistoryDataView API

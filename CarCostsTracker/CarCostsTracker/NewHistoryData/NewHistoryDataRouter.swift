@@ -15,6 +15,9 @@ final class NewHistoryDataRouter: Router {
 
 // MARK: - NewHistoryDataRouter API
 extension NewHistoryDataRouter: NewHistoryDataRouterApi {
+    func showNewHistoryData(from view: UserInterface){
+        self.show(from: view)
+    }
 }
 
 // MARK: - NewHistoryData Viper Components

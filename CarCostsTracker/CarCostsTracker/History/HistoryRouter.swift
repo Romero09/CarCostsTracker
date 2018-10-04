@@ -15,6 +15,16 @@ final class HistoryRouter: Router {
 
 // MARK: - HistoryRouter API
 extension HistoryRouter: HistoryRouterApi {
+    
+    func showHistory(from view: UserInterface) {
+        self.show(from: view)
+    }
+    
+    func showNewHistoryData(){
+        let module = AppModules.NewHistoryData.build()
+        let newHistoryDataRouter = module.router as! NewHistoryDataRouterApi
+        newHistoryDataRouter.showNewHistoryData(from: _view)
+    }
 }
 
 // MARK: - History Viper Components

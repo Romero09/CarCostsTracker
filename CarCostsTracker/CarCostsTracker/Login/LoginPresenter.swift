@@ -27,10 +27,12 @@ extension LoginPresenter: LoginPresenterApi {
         ]
         authUI.providers = providers
         authUI.delegate = view as? FUIAuthDelegate
-
         return authUI.authViewController()
     }
     
+    func switchToHistory() {
+        router.showHistory()
+    }
 }
 
 
