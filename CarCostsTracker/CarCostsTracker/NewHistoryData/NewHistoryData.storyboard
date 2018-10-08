@@ -141,6 +141,7 @@
                         <outlet property="costType" destination="8mh-mw-lxu" id="4ZK-bK-rgA"/>
                         <outlet property="date" destination="0NY-QT-Amb" id="nhC-zE-EdE"/>
                         <outlet property="milage" destination="rOG-VA-xgh" id="3Kv-Xg-ojB"/>
+                        <outlet property="submitOutlet" destination="yGh-9c-lQd" id="LAE-NR-o6o"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nXm-AG-NXG" userLabel="First Responder" sceneMemberID="firstResponder"/>

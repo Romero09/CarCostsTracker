@@ -8,7 +8,12 @@
 
 import UIKit
 
+//protocol HistoryCellDelegate {
+//    func selectedCell(post: Posts)
+//}
+
 class HistoryCollectionViewCell: UICollectionViewCell {
+    
     @IBOutlet weak var costsLogo: UIImageView!
     @IBOutlet weak var costsType: UILabel!
     @IBOutlet weak var milage: UILabel!
@@ -28,7 +33,7 @@ class HistoryCollectionViewCell: UICollectionViewCell {
     }
 }
 
-fileprivate extension CostType {
+extension CostType {
     func name() -> String {
         switch self {
         case .fuel:

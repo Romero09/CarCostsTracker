@@ -11,10 +11,32 @@ import Viperit
 
 // MARK: - NewHistoryDataPresenter Class
 final class NewHistoryDataPresenter: Presenter {
+    var historyDataToEdit: HistoryCellData?
+    
+
 }
 
 // MARK: - NewHistoryDataPresenter API
 extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
+    
+    func isEditMode() -> Bool {
+        if historyDataToEdit != nil {
+            return true } else {
+                return false
+        }
+    }
+    
+    
+    func updateEditView(){
+        if let historyDataToEdit = historyDataToEdit{
+            view.costDescription.text = historyDataToEdit.description
+            view.costPrice.text = String(historyDataToEdit.price.dropLast())
+            view.milage.text = String(historyDataToEdit.mileage.dropLast().dropLast())
+            view.date.text = historyDataToEdit.costDate
+            view.costType.titleLabel?.text = historyDataToEdit.costType.name()
+            view.date.text = historyDataToEdit.costDate
+        }
+    }
     
     func submitData() {
         let costType = view.costType.titleLabel?.text ?? ""
@@ -24,6 +46,13 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
         let costDescription = view.costDescription.text ?? ""
         
         interactor.storeData(type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription)
+    }
+    
+
+    
+    func fillEditData(edit data: HistoryCellData){
+        historyDataToEdit = data
+        
     }
     
 }

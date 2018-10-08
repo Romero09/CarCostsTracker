@@ -18,6 +18,11 @@ extension NewHistoryDataRouter: NewHistoryDataRouterApi {
     func showNewHistoryData(from view: UserInterface){
         self.show(from: view)
     }
+    
+    func showNewHistoryDataEdit(from view: UserInterface, edit data: HistoryCellData){
+        presenter.fillEditData(edit: data)
+        self.show(from: view)
+    }
 }
 
 // MARK: - NewHistoryData Viper Components

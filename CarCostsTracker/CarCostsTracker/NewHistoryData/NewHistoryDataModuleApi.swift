@@ -11,6 +11,7 @@ import Viperit
 //MARK: - NewHistoryDataRouter API
 protocol NewHistoryDataRouterApi: RouterProtocol {
     func showNewHistoryData(from view: UserInterface)
+    func showNewHistoryDataEdit(from view: UserInterface, edit data: HistoryCellData)
 }
 
 //MARK: - NewHistoryDataView API
@@ -25,7 +26,10 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
 
 //MARK: - NewHistoryDataPresenter API
 protocol NewHistoryDataPresenterApi: PresenterProtocol {
+    func updateEditView()
+    func isEditMode()->Bool
     func submitData()
+    func fillEditData(edit data: HistoryCellData)
 }
 
 //MARK: - NewHistoryDataInteractor API

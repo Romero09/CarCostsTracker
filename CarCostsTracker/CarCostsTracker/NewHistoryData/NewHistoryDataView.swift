@@ -29,13 +29,17 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
     @IBAction func submitData(_ sender: Any) {
         presenter.submitData()
     }
+    @IBOutlet weak var submitOutlet: UIButton!
+    
     
     var datePicker: UIDatePicker?
     
     
     
-    override func viewDidLoad() {
+    override func viewWillAppear(_ animated: Bool) {
+        
         self.title = "Add new data"
+        costType.titleLabel?.text = "Select Cost Type"
         
         datePicker = UIDatePicker()
         datePicker?.datePickerMode = .date
@@ -54,6 +58,14 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
         costDescription.layer.borderWidth = 1
         costDescription.layer.cornerRadius = 8
         costDescription.layer.borderColor = UIColor.lightGray.cgColor
+        
+        if presenter.isEditMode(){
+            DispatchQueue.main.async(execute: {
+            self.presenter.updateEditView()
+            self.title = "Edit data"
+                self.submitOutlet.titleLabel?.text = "Save"
+                })
+        }
     }
     
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
