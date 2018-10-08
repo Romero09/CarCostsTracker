@@ -41,7 +41,7 @@ extension HistoryView: HistoryViewApi {
     }
 }
 
-extension HistoryView: UICollectionViewDataSource, UICollectionViewDelegate{
+extension HistoryView: UICollectionViewDataSource, UICollectionViewDelegate{	
     
     func reloadData(){
         costTable.reloadData()

@@ -61,11 +61,16 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
         
         if presenter.isEditMode(){
             DispatchQueue.main.async(execute: {
-            self.presenter.updateEditView()
-            self.title = "Edit data"
+                self.presenter.updateEditView()
+                self.title = "Edit data"
                 self.submitOutlet.titleLabel?.text = "Save"
+                self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(self.deleteFromDB)), animated: true)
                 })
         }
+    }
+    
+    @objc func deleteFromDB(){
+        print("delete")
     }
     
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
