@@ -16,6 +16,11 @@ final class HistoryView: UserInterface {
     
     var historyArray: Array<HistoryCellData> = []
     
+    @IBOutlet weak var chartsButtonOutlet: UIButton!
+    
+    @IBOutlet weak var chartsButton: UIButton!
+    
+
     
 }
 
@@ -23,10 +28,19 @@ final class HistoryView: UserInterface {
 extension HistoryView: HistoryViewApi {
 
     override func viewDidLoad() {
+        
+        chartsButtonOutlet.layer.cornerRadius = chartsButtonOutlet.frame.width/2
+        chartsButtonOutlet.layer.borderWidth = 2.0
+        chartsButtonOutlet.layer.borderColor = self.view.tintColor.cgColor
+        chartsButtonOutlet.backgroundColor = UIColor.white
+
         self.title = "History"
         self.navigationItem.setHidesBackButton(true, animated:true)
-        self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(callSwitchToNewHistoryData)), animated: true)
+        
+        self.navigationItem.setRightBarButton(UIBarButtonItem(image: UIImage(named: "add_item.png"), style: UIBarButtonItem.Style.done, target: self, action: #selector(callSwitchToNewHistoryData)), animated: true)
+        
         self.navigationItem.setLeftBarButton(UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(callLogOut)), animated: true)
+        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.red
         
         costTable.delegate = self
         costTable.allowsSelection = true
@@ -47,6 +61,7 @@ extension HistoryView: HistoryViewApi {
         presenter.switchSwitchToNewHistoryData()
     }
 }
+
 
 extension HistoryView: UICollectionViewDataSource, UICollectionViewDelegate{	
     
