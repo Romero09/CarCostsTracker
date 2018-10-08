@@ -25,6 +25,10 @@ final class NewHistoryDataPresenter: Presenter {
 // MARK: - NewHistoryDataPresenter API
 extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
     
+    func returnToHistory(){
+        router.showHistory()
+    }
+    
     func isEditMode() -> Bool {
         if historyDataToEdit != nil {
             return true } else {
@@ -51,7 +55,21 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
         let date = view.date.text ?? ""
         let costDescription = view.costDescription.text ?? ""
         
+        if isEditMode(){
+            guard let historyDataToEdit = self.historyDataToEdit else {
+               return print("Error historyDataToEdit is nil")
+            }
+            interactor.updateData(document: historyDataToEdit.documentID ,type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription)
+        } else{
         interactor.storeData(type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription)
+        }
+    }
+    
+    func performDataDelete(){
+        guard let historyDataToEdit = self.historyDataToEdit else {
+           return print("Error historyDataToEdit is nil")
+        }
+        interactor.deleteData(document: historyDataToEdit.documentID)
     }
     
 

@@ -20,6 +20,24 @@ final class NewHistoryDataInteractor: Interactor {
 extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
     
     
+    func deleteData(document id: String) {
+        
+        guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
+            return print("Error user not Authorized")
+        }
+        
+        db.collection(userUID).document(id).delete(){ err in
+            if let err = err {
+                print("Error removing document: \(err)")
+            } else {
+                print("Document: \(id) successfully removed!")
+                self.presenter.returnToHistory()
+            }
+        }
+    }
+    
+    
+    
     func storeData(type: String, price: Double, milage: Int, date: String, costDescription: String) {
         
         var ref: DocumentReference? = nil
@@ -36,10 +54,37 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             if let err = err {
                 print("Error adding document: \(err)")
             } else {
+                self.presenter.returnToHistory()
                 print("Document added with ID: \(ref!.documentID)")
             }
         }
     }
+    
+    func updateData(document id: String, type: String, price: Double, milage: Int, date: String, costDescription: String){
+        var ref: DocumentReference? = nil
+        guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
+            return print("Error user not Authorized")
+        }
+        
+        ref = db.collection(userUID).document(id)
+        ref?.updateData([
+            "costType": type,
+            "price": price,
+            "milage": milage,
+            "date": date,
+            "description": costDescription
+        ]){ err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                self.presenter.returnToHistory()
+                print("Document \(id) successfully updated")
+            }
+        }
+        
+        
+    }
+    
     
 }
 

@@ -69,7 +69,7 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
     }
     
     @objc func deleteFromDB(){
-        print("delete")
+        presenter.performDataDelete()
     }
     
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
