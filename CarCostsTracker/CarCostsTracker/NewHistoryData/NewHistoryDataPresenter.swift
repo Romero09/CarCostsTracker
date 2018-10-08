@@ -13,7 +13,13 @@ import Viperit
 final class NewHistoryDataPresenter: Presenter {
     var historyDataToEdit: HistoryCellData?
     
-
+    override func viewHasLoaded(){
+        if isEditMode(){
+            DispatchQueue.main.async(execute: {
+                self.updateEditView()
+            })
+        }
+    }
 }
 
 // MARK: - NewHistoryDataPresenter API
@@ -33,7 +39,7 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
             view.costPrice.text = String(historyDataToEdit.price.dropLast())
             view.milage.text = String(historyDataToEdit.mileage.dropLast().dropLast())
             view.date.text = historyDataToEdit.costDate
-            view.costType.titleLabel?.text = historyDataToEdit.costType.name()
+            view.costType.setTitle(historyDataToEdit.costType.name(), for: .normal)
             view.date.text = historyDataToEdit.costDate
         }
     }

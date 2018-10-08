@@ -61,9 +61,8 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
         
         if presenter.isEditMode(){
             DispatchQueue.main.async(execute: {
-                self.presenter.updateEditView()
                 self.title = "Edit data"
-                self.submitOutlet.titleLabel?.text = "Save"
+                self.submitOutlet.setTitle("Save", for: UIControl.State())
                 self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(self.deleteFromDB)), animated: true)
                 })
         }
@@ -103,15 +102,15 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
         let cancel = UIAlertAction(title: "Cancle", style: .cancel, handler: nil)
         
         let repair = UIAlertAction(title: "Repair", style: .default) {action in
-            self.costType.titleLabel?.text = "Repair"
+            self.costType.setTitle("Repair", for: .normal)
             }
         
         let fuel = UIAlertAction(title: "Fuel", style: .default) {action in
-            self.costType.titleLabel?.text = "Fuel"
+            self.costType.setTitle("Fuel", for: .normal)
         }
         
         let other = UIAlertAction(title: "Other", style: .default) {action in
-            self.costType.titleLabel?.text = "Other"
+            self.costType.setTitle("Other", for: .normal)
         }
         
         actionSheet.addAction(repair)
