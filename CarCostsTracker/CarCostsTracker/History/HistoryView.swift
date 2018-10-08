@@ -16,6 +16,7 @@ final class HistoryView: UserInterface {
     
     var historyArray: Array<HistoryCellData> = []
     
+    
 }
 
 //MARK: - HistoryView API
@@ -23,7 +24,9 @@ extension HistoryView: HistoryViewApi {
 
     override func viewDidLoad() {
         self.title = "History"
+        self.navigationItem.setHidesBackButton(true, animated:true)
         self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(callSwitchToNewHistoryData)), animated: true)
+        self.navigationItem.setLeftBarButton(UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(callLogOut)), animated: true)
         
         costTable.delegate = self
         costTable.allowsSelection = true
@@ -34,6 +37,10 @@ extension HistoryView: HistoryViewApi {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         presenter.getData()
+    }
+    
+    @objc func callLogOut(){
+        presenter.performLogOut()
     }
     
     @objc func callSwitchToNewHistoryData(){

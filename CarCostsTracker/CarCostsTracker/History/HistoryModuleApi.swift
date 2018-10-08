@@ -10,6 +10,7 @@ import Viperit
 
 //MARK: - HistoryRouter API
 protocol HistoryRouterApi: RouterProtocol {
+    func showLogIn()
     func showHistory(from view: UserInterface)
     func showNewHistoryData()
     func showNewHistoryData(edit data: HistoryCellData)
@@ -23,6 +24,7 @@ protocol HistoryViewApi: UserInterfaceProtocol {
 //MARK: - HistoryPresenter API
 protocol HistoryPresenterApi: PresenterProtocol {
     var historyArray: Array<HistoryCellData> {get}
+    func performLogOut()
     func getData()
     func switchSwitchToNewHistoryData()
     func transferData(history data: Array<HistoryDataModel>)

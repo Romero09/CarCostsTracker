@@ -18,6 +18,14 @@ final class HistoryPresenter: Presenter {
 // MARK: - HistoryPresenter API
 extension HistoryPresenter: HistoryPresenterApi {
     
+    func performLogOut() {
+        if sharedUserAuth.authorizedUser?.currentUser != nil{
+            sharedUserAuth.authorizedUser = nil
+        }
+        
+        router.showLogIn()
+    }
+    
     func transferData(history data: Array<HistoryDataModel>) {
 
         historyArray = []
