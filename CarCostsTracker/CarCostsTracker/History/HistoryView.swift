@@ -18,7 +18,9 @@ final class HistoryView: UserInterface {
     
     @IBOutlet weak var chartsButtonOutlet: UIButton!
     
-    @IBOutlet weak var chartsButton: UIButton!
+    @IBAction func chartsButton(_ sender: Any) {
+        presenter.switchToCharts()
+    }
     
 
     
@@ -58,7 +60,7 @@ extension HistoryView: HistoryViewApi {
     }
     
     @objc func callSwitchToNewHistoryData(){
-        presenter.switchSwitchToNewHistoryData()
+        presenter.switchToNewHistoryData()
     }
 }
 

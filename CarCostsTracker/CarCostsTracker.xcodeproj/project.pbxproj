@@ -36,6 +36,13 @@
 		410EB1182164DF3400515C3E /* NewHistoryDataInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB1112164DF3300515C3E /* NewHistoryDataInteractor.swift */; };
 		410EB1192164DF3400515C3E /* NewHistoryDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410EB1122164DF3300515C3E /* NewHistoryDataView.swift */; };
 		410EB11B216754FF00515C3E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 410EB11A216754FF00515C3E /* GoogleService-Info.plist */; };
+		414D03FF216C87D50035B3D2 /* Charts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 414D03F8216C87D50035B3D2 /* Charts.storyboard */; };
+		414D0400216C87D50035B3D2 /* ChartsDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D03F9216C87D50035B3D2 /* ChartsDisplayData.swift */; };
+		414D0401216C87D50035B3D2 /* ChartsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D03FA216C87D50035B3D2 /* ChartsPresenter.swift */; };
+		414D0402216C87D50035B3D2 /* ChartsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D03FB216C87D50035B3D2 /* ChartsRouter.swift */; };
+		414D0403216C87D50035B3D2 /* ChartsModuleApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D03FC216C87D50035B3D2 /* ChartsModuleApi.swift */; };
+		414D0404216C87D50035B3D2 /* ChartsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D03FD216C87D50035B3D2 /* ChartsInteractor.swift */; };
+		414D0405216C87D50035B3D2 /* ChartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D03FE216C87D50035B3D2 /* ChartsView.swift */; };
 		41DB53432163A189009C8755 /* HistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */; };
 		C9D39AA5E7C49BE4E7E0BD81 /* Pods_CarCostsTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA281969016F34CF2304D64 /* Pods_CarCostsTracker.framework */; };
 /* End PBXBuildFile section */
@@ -87,6 +94,13 @@
 		410EB1112164DF3300515C3E /* NewHistoryDataInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHistoryDataInteractor.swift; sourceTree = "<group>"; };
 		410EB1122164DF3300515C3E /* NewHistoryDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHistoryDataView.swift; sourceTree = "<group>"; };
 		410EB11A216754FF00515C3E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		414D03F8216C87D50035B3D2 /* Charts.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Charts.storyboard; sourceTree = "<group>"; };
+		414D03F9216C87D50035B3D2 /* ChartsDisplayData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsDisplayData.swift; sourceTree = "<group>"; };
+		414D03FA216C87D50035B3D2 /* ChartsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsPresenter.swift; sourceTree = "<group>"; };
+		414D03FB216C87D50035B3D2 /* ChartsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsRouter.swift; sourceTree = "<group>"; };
+		414D03FC216C87D50035B3D2 /* ChartsModuleApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsModuleApi.swift; sourceTree = "<group>"; };
+		414D03FD216C87D50035B3D2 /* ChartsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsInteractor.swift; sourceTree = "<group>"; };
+		414D03FE216C87D50035B3D2 /* ChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsView.swift; sourceTree = "<group>"; };
 		41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		53EBE42513C43B80F7DEEB60 /* Pods-CarCostsTrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTrackerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTrackerTests/Pods-CarCostsTrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F92AC99AFDE02AA40EE6A7E4 /* Pods-CarCostsTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTracker/Pods-CarCostsTracker.release.xcconfig"; sourceTree = "<group>"; };
@@ -163,6 +177,7 @@
 		4094042C21624B1F00002636 /* CarCostsTracker */ = {
 			isa = PBXGroup;
 			children = (
+				414D03F7216C87A80035B3D2 /* Charts */,
 				410EB10B2164DE8700515C3E /* NewHistoryData */,
 				410EB0FA2164A65100515C3E /* Login */,
 				406D2F6C21635EEF009A6586 /* History */,
@@ -207,6 +222,20 @@
 				410EB1122164DF3300515C3E /* NewHistoryDataView.swift */,
 			);
 			path = NewHistoryData;
+			sourceTree = "<group>";
+		};
+		414D03F7216C87A80035B3D2 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				414D03F8216C87D50035B3D2 /* Charts.storyboard */,
+				414D03F9216C87D50035B3D2 /* ChartsDisplayData.swift */,
+				414D03FA216C87D50035B3D2 /* ChartsPresenter.swift */,
+				414D03FB216C87D50035B3D2 /* ChartsRouter.swift */,
+				414D03FC216C87D50035B3D2 /* ChartsModuleApi.swift */,
+				414D03FD216C87D50035B3D2 /* ChartsInteractor.swift */,
+				414D03FE216C87D50035B3D2 /* ChartsView.swift */,
+			);
+			path = Charts;
 			sourceTree = "<group>";
 		};
 		D95F62C56E4802A7A10C0640 /* Pods */ = {
@@ -315,6 +344,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				410EB1132164DF3400515C3E /* NewHistoryData.storyboard in Resources */,
+				414D03FF216C87D50035B3D2 /* Charts.storyboard in Resources */,
 				4094043821624B2000002636 /* LaunchScreen.storyboard in Resources */,
 				4094043521624B2000002636 /* Assets.xcassets in Resources */,
 				410EB1022164A66700515C3E /* Login.storyboard in Resources */,
@@ -469,13 +499,19 @@
 				410EB1152164DF3400515C3E /* NewHistoryDataPresenter.swift in Sources */,
 				4094045C216265F200002636 /* HistoryView.swift in Sources */,
 				410EB1162164DF3400515C3E /* NewHistoryDataRouter.swift in Sources */,
+				414D0403216C87D50035B3D2 /* ChartsModuleApi.swift in Sources */,
+				414D0400216C87D50035B3D2 /* ChartsDisplayData.swift in Sources */,
 				4094042E21624B1F00002636 /* AppDelegate.swift in Sources */,
+				414D0401216C87D50035B3D2 /* ChartsPresenter.swift in Sources */,
+				414D0405216C87D50035B3D2 /* ChartsView.swift in Sources */,
+				414D0404216C87D50035B3D2 /* ChartsInteractor.swift in Sources */,
 				410EB1072164A66700515C3E /* LoginInteractor.swift in Sources */,
 				410EB1082164A66700515C3E /* LoginView.swift in Sources */,
 				410EB1172164DF3400515C3E /* NewHistoryDataModuleApi.swift in Sources */,
 				410EB1052164A66700515C3E /* LoginRouter.swift in Sources */,
 				40940459216265F200002636 /* HistoryRouter.swift in Sources */,
 				4094045A216265F200002636 /* HistoryModuleApi.swift in Sources */,
+				414D0402216C87D50035B3D2 /* ChartsRouter.swift in Sources */,
 				410EB1042164A66700515C3E /* LoginPresenter.swift in Sources */,
 				4094045B216265F200002636 /* HistoryInteractor.swift in Sources */,
 				41DB53432163A189009C8755 /* HistoryCollectionViewCell.swift in Sources */,

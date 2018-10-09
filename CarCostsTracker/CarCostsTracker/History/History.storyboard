@@ -129,6 +129,9 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <size key="titleShadowOffset" width="15" height="0.0"/>
                                 <state key="normal" image="charts_icon"/>
+                                <connections>
+                                    <action selector="chartsButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="Fmv-N6-K1c"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -142,7 +145,6 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="chartsButton" destination="NG4-6C-Te9" id="EN6-hX-dBQ"/>
                         <outlet property="chartsButtonOutlet" destination="NG4-6C-Te9" id="cNY-lS-cFl"/>
                         <outlet property="costTable" destination="X1I-1V-X69" id="Nka-3f-yHy"/>
                     </connections>

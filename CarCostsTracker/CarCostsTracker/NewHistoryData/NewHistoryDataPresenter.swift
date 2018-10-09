@@ -79,11 +79,8 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
         interactor.deleteData(document: historyDataToEdit.documentID)
     }
     
-
-    
     func fillEditData(edit data: HistoryCellData){
         historyDataToEdit = data
-        
     }
     
 }
