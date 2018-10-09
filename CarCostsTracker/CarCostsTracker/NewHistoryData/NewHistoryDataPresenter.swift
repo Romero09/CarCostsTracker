@@ -53,9 +53,14 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
         let costType = view.costTypeButton.titleLabel?.text ?? ""
         let costPrice = Double(view.costPriceTextField.text ?? "") ?? 0.0
         let milage = Int(view.milageTextField.text ?? "") ?? 0
-        
-        let date = String(view.getSelectedDate!.timeIntervalSince1970)
         let costDescription = view.costDescriptionTextView.text ?? ""
+        var date = ""
+        
+        if let tempDate = view.getSelectedDate {
+            date = String(tempDate.timeIntervalSince1970)
+        } else {
+            date = historyDataToEdit?.costDate ?? ""
+        }
         
         if isEditMode(){
             guard let historyDataToEdit = self.historyDataToEdit else {

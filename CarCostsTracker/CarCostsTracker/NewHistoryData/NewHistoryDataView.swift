@@ -35,7 +35,7 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
     
     
     
-    var selectedDate: Date = Date()
+    var selectedDate: Date?
     var datePicker: UIDatePicker?
     
     
@@ -71,6 +71,7 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor.red
                 })
         } else {
+            var selectedDate: Date = Date()
             dateTextField.text = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
         }
     }
@@ -85,6 +86,9 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
     
     @objc func dateChanged(datePicker: UIDatePicker){
         selectedDate = datePicker.date
+        guard let selectedDate = selectedDate else {
+        return print("selectedDate was nil")
+        }
         dateTextField.text = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
         
 //     to set time stamp
