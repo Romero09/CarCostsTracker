@@ -30,9 +30,9 @@ extension HistoryView: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let hisotryCell = collectionView.dequeueReusableCell(withReuseIdentifier: "historyCell", for: indexPath)
+        let historyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "historyCell", for: indexPath)
         
-        return hisotryCell
+        return historyCell
     }
 }
 
