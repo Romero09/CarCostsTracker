@@ -55,7 +55,7 @@ extension ChartsPresenter: ChartsPresenterApi {
             let repairValue = Double(chartDataArray[i].repair)
             let otherValue = Double(chartDataArray[i].other)
             
-            return BarChartDataEntry(x: Double(chartDataArray[i].month)+0.5, yValues: [fuelValue, repairValue, otherValue])
+            return BarChartDataEntry(x: Double(chartDataArray[i].month)-0.5, yValues: [fuelValue, repairValue, otherValue])
         }
         
         let set = BarChartDataSet(values: yVals, label: "Expenses statistics per month")
@@ -69,69 +69,41 @@ extension ChartsPresenter: ChartsPresenterApi {
         view.barChartView.data = data
     }
     
-    func getDataForChart(data historyList: [HistoryDataModel]) -> [ChartData] {
-        var chartDataArray: [ChartData] = []
+    func toChartData(history data:HistoryDataModel) -> ChartData{
         var chartData = ChartData()
+        chartData.month = getMonthNumber(date: data.date)
+        chartData.timeStamp = data.date
         
-//        let a = [1, 2, 3, 4]
-//        
-//        historyList.map { $0.toChartData() }
-//            .reduce(ChartDataArray, { (result, model: ChartData) -> [ChartData] in
-//                if let index = result.containsMonth(model), let existingEntry = result[index] {
-//                    let newEntry = existingEntry.add(model)
-//                    result[index] = newEntry
-//                    return result
-//                }
-//                
-//                return [result] + [model]
-//            })
-        
-        
-        
-        for i in 0 ..< historyList.count{
-            
-            let currentExpensesMonth = getMonthNumber(date: historyList[i].date)
-            let currentExpensesTypes = historyList[i].costsType
-            let currentExpensesPrice = historyList[i].costsPrice
-            let currentExpensesTimeStamp = historyList[i].date
-            
-            if chartData.month == 0 {
-                switch currentExpensesTypes{
-                case CostType.fuel.name(): chartData.fuel += currentExpensesPrice
-                case CostType.repair.name(): chartData.repair += currentExpensesPrice
-                case CostType.other.name(): chartData.other += currentExpensesPrice
-                default:
-                    break
-                }
-                chartData.month = currentExpensesMonth
-                chartData.timeStamp = currentExpensesTimeStamp
-            }
-            
-            if i == historyList.count-1 {
-                chartDataArray.append(chartData)
-                chartData = ChartData()
-                break
-            }
-            
-            let nextExpensesMonth = getMonthNumber(date: historyList[i+1].date)
-            let nextExpensesTypes = historyList[i+1].costsType
-            let nextExpensesPrice = historyList[i+1].costsPrice
-            
-            if currentExpensesMonth == nextExpensesMonth {
-                switch nextExpensesTypes{
-                case CostType.fuel.name(): chartData.fuel += nextExpensesPrice
-                case CostType.repair.name(): chartData.repair += nextExpensesPrice
-                case CostType.other.name(): chartData.other += nextExpensesPrice
-                default:
-                    break
-                }
-            } else {
-                chartDataArray.append(chartData)
-                chartData = ChartData()
-            }
+        switch data.costsType{
+        case CostType.fuel.name(): chartData.fuel += data.costsPrice
+        case CostType.repair.name(): chartData.repair += data.costsPrice
+        case CostType.other.name(): chartData.other += data.costsPrice
+        default:
+            break
         }
-        return chartDataArray
+        return chartData
     }
+    
+    
+    func getDataForChart(data historyList: [HistoryDataModel]) -> [ChartData] {
+
+        let newChartData = historyList.map { toChartData(history: $0) }
+            .reduce([], { (result, model: ChartData) -> [ChartData] in
+                if let monthIndex = result.monthAtIndex(data: model) {
+                    var existingEntry = result
+                    existingEntry[monthIndex].other += model.other
+                    existingEntry[monthIndex].fuel += model.fuel
+                    existingEntry[monthIndex].repair += model.repair
+                    
+                    return existingEntry
+                }
+                var newEntry = result
+                newEntry.append(model)
+                return newEntry
+            })
+        return newChartData
+    }
+    
     
     func barChartSetUp(){
         let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -153,30 +125,17 @@ extension ChartsPresenter: ChartsPresenterApi {
         xAxis.centerAxisLabelsEnabled = true
         xAxis.granularity = 1
         
-        let l = view.barChartView.legend
-        l.horizontalAlignment = .center
-        l.verticalAlignment = .bottom
-        l.orientation = .horizontal
-        l.drawInside = false
-        l.form = .square
-        l.formToTextSpace = 4
-        l.xEntrySpace = 6
-        l.font = .systemFont(ofSize: 12, weight: .light)
+        let legend = view.barChartView.legend
+        legend.horizontalAlignment = .center
+        legend.verticalAlignment = .bottom
+        legend.orientation = .horizontal
+        legend.drawInside = false
+        legend.form = .square
+        legend.formToTextSpace = 4
+        legend.xEntrySpace = 6
+        legend.font = .systemFont(ofSize: 12, weight: .light)
     }
     
-}
-
-// MARK: - Charts Viper Components
-private extension ChartsPresenter {
-    var view: ChartsViewApi {
-        return _view as! ChartsViewApi
-    }
-    var interactor: ChartsInteractorApi {
-        return _interactor as! ChartsInteractorApi
-    }
-    var router: ChartsRouterApi {
-        return _router as! ChartsRouterApi
-    }
 }
 
 class ChartValueFormatter: NSObject, IValueFormatter {
@@ -203,4 +162,29 @@ struct ChartData{
     var repair: Double = 0.0
     var fuel: Double = 0.0
     var other: Double = 0.0
+    
+    
 }
+
+extension Array where Element == ChartData {
+    func monthAtIndex(data: ChartData) -> Int?{
+            return self.firstIndex(where: { (result: ChartData) -> Bool in
+                result.month == data.month
+            })
+    }
+}
+
+// MARK: - Charts Viper Components
+private extension ChartsPresenter {
+    var view: ChartsViewApi {
+        return _view as! ChartsViewApi
+    }
+    var interactor: ChartsInteractorApi {
+        return _interactor as! ChartsInteractorApi
+    }
+    var router: ChartsRouterApi {
+        return _router as! ChartsRouterApi
+    }
+}
+
+
