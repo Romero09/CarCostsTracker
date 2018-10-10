@@ -28,8 +28,16 @@ final class HistoryView: UserInterface {
 
 //MARK: - HistoryView API
 extension HistoryView: HistoryViewApi {
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        //Sets default orientagion for this view to portrait
+        let value = UIInterfaceOrientation.portrait.rawValue
+        UIDevice.current.setValue(value, forKey: "orientation")
+    }
 
     override func viewDidLoad() {
+        
         chartsButtonOutlet.layer.cornerRadius = chartsButtonOutlet.frame.width/2
         chartsButtonOutlet.layer.borderWidth = 2.0
         chartsButtonOutlet.layer.borderColor = self.view.tintColor.cgColor
