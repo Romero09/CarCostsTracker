@@ -13,7 +13,7 @@ import Viperit
 final class NewHistoryDataView: UserInterface, UITextViewDelegate {
     
     @IBAction func costTypeSelectionButton(_ sender: Any) {
-        showActionSheet()
+        showSelectCostTypeActionSheet()
     }
     
     @IBOutlet weak var costTypeButton: UIButton!
@@ -67,17 +67,13 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
             DispatchQueue.main.async(execute: {
                 self.title = "Edit data"
                 self.submitDataButtonOutlet.setTitle("Save", for: UIControl.State())
-                self.navigationItem.setRightBarButton(UIBarButtonItem(image: UIImage(named: "delete_item.png"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.deleteFromDB)), animated: true)
+                self.navigationItem.setRightBarButton(UIBarButtonItem(image: UIImage(named: "delete_item.png"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.showDeleteAction)), animated: true)
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor.red
                 })
         } else {
-            var selectedDate: Date = Date()
+            let selectedDate: Date = Date()
             dateTextField.text = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
         }
-    }
-    
-    @objc func deleteFromDB(){
-        presenter.performDataDelete()
     }
     
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
@@ -112,7 +108,7 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
         }
     }
     
-    func showActionSheet(){
+    func showSelectCostTypeActionSheet(){
         let actionSheet = UIAlertController(title: "Type of costs", message: nil, preferredStyle: .actionSheet)
         
         let cancel = UIAlertAction(title: "Cancle", style: .cancel, handler: nil)
@@ -135,6 +131,21 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
         actionSheet.addAction(cancel)
         
         present(actionSheet, animated: true, completion: nil)
+    }
+    
+    @objc func showDeleteAction(){
+        let deleteAction = UIAlertController(title: "Delete entry", message: "Are you sure you want to delete this entry?", preferredStyle: .alert)
+        
+        let accept = UIAlertAction(title: "Yes", style: .destructive) { action in
+            self.presenter.performDataDelete()
+        }
+        
+        let cancel = UIAlertAction(title: "No", style: .cancel, handler: nil)
+        
+        deleteAction.addAction(accept)
+        deleteAction.addAction(cancel)
+        
+        present(deleteAction, animated: true, completion: nil)
     }
 }
 
