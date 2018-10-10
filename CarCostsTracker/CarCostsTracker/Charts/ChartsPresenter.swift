@@ -62,22 +62,23 @@ extension ChartsPresenter: ChartsPresenterApi {
         set.colors = [ChartColorTemplates.material()[0], ChartColorTemplates.material()[1], ChartColorTemplates.material()[2]]
         set.stackLabels = ["Fuel", "Repair", "Other"]
         set.valueFormatter = ChartValueFormatter(numberFormatter: formatter)
+        set.valueFont = .systemFont(ofSize: 12, weight: .bold)
         let data = BarChartData(dataSet: set)
         
         view.barChartView.fitBars = true
         view.barChartView.data = data
     }
     
-    func getDataForChart(data array: Array<HistoryDataModel>) -> Array<ChartData> {
-        var chartDataArray: Array<ChartData> = []
+    func getDataForChart(data historyList: [HistoryDataModel]) -> [ChartData] {
+        var chartDataArray: [ChartData] = []
         var chartData = ChartData()
         
-        for i in 0 ..< array.count{
+        for i in 0 ..< historyList.count{
             
-            let currentExpensesMonth = getMonthNumber(date: array[i].date)
-            let currentExpensesTypes = array[i].costsType
-            let currentExpensesPrice = array[i].costsPrice
-            let currentExpensesTimeStamp = array[i].date
+            let currentExpensesMonth = getMonthNumber(date: historyList[i].date)
+            let currentExpensesTypes = historyList[i].costsType
+            let currentExpensesPrice = historyList[i].costsPrice
+            let currentExpensesTimeStamp = historyList[i].date
             
             if chartData.month == 0 {
                 switch currentExpensesTypes{
@@ -91,15 +92,15 @@ extension ChartsPresenter: ChartsPresenterApi {
                 chartData.timeStamp = currentExpensesTimeStamp
             }
             
-            if i == array.count-1 {
+            if i == historyList.count-1 {
                 chartDataArray.append(chartData)
                 chartData = ChartData()
                 break
             }
             
-            let nextExpensesMonth = getMonthNumber(date: array[i+1].date)
-            let nextExpensesTypes = array[i+1].costsType
-            let nextExpensesPrice = array[i+1].costsPrice
+            let nextExpensesMonth = getMonthNumber(date: historyList[i+1].date)
+            let nextExpensesTypes = historyList[i+1].costsType
+            let nextExpensesPrice = historyList[i+1].costsPrice
             
             if currentExpensesMonth == nextExpensesMonth {
                 switch nextExpensesTypes{
@@ -130,7 +131,7 @@ extension ChartsPresenter: ChartsPresenterApi {
         let xAxis = view.barChartView.xAxis
         xAxis.valueFormatter = IndexAxisValueFormatter(values:months)
         xAxis.labelPosition = .top
-        xAxis.labelFont = .systemFont(ofSize: 12, weight: .light)
+        xAxis.labelFont = .systemFont(ofSize: 16, weight: .light)
         xAxis.labelTextColor = UIColor(red: 255/255, green: 192/255, blue: 56/255, alpha: 1)
         xAxis.drawAxisLineEnabled = false
         xAxis.drawGridLinesEnabled = true
@@ -138,13 +139,14 @@ extension ChartsPresenter: ChartsPresenterApi {
         xAxis.granularity = 1
         
         let l = view.barChartView.legend
-        l.horizontalAlignment = .right
+        l.horizontalAlignment = .center
         l.verticalAlignment = .bottom
         l.orientation = .horizontal
         l.drawInside = false
         l.form = .square
         l.formToTextSpace = 4
         l.xEntrySpace = 6
+        l.font = .systemFont(ofSize: 12, weight: .light)
     }
     
 }

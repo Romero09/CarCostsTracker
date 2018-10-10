@@ -21,16 +21,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aO7-HC-2Ih" customClass="BarChartView" customModule="Charts">
-                                <rect key="frame" x="16" y="45" width="343" height="210"/>
+                                <rect key="frame" x="16" y="45" width="343" height="602"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="aO7-HC-2Ih" firstAttribute="top" secondItem="EcR-ye-kTk" secondAttribute="bottom" constant="25" id="EKv-Fw-yQK"/>
-                            <constraint firstItem="vb6-4r-Epx" firstAttribute="top" secondItem="aO7-HC-2Ih" secondAttribute="bottom" constant="412" id="Pk1-Wz-ZXv"/>
-                            <constraint firstItem="aO7-HC-2Ih" firstAttribute="trailing" secondItem="kgt-o0-aP8" secondAttribute="trailingMargin" id="fYw-7o-7q7"/>
-                            <constraint firstItem="aO7-HC-2Ih" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leadingMargin" id="nlO-tI-6uq"/>
+                            <constraint firstItem="aO7-HC-2Ih" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leadingMargin" id="KCg-b6-Xet"/>
+                            <constraint firstItem="aO7-HC-2Ih" firstAttribute="trailing" secondItem="kgt-o0-aP8" secondAttribute="trailingMargin" id="RdY-PR-wXP"/>
+                            <constraint firstItem="aO7-HC-2Ih" firstAttribute="top" secondItem="EcR-ye-kTk" secondAttribute="bottom" constant="25" id="XMs-vw-Om5"/>
+                            <constraint firstItem="vb6-4r-Epx" firstAttribute="top" secondItem="aO7-HC-2Ih" secondAttribute="bottom" constant="20" id="tds-w3-y13"/>
                         </constraints>
                     </view>
                     <connections>
@@ -39,7 +39,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nXm-AG-NXG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="293.60000000000002" y="355.7721139430285"/>
+            <point key="canvasLocation" x="292.80359820089956" y="354.39999999999998"/>
         </scene>
     </scenes>
 </document>
