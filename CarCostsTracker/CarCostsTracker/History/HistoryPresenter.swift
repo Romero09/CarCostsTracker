@@ -14,6 +14,11 @@ final class HistoryPresenter: Presenter {
     
     var historyArray: Array<HistoryCellData> = []
     var historyDataModel: Array<HistoryDataModel> = []
+    
+    override func viewIsAboutToAppear() {
+        historyArray = []
+        view.reloadData()
+    }
 }
 
 // MARK: - HistoryPresenter API

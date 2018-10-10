@@ -73,6 +73,21 @@ extension ChartsPresenter: ChartsPresenterApi {
         var chartDataArray: [ChartData] = []
         var chartData = ChartData()
         
+//        let a = [1, 2, 3, 4]
+//        
+//        historyList.map { $0.toChartData() }
+//            .reduce(ChartDataArray, { (result, model: ChartData) -> [ChartData] in
+//                if let index = result.containsMonth(model), let existingEntry = result[index] {
+//                    let newEntry = existingEntry.add(model)
+//                    result[index] = newEntry
+//                    return result
+//                }
+//                
+//                return [result] + [model]
+//            })
+        
+        
+        
         for i in 0 ..< historyList.count{
             
             let currentExpensesMonth = getMonthNumber(date: historyList[i].date)

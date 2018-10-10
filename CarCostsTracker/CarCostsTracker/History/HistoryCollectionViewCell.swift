@@ -23,7 +23,6 @@ class HistoryCollectionViewCell: UICollectionViewCell {
     
     
     func fillCellData(historyData: HistoryCellData){
-        
         costsLogo.image = historyData.costType.image()
         costsType.text = historyData.costType.name()
         milage.text = historyData.mileage
