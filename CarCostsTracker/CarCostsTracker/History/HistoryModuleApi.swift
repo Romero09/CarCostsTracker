@@ -24,6 +24,8 @@ protocol HistoryViewApi: UserInterfaceProtocol {
 
 //MARK: - HistoryPresenter API
 protocol HistoryPresenterApi: PresenterProtocol {
+    func showActivityIndicator(uiView: UIView)
+    func dismissActivityIndicator(uiView: UIView)
     var historyArray: Array<HistoryCellData> {get}
     func performLogOut()
     func getData()

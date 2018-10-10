@@ -34,10 +34,11 @@ extension HistoryView: HistoryViewApi {
         //Sets default orientagion for this view to portrait
         let value = UIInterfaceOrientation.portrait.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
+        
+        self.presenter.showActivityIndicator(uiView: self.view)
     }
 
     override func viewDidLoad() {
-        
         chartsButtonOutlet.layer.cornerRadius = chartsButtonOutlet.frame.width/2
         chartsButtonOutlet.layer.borderWidth = 2.0
         chartsButtonOutlet.layer.borderColor = self.view.tintColor.cgColor
@@ -57,6 +58,8 @@ extension HistoryView: HistoryViewApi {
         presenter.getData()
     }
     
+    
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         presenter.getData()
@@ -75,6 +78,7 @@ extension HistoryView: HistoryViewApi {
 extension HistoryView: UICollectionViewDataSource, UICollectionViewDelegate{	
     
     func reloadData(){
+        self.presenter.dismissActivityIndicator(uiView: self.view)
         costTable.reloadData()
     }
     
@@ -87,6 +91,7 @@ extension HistoryView: UICollectionViewDataSource, UICollectionViewDelegate{
         
         hisotryCell.fillCellData(historyData: presenter.historyArray[indexPath.row])
         hisotryCell.isSelected = true
+        
         return hisotryCell
     }
     
