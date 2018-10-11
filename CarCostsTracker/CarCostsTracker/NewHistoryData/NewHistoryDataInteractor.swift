@@ -9,11 +9,13 @@
 import Foundation
 import Viperit
 import Firebase
+import RxSwift
 
 // MARK: - NewHistoryDataInteractor Class
 final class NewHistoryDataInteractor: Interactor {
     
     let db = Firestore.firestore()
+    let storage = Storage.storage()
 }
 
 // MARK: - NewHistoryDataInteractor API
@@ -34,11 +36,26 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
                 self.presenter.returnToHistory()
             }
         }
+        
+        // Create a reference to the file to delete
+        let storageRef = storage.reference().child(userUID).child("\(id).jpg")
+        
+        // Delete the file
+        storageRef.delete { error in
+            if let error = error {
+                print(error)
+                // Uh-oh, an error occurred!
+            } else {
+                // File deleted successfully
+            }
+        }
     }
     
     
     
-    func storeData(type: String, price: Double, milage: Int, date: String, costDescription: String) {
+    func storeData(type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?) {
+        
+        
         
         var ref: DocumentReference? = nil
         guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
@@ -58,9 +75,23 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
                 print("Document added with ID: \(ref!.documentID)")
             }
         }
+        
+        if let image = image {
+            
+            let storageRef = storage.reference().child(userUID).child("\(ref!.documentID).jpg")
+            // Upload the file to the path "userID/documentID"
+            // Create file metadata including the content type
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpeg"
+            storageRef.putData(image, metadata: metadata) { (metadata, error) in
+                if let error = error {
+                    print("Error adding document: \(error)")
+                }
+            }
+        }
     }
     
-    func updateData(document id: String, type: String, price: Double, milage: Int, date: String, costDescription: String){
+    func updateData(document id: String, type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?){
         var ref: DocumentReference? = nil
         guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
             return print("Error user not Authorized")
@@ -82,7 +113,39 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             }
         }
         
+        if let image = image {
+            
+            let storageRef = storage.reference().child(userUID).child("\(ref!.documentID).jpg")
+            // Upload the file to the path "userID/documentID"
+            // Create file metadata including the content type
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpeg"
+            storageRef.putData(image, metadata: metadata) { (metadata, error) in
+                if let error = error {
+                    print("Error adding document: \(error)")
+                }
+            }
+        }
+    }
+    
+    func fetchImage(form documentID: String){
+        guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
+            return print("Error user not Authorized")
+        }
         
+         let storageRef = storage.reference().child(userUID).child("\(documentID).jpg")
+        
+        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+        storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+            if let error = error {
+                print(error)
+                self.presenter.failedToFetchImage(error: error)
+            } else {
+                // Data for "images/island.jpg" is returned
+                let image = UIImage(data: data!)
+                self.presenter.openAttachedImage(image: image!)
+            }
+        }
     }
     
     

@@ -11,7 +11,6 @@ import Charts
 
 //MARK: - ChartsRouter API
 protocol ChartsRouterApi: RouterProtocol {
-    func showCharts(from view: UserInterface, data array: Array<HistoryDataModel>)
 }
 
 //MARK: - ChartsView API

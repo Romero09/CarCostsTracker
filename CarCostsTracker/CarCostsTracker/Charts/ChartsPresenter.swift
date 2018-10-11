@@ -14,6 +14,12 @@ import Charts
 final class ChartsPresenter: Presenter {
     var chartsData: Array<HistoryDataModel> = []
     
+//    override func setupView(data: Any) {
+//        guard let data = data as? HistoryDataModel {
+//            
+//        }
+//    }
+    
     override func viewIsAboutToAppear() {
         barChartUpdate()
     }

@@ -10,7 +10,8 @@ import UIKit
 import Viperit
 
 //MARK: NewHistoryDataView Class
-final class NewHistoryDataView: UserInterface, UITextViewDelegate {
+final class NewHistoryDataView: UserInterface {
+    private weak var acitivityIndicationView: UIView?
     
     @IBAction func costTypeSelectionButton(_ sender: Any) {
         showSelectCostTypeActionSheet()
@@ -29,20 +30,45 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
     @IBAction func submitDataButton(_ sender: Any) {
         presenter.submitData()
     }
+    
     @IBOutlet weak var submitDataButtonOutlet: UIButton!
     
+    @IBAction func libraryButton(_ sender: Any) {
+        openLibrary()
+    }
+    @IBAction func cameraButton(_ sender: Any) {
+        openCamera()
+    }
     
+    @IBAction func openImageButton(_ sender: Any) {
+        presenter.getImageFromServer()
+    }
     
+    @IBOutlet weak var openImageButtonOutlet: UIButton!
     
-    
+    var imagePicked: UIImage?
     var selectedDate: Date?
     var datePicker: UIDatePicker?
+}
+
+
+//MARK: Lifecycle
+extension NewHistoryDataView{
     
+    override func viewDidLoad() {
+        costDescriptionTextView.delegate = self
+        costDescriptionTextView.text = "Enter costs description..."
+        costDescriptionTextView.textColor = UIColor.lightGray
+        costDescriptionTextView.layer.borderWidth = 1
+        costDescriptionTextView.layer.cornerRadius = 8
+        costDescriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
+        
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         
+        openImageButtonOutlet.isHidden = true
         self.title = "Add new data"
-        costTypeButton.titleLabel?.text = "Select Cost Type"
         
         datePicker = UIDatePicker()
         datePicker?.datePickerMode = .dateAndTime
@@ -56,44 +82,24 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
         dateTextField.inputView = datePicker
         
         
-        costDescriptionTextView.delegate = self
-        costDescriptionTextView.text = "Enter costs description..."
-        costDescriptionTextView.textColor = UIColor.lightGray
-        costDescriptionTextView.layer.borderWidth = 1
-        costDescriptionTextView.layer.cornerRadius = 8
-        costDescriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
-        
+
         if presenter.isEditMode(){
             DispatchQueue.main.async(execute: {
                 self.title = "Edit data"
+                self.openImageButtonOutlet.isHidden = false
                 self.submitDataButtonOutlet.setTitle("Save", for: UIControl.State())
                 self.navigationItem.setRightBarButton(UIBarButtonItem(image: UIImage(named: "delete_item.png"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.showDeleteAction)), animated: true)
                     self.navigationItem.rightBarButtonItem?.tintColor = UIColor.red
                 })
         } else {
-            let selectedDate: Date = Date()
-            dateTextField.text = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
+            costTypeButton.titleLabel?.text = "Select Cost Type"
+            selectedDate = Date()
+            dateTextField.text = DateFormatter.localizedString(from: selectedDate!, dateStyle: .short, timeStyle: .short)
         }
     }
-    
-    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
-        view.endEditing(true)
-    }
-    
-    @objc func dateChanged(datePicker: UIDatePicker){
-        selectedDate = datePicker.date
-        guard let selectedDate = selectedDate else {
-        return print("selectedDate was nil")
-        }
-        dateTextField.text = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
-        
-//     to set time stamp
-//        let stringTimeStamp = String(date.timeIntervalSince1970)
-//     to convert from timestamp to date
-//        let timeStamp = TimeInterval(stringTimeStamp)
-//        let newDate = Date(timeIntervalSince1970: timeStamp)
-    }
-    
+}
+
+extension NewHistoryDataView: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.lightGray {
             textView.text = nil
@@ -107,6 +113,23 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
             textView.textColor = UIColor.lightGray
         }
     }
+}
+
+//MARK: Actions bindings
+extension NewHistoryDataView {
+    
+    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
+        view.endEditing(true)
+    }
+    
+    @objc func dateChanged(datePicker: UIDatePicker){
+        selectedDate = datePicker.date
+        guard let selectedDate = selectedDate else {
+        return print("selectedDate was nil")
+        }
+        dateTextField.text = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
+        
+    }
     
     func showSelectCostTypeActionSheet(){
         let actionSheet = UIAlertController(title: "Type of costs", message: nil, preferredStyle: .actionSheet)
@@ -114,15 +137,15 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
         let cancel = UIAlertAction(title: "Cancle", style: .cancel, handler: nil)
         
         let repair = UIAlertAction(title: "Repair", style: .default) {action in
-            self.costTypeButton.setTitle("Repair", for: .normal)
+            self.updateCostTypeButtonLabel(text: "Repair")
             }
         
         let fuel = UIAlertAction(title: "Fuel", style: .default) {action in
-            self.costTypeButton.setTitle("Fuel", for: .normal)
+           self.updateCostTypeButtonLabel(text: "Fuel")
         }
         
         let other = UIAlertAction(title: "Other", style: .default) {action in
-            self.costTypeButton.setTitle("Other", for: .normal)
+            self.updateCostTypeButtonLabel(text: "Other")
         }
         
         actionSheet.addAction(repair)
@@ -131,6 +154,13 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
         actionSheet.addAction(cancel)
         
         present(actionSheet, animated: true, completion: nil)
+    }
+    
+    func updateCostTypeButtonLabel(text: String){
+        DispatchQueue.main.async(execute: {
+            self.costTypeButton.setTitle(text, for: .selected)
+        self.costTypeButton.setTitle(text, for: .normal)
+        })
     }
     
     @objc func showDeleteAction(){
@@ -149,13 +179,49 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
     }
 }
 
-//MARK: - NewHistoryDataView API
-extension NewHistoryDataView: NewHistoryDataViewApi {
-    var getSelectedDate: Date? {
-        return self.selectedDate
+extension NewHistoryDataView: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+    
+    func openCamera(){
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = .camera;
+            imagePicker.allowsEditing = false
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+    }
+    
+    func openLibrary(){
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = .photoLibrary;
+            imagePicker.allowsEditing = true
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+    }
+    
+    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let selectedImage = info[.originalImage] as? UIImage else {
+            fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
+        }
+        imagePicked = selectedImage
+        dismiss(animated:true, completion: nil)
     }
     
     
+}
+
+//MARK: - NewHistoryDataView API
+extension NewHistoryDataView: NewHistoryDataViewApi {
+    
+    var newHistoryDataView: NewHistoryDataView {
+        return self
+    }
+    
+    var getSelectedDate: Date? {
+        return self.selectedDate
+    }
 }
 
 // MARK: - NewHistoryDataView Viper Components API

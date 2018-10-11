@@ -20,7 +20,7 @@ extension HistoryRouter: HistoryRouterApi {
     func showCharts(data array: Array<HistoryDataModel>) {
         let module = AppModules.Charts.build()
         let chartsRouter = module.router as! ChartsRouterApi
-        chartsRouter.showCharts(from: _view, data: array)
+        chartsRouter.show(from: _view, embedInNavController: false, setupData: array)
     }
     
     func showLogIn(){

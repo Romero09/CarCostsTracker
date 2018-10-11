@@ -24,6 +24,7 @@ class HistoryCollectionViewCell: UICollectionViewCell {
     
     func fillCellData(historyData: HistoryCellData){
         costsLogo.image = historyData.costType.image()
+        costsLogo.tintColor = .blue
         costsType.text = historyData.costType.name()
         milage.text = historyData.mileage
         let timeStamp = TimeInterval(historyData.costDate)

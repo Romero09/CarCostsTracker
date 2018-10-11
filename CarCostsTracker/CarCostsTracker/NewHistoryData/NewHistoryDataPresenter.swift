@@ -13,7 +13,8 @@ import Viperit
 final class NewHistoryDataPresenter: Presenter {
     var historyDataToEdit: HistoryCellData?
     
-    override func viewHasLoaded(){
+    override func viewHasLoaded() {
+        super.viewIsAboutToAppear()
         if isEditMode(){
             DispatchQueue.main.async(execute: {
                 self.updateEditView()
@@ -25,6 +26,22 @@ final class NewHistoryDataPresenter: Presenter {
 // MARK: - NewHistoryDataPresenter API
 extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
     
+    
+    func failedToFetchImage(error message: Error) {
+        dismissActivityIndicator(uiView: view.newHistoryDataView.view)
+        let alert = UIAlertController(title: "No image found", message: "No image found for this entry, please attach image", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        view.newHistoryDataView.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    
+    func openAttachedImage(image data: UIImage) {
+        router.showAttachedImageView(image: data)
+        dismissActivityIndicator(uiView: view.newHistoryDataView.view)
+    }
+    
+    
     func returnToHistory(){
         router.showHistory()
     }
@@ -32,7 +49,7 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
     func isEditMode() -> Bool {
         if historyDataToEdit != nil {
             return true } else {
-                return false
+            return false
         }
     }
     
@@ -54,6 +71,7 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
         let costPrice = Double(view.costPriceTextField.text ?? "") ?? 0.0
         let milage = Int(view.milageTextField.text ?? "") ?? 0
         let costDescription = view.costDescriptionTextView.text ?? ""
+        let imagePicked = view.imagePicked?.jpegData(compressionQuality: 0.7)
         var date = ""
         
         if let tempDate = view.getSelectedDate {
@@ -64,25 +82,69 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
         
         if isEditMode(){
             guard let historyDataToEdit = self.historyDataToEdit else {
-               return print("Error historyDataToEdit is nil")
+                return print("Error historyDataToEdit is nil")
             }
-            interactor.updateData(document: historyDataToEdit.documentID ,type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription)
+            interactor.updateData(document: historyDataToEdit.documentID ,type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription, image: imagePicked)
         } else{
-        interactor.storeData(type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription)
+            interactor.storeData(type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription, image: imagePicked)
         }
     }
     
     func performDataDelete(){
         guard let historyDataToEdit = self.historyDataToEdit else {
-           return print("Error historyDataToEdit is nil")
+            return print("Error historyDataToEdit is nil")
         }
         interactor.deleteData(document: historyDataToEdit.documentID)
+    }
+    
+    func getImageFromServer(){
+        if let historyDataToEdit = historyDataToEdit {
+            showActivityIndicator(uiView: view.newHistoryDataView.view)
+        interactor.fetchImage(form: historyDataToEdit.documentID)
+        }
     }
     
     func fillEditData(edit data: HistoryCellData){
         historyDataToEdit = data
     }
     
+    
+    func showActivityIndicator(uiView: UIView) {
+        DispatchQueue.main.async(execute: {
+            let container: UIView = UIView()
+            container.frame = uiView.frame
+            container.center = uiView.center
+            container.tag = 100
+            
+            let loadingView: UIView = UIView()
+            loadingView.frame = CGRect(x: 0.0, y: 0.0, width: 80.0, height: 80.0)
+            loadingView.center = uiView.center
+            loadingView.backgroundColor = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 0.7)
+            loadingView.clipsToBounds = true
+            loadingView.layer.cornerRadius = 10
+            
+            let actInd: UIActivityIndicatorView = UIActivityIndicatorView()
+            actInd.frame = CGRect(x: 0.0, y: 0.0, width: 40.0, height: 40.0)
+            actInd.hidesWhenStopped = true
+            actInd.style =
+                UIActivityIndicatorView.Style.whiteLarge
+            actInd.center = CGPoint(x: loadingView.frame.size.width / 2,
+                                    y: loadingView.frame.size.height / 2);
+            loadingView.addSubview(actInd)
+            container.addSubview(loadingView)
+            uiView.addSubview(container)
+            actInd.startAnimating()
+            
+        })
+    }
+    
+    func dismissActivityIndicator(uiView: UIView){
+        DispatchQueue.main.async(execute: {
+            if let viewWithTag = uiView.viewWithTag(100){
+                viewWithTag.removeFromSuperview()
+            }
+        })
+    }
 }
 
 // MARK: - NewHistoryData Viper Components

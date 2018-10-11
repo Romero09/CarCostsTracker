@@ -78,7 +78,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yGh-9c-lQd">
-                                <rect key="frame" x="149" y="418" width="77" height="42"/>
+                                <rect key="frame" x="149" y="545" width="77" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Submit"/>
                                 <connections>
@@ -102,6 +102,30 @@
                                     <action selector="costTypeSelectionButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="J4r-lY-Qz3"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CTf-yP-NI3">
+                                <rect key="frame" x="57" y="411" width="92" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Open camera"/>
+                                <connections>
+                                    <action selector="cameraButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="leL-Ba-Asg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hVr-wl-6Rh">
+                                <rect key="frame" x="243" y="411" width="84" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Open library"/>
+                                <connections>
+                                    <action selector="libraryButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="BRQ-td-Dkm"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sj9-Ns-npc">
+                                <rect key="frame" x="113" y="471" width="148" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Open attached image"/>
+                                <connections>
+                                    <action selector="openImageButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="V4Q-9Z-mca"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -121,7 +145,7 @@
                             <constraint firstItem="jr8-1r-4Lv" firstAttribute="top" secondItem="2IQ-ZI-F2O" secondAttribute="bottom" constant="21" id="DIx-oB-e92"/>
                             <constraint firstAttribute="trailingMargin" secondItem="0NY-QT-Amb" secondAttribute="trailing" constant="27" id="DY0-Xy-ZCa"/>
                             <constraint firstItem="3F1-Wj-dcr" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leadingMargin" id="F2T-Pg-2Vy"/>
-                            <constraint firstItem="yGh-9c-lQd" firstAttribute="centerY" secondItem="kgt-o0-aP8" secondAttribute="centerY" constant="105.5" id="NDC-Xv-SXb"/>
+                            <constraint firstItem="vb6-4r-Epx" firstAttribute="top" secondItem="yGh-9c-lQd" secondAttribute="bottom" constant="80" id="He6-Lu-FzA"/>
                             <constraint firstItem="FwR-PB-rSY" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leadingMargin" id="QhY-NC-3Jd"/>
                             <constraint firstAttribute="trailingMargin" secondItem="rOG-VA-xgh" secondAttribute="trailing" constant="27" id="S1f-6o-hs5"/>
                             <constraint firstItem="M5s-Mz-ctr" firstAttribute="top" secondItem="8mh-mw-lxu" secondAttribute="bottom" constant="13" id="XJI-ST-nca"/>
@@ -141,6 +165,7 @@
                         <outlet property="costTypeButton" destination="8mh-mw-lxu" id="on7-YV-w8h"/>
                         <outlet property="dateTextField" destination="0NY-QT-Amb" id="P3l-DF-ebA"/>
                         <outlet property="milageTextField" destination="rOG-VA-xgh" id="fOZ-VX-xC7"/>
+                        <outlet property="openImageButtonOutlet" destination="sj9-Ns-npc" id="Fdk-AQ-6QS"/>
                         <outlet property="submitDataButtonOutlet" destination="yGh-9c-lQd" id="Qd4-RD-ETC"/>
                     </connections>
                 </viewController>

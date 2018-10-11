@@ -7,6 +7,8 @@
 //
 
 import Viperit
+import RxCocoa
+import RxSwift
 
 //MARK: - HistoryRouter API
 protocol HistoryRouterApi: RouterProtocol {
@@ -19,23 +21,17 @@ protocol HistoryRouterApi: RouterProtocol {
 
 //MARK: - HistoryView API
 protocol HistoryViewApi: UserInterfaceProtocol {
-    func reloadData()
+    var disposeBag: DisposeBag { get }
+    var selectedCell: ControlEvent<HistoryCellData> { get }
+    var createNewEntry: ControlEvent<Void> { get }
+    func setData(drivableData: Observable<[HistoryCellData]>)
 }
 
 //MARK: - HistoryPresenter API
 protocol HistoryPresenterApi: PresenterProtocol {
-    func showActivityIndicator(uiView: UIView)
-    func dismissActivityIndicator(uiView: UIView)
-    var historyArray: Array<HistoryCellData> {get}
-    func performLogOut()
-    func getData()
-    func switchToNewHistoryData()
-    func transferData(history data: Array<HistoryDataModel>)
-    func historyCellSelected(cell data: HistoryCellData)
-    func switchToCharts()
 }
 
 //MARK: - HistoryInteractor API
 protocol HistoryInteractorApi: InteractorProtocol {
-    func fetchFromDB()
+    func fetchHistoryData() -> Observable<[HistoryDataModel]>
 }
