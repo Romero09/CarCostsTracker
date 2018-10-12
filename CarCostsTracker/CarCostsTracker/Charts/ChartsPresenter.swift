@@ -12,13 +12,14 @@ import Charts
 
 // MARK: - ChartsPresenter Class
 final class ChartsPresenter: Presenter {
-    var chartsData: Array<HistoryDataModel> = []
+    var chartsData: [HistoryDataModel] = []
     
-//    override func setupView(data: Any) {
-//        guard let data = data as? HistoryDataModel {
-//            
-//        }
-//    }
+    override func setupView(data: Any) {
+        guard let data = data as? [HistoryDataModel] else {
+            return
+        }
+        chartsData = data
+    }
     
     override func viewIsAboutToAppear() {
         barChartUpdate()

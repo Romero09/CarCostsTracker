@@ -18,13 +18,14 @@ class HistoryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var costsType: UILabel!
     @IBOutlet weak var milage: UILabel!
     @IBOutlet weak var date: UILabel!
-    @IBOutlet weak var detailedDescription: UILabel!
     @IBOutlet weak var price: UILabel!
+    @IBOutlet weak var pointerImage: UIImageView!
     
     
     func fillCellData(historyData: HistoryCellData){
         costsLogo.image = historyData.costType.image()
         costsLogo.tintColor = .blue
+        pointerImage.tintColor = .blue
         costsType.text = historyData.costType.name()
         milage.text = historyData.mileage
         let timeStamp = TimeInterval(historyData.costDate)

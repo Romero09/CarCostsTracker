@@ -30,6 +30,7 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
 
 //MARK: - NewHistoryDataPresenter API
 protocol NewHistoryDataPresenterApi: PresenterProtocol {
+    func viewWillAppear()
     func openAttachedImage(image data: UIImage)
     func getImageFromServer()
     func updateEditView()

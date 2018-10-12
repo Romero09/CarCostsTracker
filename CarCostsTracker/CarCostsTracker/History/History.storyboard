@@ -106,6 +106,7 @@
                                             <outlet property="costsType" destination="f2m-dc-ZAd" id="zMM-sa-BjE"/>
                                             <outlet property="date" destination="Tvn-qv-xPs" id="Pp3-wQ-wcO"/>
                                             <outlet property="milage" destination="FwN-vt-yjn" id="zen-Ba-VUG"/>
+                                            <outlet property="pointerImage" destination="p1D-lu-BPG" id="mJv-FM-1qV"/>
                                             <outlet property="price" destination="srK-MC-qOY" id="72y-mr-xan"/>
                                         </connections>
                                     </collectionViewCell>

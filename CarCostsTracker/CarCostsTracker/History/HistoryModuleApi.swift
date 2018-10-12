@@ -12,7 +12,7 @@ import RxSwift
 
 //MARK: - HistoryRouter API
 protocol HistoryRouterApi: RouterProtocol {
-    func showCharts(data array: Array<HistoryDataModel>)
+    func showCharts(data array: [HistoryDataModel])
     func showLogIn()
     func showHistory(from view: UserInterface)
     func showNewHistoryData()
@@ -24,7 +24,9 @@ protocol HistoryViewApi: UserInterfaceProtocol {
     var disposeBag: DisposeBag { get }
     var selectedCell: ControlEvent<HistoryCellData> { get }
     var createNewEntry: ControlEvent<Void> { get }
+    var performLogOut: ControlEvent<Void> { get }
     func setData(drivableData: Observable<[HistoryCellData]>)
+    var showCharts: ControlEvent<Void> { get }
 }
 
 //MARK: - HistoryPresenter API

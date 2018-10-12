@@ -13,18 +13,19 @@ import Viperit
 final class NewHistoryDataPresenter: Presenter {
     var historyDataToEdit: HistoryCellData?
     
-    override func viewHasLoaded() {
-        super.viewIsAboutToAppear()
+
+}
+
+// MARK: - NewHistoryDataPresenter API
+extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
+    
+    func viewWillAppear(){
         if isEditMode(){
             DispatchQueue.main.async(execute: {
                 self.updateEditView()
             })
         }
     }
-}
-
-// MARK: - NewHistoryDataPresenter API
-extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
     
     
     func failedToFetchImage(error message: Error) {

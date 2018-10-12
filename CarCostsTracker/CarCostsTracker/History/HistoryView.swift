@@ -14,15 +14,17 @@ import RxCocoa
 
 //MARK: HistoryView Class
 final class HistoryView: UserInterface {
-    @IBOutlet weak var costTable: UICollectionView!
+    @IBOutlet private var costTable: UICollectionView!
     
-    @IBOutlet weak var chartsButtonOutlet: UIButton!
+    @IBOutlet private var chartsButtonOutlet: UIButton!
     
     @IBAction func chartsButton(_ sender: Any) {}
 
     private let bag = DisposeBag()
     
-    private let additionButton = UIBarButtonItem(image: UIImage(named: "add_item.png"), style: .done, target: nil, action: nil)
+    private let addItemButton = UIBarButtonItem(image: UIImage(named: "add_item.png"), style: .done, target: nil, action: nil)
+    
+    private let logOutButton = UIBarButtonItem(title: "Log out", style: .plain, target: nil, action: nil)
     
 }
 
@@ -37,7 +39,15 @@ extension HistoryView: HistoryViewApi {
     }
     
     var createNewEntry: ControlEvent<Void> {
-        return additionButton.rx.tap
+        return addItemButton.rx.tap
+    }
+    
+    var performLogOut: ControlEvent<Void>{
+        return logOutButton.rx.tap
+    }
+    
+    var showCharts: ControlEvent<Void> {
+        return chartsButtonOutlet.rx.tap
     }
     
     func setData(drivableData: Observable<[HistoryCellData]>) {
@@ -66,17 +76,13 @@ extension HistoryView: HistoryViewApi {
         self.title = "History"
         self.navigationItem.setHidesBackButton(true, animated:true)
         
-        self.navigationItem.setRightBarButton(additionButton, animated: true)
+        self.navigationItem.setRightBarButton(addItemButton, animated: true)
         
-        self.navigationItem.setLeftBarButton(UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(callLogOut)), animated: true)
+        self.navigationItem.setLeftBarButton(logOutButton, animated: true)
         self.navigationItem.leftBarButtonItem?.tintColor = UIColor.red
         super.viewDidLoad()
     }
     
-    
-    @objc func callLogOut(){ }
-    
-    @objc func callSwitchToNewHistoryData(){}
 }
 
 // MARK: - HistoryView Viper Components API

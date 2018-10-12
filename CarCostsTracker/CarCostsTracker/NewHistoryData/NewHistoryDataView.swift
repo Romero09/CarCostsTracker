@@ -81,8 +81,8 @@ extension NewHistoryDataView{
         
         dateTextField.inputView = datePicker
         
+        presenter.viewWillAppear()
         
-
         if presenter.isEditMode(){
             DispatchQueue.main.async(execute: {
                 self.title = "Edit data"
