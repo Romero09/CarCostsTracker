@@ -27,6 +27,8 @@ protocol HistoryViewApi: UserInterfaceProtocol {
     var performLogOut: ControlEvent<Void> { get }
     func setData(drivableData: Observable<[HistoryCellData]>)
     var showCharts: ControlEvent<Void> { get }
+    func startActivityIndicator()
+    func stopActivityIndicator()
 }
 
 //MARK: - HistoryPresenter API

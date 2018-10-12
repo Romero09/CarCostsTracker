@@ -51,6 +51,7 @@
 		414D041E216F4E860035B3D2 /* AttachedImageViewInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D0417216F4E860035B3D2 /* AttachedImageViewInteractor.swift */; };
 		414D041F216F4E860035B3D2 /* AttachedImageViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D0418216F4E860035B3D2 /* AttachedImageViewView.swift */; };
 		41DB53432163A189009C8755 /* HistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */; };
+		41F4FC4321709E5200B43468 /* CustomActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F4FC4221709E5200B43468 /* CustomActivityIndicator.swift */; };
 		C9D39AA5E7C49BE4E7E0BD81 /* Pods_CarCostsTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA281969016F34CF2304D64 /* Pods_CarCostsTracker.framework */; };
 /* End PBXBuildFile section */
 
@@ -116,6 +117,7 @@
 		414D0417216F4E860035B3D2 /* AttachedImageViewInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachedImageViewInteractor.swift; sourceTree = "<group>"; };
 		414D0418216F4E860035B3D2 /* AttachedImageViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachedImageViewView.swift; sourceTree = "<group>"; };
 		41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		41F4FC4221709E5200B43468 /* CustomActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityIndicator.swift; sourceTree = "<group>"; };
 		53EBE42513C43B80F7DEEB60 /* Pods-CarCostsTrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTrackerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTrackerTests/Pods-CarCostsTrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F92AC99AFDE02AA40EE6A7E4 /* Pods-CarCostsTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTracker/Pods-CarCostsTracker.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -164,6 +166,7 @@
 				4094042D21624B1F00002636 /* AppDelegate.swift */,
 				4094043421624B2000002636 /* Assets.xcassets */,
 				410EB1092164B9CC00515C3E /* UserAuth.swift */,
+				41F4FC4221709E5200B43468 /* CustomActivityIndicator.swift */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -228,7 +231,6 @@
 		410EB10B2164DE8700515C3E /* NewHistoryData */ = {
 			isa = PBXGroup;
 			children = (
-				414D0420216F82820035B3D2 /* View */,
 				410EB10C2164DF3300515C3E /* NewHistoryData.storyboard */,
 				410EB10D2164DF3300515C3E /* NewHistoryDataDisplayData.swift */,
 				410EB10E2164DF3300515C3E /* NewHistoryDataPresenter.swift */,
@@ -266,13 +268,6 @@
 				414D0418216F4E860035B3D2 /* AttachedImageViewView.swift */,
 			);
 			path = AttachedImageView;
-			sourceTree = "<group>";
-		};
-		414D0420216F82820035B3D2 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		D95F62C56E4802A7A10C0640 /* Pods */ = {
@@ -551,6 +546,7 @@
 				410EB1072164A66700515C3E /* LoginInteractor.swift in Sources */,
 				410EB1082164A66700515C3E /* LoginView.swift in Sources */,
 				410EB1172164DF3400515C3E /* NewHistoryDataModuleApi.swift in Sources */,
+				41F4FC4321709E5200B43468 /* CustomActivityIndicator.swift in Sources */,
 				410EB1052164A66700515C3E /* LoginRouter.swift in Sources */,
 				414D041D216F4E860035B3D2 /* AttachedImageViewModuleApi.swift in Sources */,
 				40940459216265F200002636 /* HistoryRouter.swift in Sources */,

@@ -49,6 +49,7 @@ final class NewHistoryDataView: UserInterface {
     var imagePicked: UIImage?
     var selectedDate: Date?
     var datePicker: UIDatePicker?
+    private let activityIndicator = CustomActivityIndicator()
 }
 
 
@@ -118,6 +119,17 @@ extension NewHistoryDataView: UITextViewDelegate {
 //MARK: Actions bindings
 extension NewHistoryDataView {
     
+    func startActivityIndicaotr(){
+        activityIndicator.center = self.view.center
+        self.view.addSubview(activityIndicator)
+        self.view.isUserInteractionEnabled = false
+    }
+    
+    func stopActivityIndicaotr(){
+        activityIndicator.removeFromSuperview()
+        self.view.isUserInteractionEnabled = true
+    }
+    
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
         view.endEditing(true)
     }
@@ -179,6 +191,7 @@ extension NewHistoryDataView {
     }
 }
 
+//MARK: Camera and Library control
 extension NewHistoryDataView: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     func openCamera(){
@@ -208,9 +221,9 @@ extension NewHistoryDataView: UIImagePickerControllerDelegate, UINavigationContr
         imagePicked = selectedImage
         dismiss(animated:true, completion: nil)
     }
-    
-    
 }
+
+
 
 //MARK: - NewHistoryDataView API
 extension NewHistoryDataView: NewHistoryDataViewApi {

@@ -28,6 +28,12 @@ final class HistoryPresenter: Presenter {
     
     
     override func viewHasLoaded(){
+        view.startActivityIndicator()
+        
+        historyData.subscribe(onNext: { (element) in
+            self.view.stopActivityIndicator()
+        }).disposed(by: view.disposeBag)
+        
         interactor.fetchHistoryData()
             //3. we binds data from interactor which comes as Observable to our historyDataPublisher
             .bind(to: historyDataPublisher)

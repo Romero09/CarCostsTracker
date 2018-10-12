@@ -14,12 +14,13 @@ import RxCocoa
 
 //MARK: HistoryView Class
 final class HistoryView: UserInterface {
+    
     @IBOutlet private var costTable: UICollectionView!
     
-    @IBOutlet private var chartsButtonOutlet: UIButton!
+    @IBOutlet private var chartsButton: UIButton!
     
-    @IBAction func chartsButton(_ sender: Any) {}
-
+    private var activityIndicator = CustomActivityIndicator()
+    
     private let bag = DisposeBag()
     
     private let addItemButton = UIBarButtonItem(image: UIImage(named: "add_item.png"), style: .done, target: nil, action: nil)
@@ -30,10 +31,24 @@ final class HistoryView: UserInterface {
 
 //MARK: - HistoryView API
 extension HistoryView: HistoryViewApi {
+    
+    func startActivityIndicator() {
+        activityIndicator.center = self.view.center
+        self.view.addSubview(activityIndicator)
+        self.view.isUserInteractionEnabled = false
+    }
+    
+    func stopActivityIndicator() {
+        activityIndicator.removeFromSuperview()
+        self.view.isUserInteractionEnabled = true
+    }
+    
+    //Disposebag of this view, bag will be disposed when view will be cleared from memory
     var disposeBag: DisposeBag {
         return bag
     }
     
+    //Control events on which we can subscribe and use as observable on click events.
     var selectedCell: ControlEvent<HistoryCellData> {
         return costTable.rx.modelSelected(HistoryCellData.self)
     }
@@ -47,18 +62,23 @@ extension HistoryView: HistoryViewApi {
     }
     
     var showCharts: ControlEvent<Void> {
-        return chartsButtonOutlet.rx.tap
+        return chartsButton.rx.tap
     }
     
+    //Setting data to a view cell, reciving Observable<[HistoryCellData]
     func setData(drivableData: Observable<[HistoryCellData]>) {
         drivableData.asDriver(onErrorJustReturn: [])
-            .debug("Data driver")
+            .debug("Data driver") // used for debug purpose
+            //.drive is same as subscrive bud for drivers that works with UI. Read doc for detailed info about rx.items
             .drive(costTable.rx.items(cellIdentifier: "historyCell", cellType: HistoryCollectionViewCell.self)) {
                 (_, data: HistoryCellData, cell) in
                 cell.fillCellData(historyData: data)
             }.disposed(by: bag)
     }
-    
+}
+
+//MARK: View LifeCycle
+extension HistoryView {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -66,21 +86,31 @@ extension HistoryView: HistoryViewApi {
         let value = UIInterfaceOrientation.portrait.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
     }
-
+    
     override func viewDidLoad() {
-        chartsButtonOutlet.layer.cornerRadius = chartsButtonOutlet.frame.width/2
-        chartsButtonOutlet.layer.borderWidth = 2.0
-        chartsButtonOutlet.layer.borderColor = self.view.tintColor.cgColor
-        chartsButtonOutlet.backgroundColor = UIColor.white
+        super.viewDidLoad()
+        setUpChartsButton()
+        setUpNavigationBar()
+    }
+    
+}
 
+//MARK: View design
+extension HistoryView {
+    
+    func setUpChartsButton(){
+        chartsButton.layer.cornerRadius = chartsButton.frame.width/2
+        chartsButton.layer.borderWidth = 2.0
+        chartsButton.layer.borderColor = self.view.tintColor.cgColor
+        chartsButton.backgroundColor = UIColor.white
+    }
+    
+    func setUpNavigationBar(){
         self.title = "History"
         self.navigationItem.setHidesBackButton(true, animated:true)
-        
         self.navigationItem.setRightBarButton(addItemButton, animated: true)
-        
         self.navigationItem.setLeftBarButton(logOutButton, animated: true)
         self.navigationItem.leftBarButtonItem?.tintColor = UIColor.red
-        super.viewDidLoad()
     }
     
 }
