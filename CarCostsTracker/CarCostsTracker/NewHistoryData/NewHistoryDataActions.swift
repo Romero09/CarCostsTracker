@@ -13,19 +13,19 @@ import RxCocoa
 
 internal class NewHistoryDataActions{
     
-    static func showDeleteAction(presenter: NewHistoryDataPresenterApi) -> UIAlertController{
-        let deleteAction = UIAlertController(title: "Delete entry", message: "Are you sure you want to delete this entry?", preferredStyle: .alert)
+    static func showDeleteAction() -> (UIAlertController, ControlEvent<Void>){
+        let deleteActionView = UIAlertController(title: "Delete entry", message: "Are you sure you want to delete this entry?", preferredStyle: .alert)
         
-        let accept = UIAlertAction(title: "Yes", style: .destructive) { action in
-            presenter.performDataDelete()
-        }
+        let (accept, observableDelete) = UIAlertAction.createAction(with: "Yes", style: .destructive)
+        
+        let eventDelete = ControlEvent<Void>(events: observableDelete)
         
         let cancel = UIAlertAction(title: "No", style: .cancel, handler: nil)
         
-        deleteAction.addAction(accept)
-        deleteAction.addAction(cancel)
+        deleteActionView.addAction(accept)
+        deleteActionView.addAction(cancel)
         
-        return deleteAction
+        return (deleteActionView, eventDelete)
     }
     
     static func showSelectCostTypeActionSheet() -> (UIAlertController, AlertActions) {

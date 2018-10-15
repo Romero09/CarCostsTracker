@@ -30,6 +30,7 @@ final class NewHistoryDataView: UserInterface {
     @IBAction func libraryButton(_ sender: Any) {
         openLibrary()
     }
+    
     @IBAction func cameraButton(_ sender: Any) {
         openCamera()
     }
@@ -40,6 +41,7 @@ final class NewHistoryDataView: UserInterface {
     
     @IBOutlet weak var openImageButtonOutlet: UIButton!
     
+    private let deleteEntryButton = UIBarButtonItem(image: UIImage(named: "delete_item.png"), style: UIBarButtonItem.Style.plain, target: self, action: nil)
     var imagePicked: UIImage?
     var selectedDate: Date?
     var datePicker: UIDatePicker?
@@ -56,6 +58,12 @@ extension NewHistoryDataView{
     override func viewDidLoad() {
         setUpCostDescriptionTextView()
         setUpDatePicker()
+        
+        if presenter.isEditMode(){
+            prepareViewEditMode()
+        } else {
+            prepareViewAddItemMode()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,12 +72,6 @@ extension NewHistoryDataView{
         view.addGestureRecognizer(tapGesture)
         
         presenter.viewWillAppear()
-        
-        if presenter.isEditMode(){
-            prepareViewInEditMode()
-        } else {
-            prepareViewAddItemMode()
-        }
     }
 }
 
@@ -94,24 +96,20 @@ extension NewHistoryDataView{
         dateTextField.inputView = datePicker
     }
     
-    func prepareViewInEditMode(){
-        DispatchQueue.main.async(execute: {
+    func prepareViewEditMode(){
             self.title = "Edit data"
             self.openImageButtonOutlet.isHidden = false
             self.submitDataButtonOutlet.setTitle("Save", for: UIControl.State())
-            self.navigationItem.setRightBarButton(UIBarButtonItem(image: UIImage(named: "delete_item.png"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.showDeleteAction)), animated: true)
+            self.navigationItem.setRightBarButton(self.deleteEntryButton, animated: true)
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor.red
-        })
     }
     
     func prepareViewAddItemMode(){
-        DispatchQueue.main.async(execute: {
             self.openImageButtonOutlet.isHidden = true
             self.title = "Add new data"
             self.costTypeButton.titleLabel?.text = "Select Cost Type"
             self.selectedDate = Date()
             self.dateTextField.text = DateFormatter.localizedString(from: self.selectedDate!, dateStyle: .short, timeStyle: .short)
-        })
     }
 }
 
@@ -159,10 +157,13 @@ extension NewHistoryDataView{
         return submitDataButtonOutlet.rx.tap
     }
     
+    var deleteEntry: ControlEvent<Void> {
+        return deleteEntryButton.rx.tap
+    }
+    
     
     @objc func showDeleteAction(){
-        let deleteAction =  NewHistoryDataActions.showDeleteAction(presenter: presenter)
-        present(deleteAction, animated: true, completion: nil)
+        
     }
 }
 

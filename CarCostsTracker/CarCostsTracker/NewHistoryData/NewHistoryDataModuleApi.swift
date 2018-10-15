@@ -22,6 +22,7 @@ protocol NewHistoryDataRouterApi: RouterProtocol {
 protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var selectCostTypeMenu: ControlEvent<Void> { get }
     var submitResults: ControlEvent<Void> { get }
+    var deleteEntry: ControlEvent<Void> { get }
     
     var disposeBag: DisposeBag { get }
     

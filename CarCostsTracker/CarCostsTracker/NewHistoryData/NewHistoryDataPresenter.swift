@@ -88,6 +88,13 @@ extension NewHistoryDataPresenter{
                 self.submitData()
             }).disposed(by: view.disposeBag)
         
+        view.deleteEntry
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                () in
+                self.showDeleteEntryActionAlert()
+            }).disposed(by: view.disposeBag)
     }
 }
 
@@ -131,6 +138,18 @@ extension NewHistoryDataPresenter{
         view.updateCostTypeButtonLabel(costType: costType.name())
     }
     
+    
+    func showDeleteEntryActionAlert(){
+        let (deleteEntryActionAlert, actionAlertEvents) =  NewHistoryDataActions
+            .showDeleteAction()
+        
+        actionAlertEvents.asObservable().observeOn(MainScheduler.asyncInstance).subscribe(onNext: { [unowned self]
+            () in
+            self.performDataDelete()
+        }).disposed(by: view.disposeBag)
+        
+        view.displayAction(action: deleteEntryActionAlert)
+    }
     
 }
 
