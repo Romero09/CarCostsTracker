@@ -71,19 +71,27 @@ extension NewHistoryDataPresenter{
 extension NewHistoryDataPresenter{
     
     func bindActions(){
-    
-    view.selectCostTypeMenu
-    .asObservable()
-    .observeOn(MainScheduler.asyncInstance)
-    .subscribe(onNext: { [unowned self]
-    () in
-    self.showSelectCostTypeActionSheet()
-    }).disposed(by: view.disposeBag)
+        
+        view.selectCostTypeMenu
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                () in
+                self.showSelectCostTypeActionSheet()
+            }).disposed(by: view.disposeBag)
+        
+        view.submitResults
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                () in
+                self.submitData()
+            }).disposed(by: view.disposeBag)
         
     }
 }
 
-//MARK: - View Action Alerts
+//MARK: - View Action Alerts display and selection handling
 extension NewHistoryDataPresenter{
     
     func showSelectCostTypeActionSheet(){

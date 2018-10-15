@@ -82,9 +82,6 @@
                                 <rect key="frame" x="149" y="545" width="77" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Submit"/>
-                                <connections>
-                                    <action selector="submitDataButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="O9K-tt-hx6"/>
-                                </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3F1-Wj-dcr">
                                 <rect key="frame" x="16" y="242" width="343" height="128"/>

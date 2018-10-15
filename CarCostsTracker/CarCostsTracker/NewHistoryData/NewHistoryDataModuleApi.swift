@@ -21,7 +21,10 @@ protocol NewHistoryDataRouterApi: RouterProtocol {
 //MARK: - NewHistoryDataView API
 protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var selectCostTypeMenu: ControlEvent<Void> { get }
+    var submitResults: ControlEvent<Void> { get }
+    
     var disposeBag: DisposeBag { get }
+    
     var getSelectedDate: Date? {get}
     var costTypeButton: UIButton! {get}
     var costPriceTextField: UITextField! {get}
@@ -29,6 +32,7 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var dateTextField: UITextField! {get set}
     var costDescriptionTextView: UITextView! {get}
     var imagePicked: UIImage? {get}
+    
     func startActivityIndicaotr()
     func stopActivityIndicaotr()
     func showImageNotFound(alert controller: UIAlertController)

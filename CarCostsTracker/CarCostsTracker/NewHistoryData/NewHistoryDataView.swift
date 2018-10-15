@@ -25,10 +25,6 @@ final class NewHistoryDataView: UserInterface {
     
     @IBOutlet weak var dateTextField: UITextField!
     
-    @IBAction func submitDataButton(_ sender: Any) {
-        presenter.submitData()
-    }
-    
     @IBOutlet weak var submitDataButtonOutlet: UIButton!
     
     @IBAction func libraryButton(_ sender: Any) {
@@ -120,7 +116,7 @@ extension NewHistoryDataView{
 }
 
 
-
+//MARK: - TextView Delegates
 extension NewHistoryDataView: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.lightGray {
@@ -142,6 +138,38 @@ extension NewHistoryDataView: UITextViewDelegate {
 //MARK: Actions bindings
 extension NewHistoryDataView{
     
+    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
+        view.endEditing(true)
+    }
+    
+    @objc func dateChanged(datePicker: UIDatePicker){
+        selectedDate = datePicker.date
+        guard let selectedDate = selectedDate else {
+            return print("Selected Date was nil")
+        }
+        dateTextField.text = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
+        
+    }
+    
+    var selectCostTypeMenu : ControlEvent<Void> {
+        return costTypeButton.rx.tap
+    }
+    
+    var submitResults : ControlEvent<Void>{
+        return submitDataButtonOutlet.rx.tap
+    }
+    
+    
+    @objc func showDeleteAction(){
+        let deleteAction =  NewHistoryDataActions.showDeleteAction(presenter: presenter)
+        present(deleteAction, animated: true, completion: nil)
+    }
+}
+
+
+//MARK: - View updates and modal present
+extension NewHistoryDataView{
+    
     func startActivityIndicaotr(){
         activityIndicator.center = self.view.center
         self.view.addSubview(activityIndicator)
@@ -153,39 +181,9 @@ extension NewHistoryDataView{
         self.view.isUserInteractionEnabled = true
     }
     
-    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
-        view.endEditing(true)
-    }
-    
-    @objc func dateChanged(datePicker: UIDatePicker){
-        selectedDate = datePicker.date
-        guard let selectedDate = selectedDate else {
-            return print("selectedDate was nil")
-        }
-        dateTextField.text = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
-        
-    }
-    
-
-    
-    var selectCostTypeMenu : ControlEvent<Void> {
-        return costTypeButton.rx.tap
-    }
-    
-    
     func showImageNotFound(alert controller: UIAlertController){
         present(controller, animated: true, completion: nil)
     }
-    
-    @objc func showDeleteAction(){
-        let deleteAction =  NewHistoryDataActions.showDeleteAction(presenter: presenter)
-        present(deleteAction, animated: true, completion: nil)
-    }
-}
-
-
-//MARK: - View updates
-extension NewHistoryDataView{
     
     func displayAction(action view: UIAlertController) {
         present(view, animated: true, completion: nil)
