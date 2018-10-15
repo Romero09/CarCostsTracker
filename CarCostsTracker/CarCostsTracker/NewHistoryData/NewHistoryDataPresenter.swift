@@ -29,11 +29,9 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
     
     func failedToFetchImage(error message: Error) {
         view.stopActivityIndicaotr()
-        let alert = UIAlertController(title: "No image found", message: "No image found for this entry, please attach image", preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        view.newHistoryDataView.present(alert, animated: true, completion: nil)
+        let imageNotFoundAlert: UIAlertController = NewHistoryDataActions.showImageNotFound()
+        view.showImageNotFound(alert: imageNotFoundAlert)
     }
-    
     
     func openAttachedImage(image data: UIImage) {
         router.showAttachedImageView(image: data)
@@ -51,7 +49,6 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
             return false
         }
     }
-    
     
     func updateEditView(){
         if let historyDataToEdit = historyDataToEdit{

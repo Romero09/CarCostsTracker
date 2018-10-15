@@ -50,55 +50,77 @@ final class NewHistoryDataView: UserInterface {
     var selectedDate: Date?
     var datePicker: UIDatePicker?
     private let activityIndicator = CustomActivityIndicator()
+    
 }
+
 
 
 //MARK: Lifecycle
 extension NewHistoryDataView{
     
     override func viewDidLoad() {
+        setUpCostDescriptionTextView()
+        setUpDatePicker()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NewHistoryDataView.viewTapped(gestureRecognizer:)))
+        view.addGestureRecognizer(tapGesture)
+        
+        presenter.viewWillAppear()
+        
+        if presenter.isEditMode(){
+            prepareViewInEditMode()
+        } else {
+            prepareViewAddItemMode()
+        }
+    }
+}
+
+
+
+//MARK: View set up
+extension NewHistoryDataView{
+    
+    func setUpCostDescriptionTextView(){
         costDescriptionTextView.delegate = self
         costDescriptionTextView.text = "Enter costs description..."
         costDescriptionTextView.textColor = UIColor.lightGray
         costDescriptionTextView.layer.borderWidth = 1
         costDescriptionTextView.layer.cornerRadius = 8
         costDescriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
-        
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        openImageButtonOutlet.isHidden = true
-        self.title = "Add new data"
-        
+    func setUpDatePicker(){
         datePicker = UIDatePicker()
         datePicker?.datePickerMode = .dateAndTime
         datePicker?.addTarget(self, action: #selector(NewHistoryDataView.dateChanged(datePicker:)), for: .valueChanged)
-        
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NewHistoryDataView.viewTapped(gestureRecognizer:)))
-        
-        view.addGestureRecognizer(tapGesture)
-        
         dateTextField.inputView = datePicker
-        
-        presenter.viewWillAppear()
-        
-        if presenter.isEditMode(){
-            DispatchQueue.main.async(execute: {
-                self.title = "Edit data"
-                self.openImageButtonOutlet.isHidden = false
-                self.submitDataButtonOutlet.setTitle("Save", for: UIControl.State())
-                self.navigationItem.setRightBarButton(UIBarButtonItem(image: UIImage(named: "delete_item.png"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.showDeleteAction)), animated: true)
-                    self.navigationItem.rightBarButtonItem?.tintColor = UIColor.red
-                })
-        } else {
-            costTypeButton.titleLabel?.text = "Select Cost Type"
-            selectedDate = Date()
-            dateTextField.text = DateFormatter.localizedString(from: selectedDate!, dateStyle: .short, timeStyle: .short)
-        }
+    }
+    
+    func prepareViewInEditMode(){
+        DispatchQueue.main.async(execute: {
+            self.title = "Edit data"
+            self.openImageButtonOutlet.isHidden = false
+            self.submitDataButtonOutlet.setTitle("Save", for: UIControl.State())
+            self.navigationItem.setRightBarButton(UIBarButtonItem(image: UIImage(named: "delete_item.png"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.showDeleteAction)), animated: true)
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.red
+        })
+    }
+    
+    func prepareViewAddItemMode(){
+        DispatchQueue.main.async(execute: {
+            self.openImageButtonOutlet.isHidden = true
+            self.title = "Add new data"
+            self.costTypeButton.titleLabel?.text = "Select Cost Type"
+            self.selectedDate = Date()
+            self.dateTextField.text = DateFormatter.localizedString(from: self.selectedDate!, dateStyle: .short, timeStyle: .short)
+        })
     }
 }
+
+
 
 extension NewHistoryDataView: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -116,8 +138,10 @@ extension NewHistoryDataView: UITextViewDelegate {
     }
 }
 
+
+
 //MARK: Actions bindings
-extension NewHistoryDataView {
+extension NewHistoryDataView{
     
     func startActivityIndicaotr(){
         activityIndicator.center = self.view.center
@@ -137,59 +161,41 @@ extension NewHistoryDataView {
     @objc func dateChanged(datePicker: UIDatePicker){
         selectedDate = datePicker.date
         guard let selectedDate = selectedDate else {
-        return print("selectedDate was nil")
+            return print("selectedDate was nil")
         }
         dateTextField.text = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
         
     }
     
-    func showSelectCostTypeActionSheet(){
-        let actionSheet = UIAlertController(title: "Type of costs", message: nil, preferredStyle: .actionSheet)
-        
-        let cancel = UIAlertAction(title: "Cancle", style: .cancel, handler: nil)
-        
-        let repair = UIAlertAction(title: "Repair", style: .default) {action in
-            self.updateCostTypeButtonLabel(text: "Repair")
-            }
-        
-        let fuel = UIAlertAction(title: "Fuel", style: .default) {action in
-           self.updateCostTypeButtonLabel(text: "Fuel")
-        }
-        
-        let other = UIAlertAction(title: "Other", style: .default) {action in
-            self.updateCostTypeButtonLabel(text: "Other")
-        }
-        
-        actionSheet.addAction(repair)
-        actionSheet.addAction(fuel)
-        actionSheet.addAction(other)
-        actionSheet.addAction(cancel)
-        
-        present(actionSheet, animated: true, completion: nil)
-    }
-    
     func updateCostTypeButtonLabel(text: String){
         DispatchQueue.main.async(execute: {
             self.costTypeButton.setTitle(text, for: .selected)
-        self.costTypeButton.setTitle(text, for: .normal)
+            self.costTypeButton.setTitle(text, for: .normal)
         })
     }
     
+    func showSelectCostTypeActionSheet(){
+        let selectCostTypeAction =  NewHistoryDataActions
+            .showSelectCostTypeActionSheet(view: self, actions: [UIAlertAction(title: "Cancle", style: .cancel, handler: nil),
+                                                                 UIAlertAction(title: CostType.repair.name(), style: .default) {_ in
+                                                                    self.updateCostTypeButtonLabel(text: CostType.repair.name()) },
+                                                                 UIAlertAction(title: CostType.fuel.name(), style: .default) {_ in
+                                                                    self.updateCostTypeButtonLabel(text: CostType.fuel.name())},
+                                                                 UIAlertAction(title: CostType.other.name(), style: .default) {_ in
+                                                                    self.updateCostTypeButtonLabel(text: CostType.other.name())}])
+        present(selectCostTypeAction, animated: true, completion: nil)
+    }
+    
+    func showImageNotFound(alert controller: UIAlertController){
+        present(controller, animated: true, completion: nil)
+    }
+    
     @objc func showDeleteAction(){
-        let deleteAction = UIAlertController(title: "Delete entry", message: "Are you sure you want to delete this entry?", preferredStyle: .alert)
-        
-        let accept = UIAlertAction(title: "Yes", style: .destructive) { action in
-            self.presenter.performDataDelete()
-        }
-        
-        let cancel = UIAlertAction(title: "No", style: .cancel, handler: nil)
-        
-        deleteAction.addAction(accept)
-        deleteAction.addAction(cancel)
-        
+        let deleteAction =  NewHistoryDataActions.showDeleteAction(presenter: presenter)
         present(deleteAction, animated: true, completion: nil)
     }
 }
+
 
 //MARK: Camera and Library control
 extension NewHistoryDataView: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
@@ -227,11 +233,7 @@ extension NewHistoryDataView: UIImagePickerControllerDelegate, UINavigationContr
 
 //MARK: - NewHistoryDataView API
 extension NewHistoryDataView: NewHistoryDataViewApi {
-    
-    var newHistoryDataView: NewHistoryDataView {
-        return self
-    }
-    
+
     var getSelectedDate: Date? {
         return self.selectedDate
     }

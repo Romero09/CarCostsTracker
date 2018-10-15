@@ -25,9 +25,9 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var dateTextField: UITextField! {get set}
     var costDescriptionTextView: UITextView! {get}
     var imagePicked: UIImage? {get}
-    var newHistoryDataView: NewHistoryDataView {get}
     func startActivityIndicaotr()
     func stopActivityIndicaotr()
+    func showImageNotFound(alert controller: UIAlertController)
 }
 
 //MARK: - NewHistoryDataPresenter API
