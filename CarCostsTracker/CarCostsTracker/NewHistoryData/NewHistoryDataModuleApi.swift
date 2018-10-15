@@ -7,6 +7,8 @@
 //
 
 import Viperit
+import RxCocoa
+import RxSwift
 
 //MARK: - NewHistoryDataRouter API
 protocol NewHistoryDataRouterApi: RouterProtocol {
@@ -18,6 +20,8 @@ protocol NewHistoryDataRouterApi: RouterProtocol {
 
 //MARK: - NewHistoryDataView API
 protocol NewHistoryDataViewApi: UserInterfaceProtocol {
+    var selectCostTypeMenu: ControlEvent<Void> { get }
+    var disposeBag: DisposeBag { get }
     var getSelectedDate: Date? {get}
     var costTypeButton: UIButton! {get}
     var costPriceTextField: UITextField! {get}
@@ -28,6 +32,9 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     func startActivityIndicaotr()
     func stopActivityIndicaotr()
     func showImageNotFound(alert controller: UIAlertController)
+    func displayAction(action view: UIAlertController)
+    func updateCostTypeButtonLabel(costType text: String)
+    
 }
 
 //MARK: - NewHistoryDataPresenter API

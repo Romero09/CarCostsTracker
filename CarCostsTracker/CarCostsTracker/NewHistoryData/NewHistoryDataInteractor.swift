@@ -27,7 +27,6 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
         guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
             return print("Error user not Authorized")
         }
-        
         db.collection(userUID).document(id).delete(){ err in
             if let err = err {
                 print("Error removing document: \(err)")
@@ -39,7 +38,6 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
         
         // Create a reference to the file to delete
         let storageRef = storage.reference().child(userUID).child("\(id).jpg")
-        
         // Delete the file
         storageRef.delete { error in
             if let error = error {
@@ -52,10 +50,7 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
     }
     
     
-    
     func storeData(type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?) {
-        
-        
         
         var ref: DocumentReference? = nil
         guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
@@ -114,7 +109,6 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
         }
         
         if let image = image {
-            
             let storageRef = storage.reference().child(userUID).child("\(ref!.documentID).jpg")
             // Upload the file to the path "userID/documentID"
             // Create file metadata including the content type
@@ -133,8 +127,7 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             return print("Error user not Authorized")
         }
         
-         let storageRef = storage.reference().child(userUID).child("\(documentID).jpg")
-        
+        let storageRef = storage.reference().child(userUID).child("\(documentID).jpg")
         // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
         storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
             if let error = error {
@@ -147,8 +140,6 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             }
         }
     }
-    
-    
 }
 
 // MARK: - Interactor Viper Components Api

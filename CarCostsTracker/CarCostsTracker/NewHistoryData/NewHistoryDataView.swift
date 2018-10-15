@@ -8,14 +8,12 @@
 
 import UIKit
 import Viperit
+import RxCocoa
+import RxSwift
 
 //MARK: NewHistoryDataView Class
 final class NewHistoryDataView: UserInterface {
     private weak var acitivityIndicationView: UIView?
-    
-    @IBAction func costTypeSelectionButton(_ sender: Any) {
-        showSelectCostTypeActionSheet()
-    }
     
     @IBOutlet weak var costTypeButton: UIButton!
     
@@ -50,6 +48,7 @@ final class NewHistoryDataView: UserInterface {
     var selectedDate: Date?
     var datePicker: UIDatePicker?
     private let activityIndicator = CustomActivityIndicator()
+    private let bag = DisposeBag()
     
 }
 
@@ -167,24 +166,12 @@ extension NewHistoryDataView{
         
     }
     
-    func updateCostTypeButtonLabel(text: String){
-        DispatchQueue.main.async(execute: {
-            self.costTypeButton.setTitle(text, for: .selected)
-            self.costTypeButton.setTitle(text, for: .normal)
-        })
+
+    
+    var selectCostTypeMenu : ControlEvent<Void> {
+        return costTypeButton.rx.tap
     }
     
-    func showSelectCostTypeActionSheet(){
-        let selectCostTypeAction =  NewHistoryDataActions
-            .showSelectCostTypeActionSheet(view: self, actions: [UIAlertAction(title: "Cancle", style: .cancel, handler: nil),
-                                                                 UIAlertAction(title: CostType.repair.name(), style: .default) {_ in
-                                                                    self.updateCostTypeButtonLabel(text: CostType.repair.name()) },
-                                                                 UIAlertAction(title: CostType.fuel.name(), style: .default) {_ in
-                                                                    self.updateCostTypeButtonLabel(text: CostType.fuel.name())},
-                                                                 UIAlertAction(title: CostType.other.name(), style: .default) {_ in
-                                                                    self.updateCostTypeButtonLabel(text: CostType.other.name())}])
-        present(selectCostTypeAction, animated: true, completion: nil)
-    }
     
     func showImageNotFound(alert controller: UIAlertController){
         present(controller, animated: true, completion: nil)
@@ -197,7 +184,24 @@ extension NewHistoryDataView{
 }
 
 
-//MARK: Camera and Library control
+//MARK: - View updates
+extension NewHistoryDataView{
+    
+    func displayAction(action view: UIAlertController) {
+        present(view, animated: true, completion: nil)
+    }
+    
+    func updateCostTypeButtonLabel(costType text: String){
+        DispatchQueue.main.async(execute: {
+            self.costTypeButton.setTitle(text, for: .selected)
+            self.costTypeButton.setTitle(text, for: .normal)
+        })
+    }
+    
+}
+
+
+//MARK: - Camera and Library control
 extension NewHistoryDataView: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     func openCamera(){
@@ -233,7 +237,11 @@ extension NewHistoryDataView: UIImagePickerControllerDelegate, UINavigationContr
 
 //MARK: - NewHistoryDataView API
 extension NewHistoryDataView: NewHistoryDataViewApi {
-
+    
+    var disposeBag: DisposeBag {
+        return bag
+    }
+    
     var getSelectedDate: Date? {
         return self.selectedDate
     }
