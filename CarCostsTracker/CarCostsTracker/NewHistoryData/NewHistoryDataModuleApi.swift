@@ -44,7 +44,6 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
 protocol NewHistoryDataPresenterApi: PresenterProtocol {
     func viewWillAppear()
     func getImageFromServer()
-    func updateEditView()
     func isEditMode()->Bool
     func fillEditData(edit data: HistoryCellData)
     func returnToHistory()

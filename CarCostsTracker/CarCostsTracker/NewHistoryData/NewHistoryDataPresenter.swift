@@ -46,7 +46,7 @@ extension NewHistoryDataPresenter{
         }
     }
     
-    func updateEditView(){
+    private func updateEditView(){
         if let historyDataToEdit = historyDataToEdit{
             view.costDescriptionTextView.text = historyDataToEdit.description
             view.costPriceTextField.text = String(historyDataToEdit.price.dropLast())
@@ -64,7 +64,7 @@ extension NewHistoryDataPresenter{
 extension NewHistoryDataPresenter{
     
     //Bind action listeners on buttons
-    func bindActions(){
+    private func bindActions(){
         
         view.selectCostTypeMenu
             .asObservable()
@@ -95,7 +95,7 @@ extension NewHistoryDataPresenter{
 //MARK: - View Action Alerts display and selection handling
 extension NewHistoryDataPresenter{
     
-    func showSelectCostTypeActionSheet(){
+    private func showSelectCostTypeActionSheet(){
         let (costTypeActionSheet, actionSheetEvents) =  NewHistoryDataActions
             .showSelectCostTypeActionSheet()
         
@@ -133,7 +133,7 @@ extension NewHistoryDataPresenter{
     }
     
     //Creates Action Alert, sends it to present in View and subscribes on action events.
-    func showDeleteEntryActionAlert(){
+    private func showDeleteEntryActionAlert(){
         let (deleteEntryActionAlert, actionAlertEvents) =  NewHistoryDataActions
             .showDeleteAction()
         
@@ -145,11 +145,10 @@ extension NewHistoryDataPresenter{
             self.performDataDelete()
         }).disposed(by: view.disposeBag)
         
-        
         view.displayAction(action: deleteEntryActionAlert)
     }
     
-    func showAlertOnError(){
+    private func showAlertOnError(){
         view.stopActivityIndicaotr()
         let imageNotFoundAlert: UIAlertController = NewHistoryDataActions.showImageNotFound()
         self.view.displayAction(action: imageNotFoundAlert)
@@ -161,7 +160,7 @@ extension NewHistoryDataPresenter{
 //MARK: - Connection with Interactor
 extension NewHistoryDataPresenter{
     
-    func submitData() {
+    private func submitData() {
         let costType = view.costTypeButton.titleLabel?.text ?? ""
         let costPrice = Double(view.costPriceTextField.text ?? "") ?? 0.0
         let milage = Int(view.milageTextField.text ?? "") ?? 0
@@ -185,7 +184,7 @@ extension NewHistoryDataPresenter{
         }
     }
     
-    func performDataDelete(){
+    private func performDataDelete(){
         guard let historyDataToEdit = self.historyDataToEdit else {
             return print("Error historyDataToEdit is nil")
         }
@@ -209,7 +208,7 @@ extension NewHistoryDataPresenter{
 //MARK: - Connection with Router
 extension NewHistoryDataPresenter{
     
-    func openAttachedImage(image data: UIImage) {
+    private func openAttachedImage(image data: UIImage) {
         router.showAttachedImageView(image: data)
         view.stopActivityIndicaotr()
     }
