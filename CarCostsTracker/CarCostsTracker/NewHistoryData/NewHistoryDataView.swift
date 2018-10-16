@@ -25,27 +25,22 @@ final class NewHistoryDataView: UserInterface {
     
     @IBOutlet weak var dateTextField: UITextField!
     
-    @IBOutlet weak var submitDataButtonOutlet: UIButton!
-    
-    @IBAction func libraryButton(_ sender: Any) {
-        openLibrary()
-    }
-    
-    @IBAction func cameraButton(_ sender: Any) {
-        openCamera()
-    }
-    
     @IBAction func openImageButton(_ sender: Any) {
         presenter.getImageFromServer()
     }
     
     @IBOutlet weak var openImageButtonOutlet: UIButton!
     
+    @IBOutlet weak var submitButton: UIBarButtonItem!
+    
+    @IBOutlet weak var attachImageButton: UIBarButtonItem!
+    
+    
     private let deleteEntryButton = UIBarButtonItem(image: UIImage(named: "delete_item.png"), style: UIBarButtonItem.Style.plain, target: self, action: nil)
     private var selectedDate: Date?
     private var datePicker: UIDatePicker?
     private let activityIndicator = CustomActivityIndicator()
-    private let bag = DisposeBag()
+    private var bag = DisposeBag()
     var imagePicked: UIImage?
     
 }
@@ -57,12 +52,14 @@ extension NewHistoryDataView{
     override func viewDidLoad() {
         setUpCostDescriptionTextView()
         setUpDatePicker()
+        presenter.viewDidLoad()
         
         if presenter.isEditMode(){
             prepareViewEditMode()
         } else {
             prepareViewAddItemMode()
         }
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,6 +68,7 @@ extension NewHistoryDataView{
         view.addGestureRecognizer(tapGesture)
         
         presenter.viewWillAppear()
+        
     }
 }
 
@@ -98,7 +96,7 @@ extension NewHistoryDataView{
     func prepareViewEditMode(){
             self.title = "Edit data"
             self.openImageButtonOutlet.isHidden = false
-            self.submitDataButtonOutlet.setTitle("Save", for: UIControl.State())
+            self.submitButton.title = "Save"
             self.navigationItem.setRightBarButton(self.deleteEntryButton, animated: true)
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor.red
     }
@@ -153,11 +151,19 @@ extension NewHistoryDataView{
     }
     
     var submitResults : ControlEvent<Void>{
-        return submitDataButtonOutlet.rx.tap
+        return submitButton.rx.tap
     }
     
     var deleteEntry: ControlEvent<Void> {
         return deleteEntryButton.rx.tap
+    }
+    
+    var attachImage: ControlEvent<Void>{
+        return attachImageButton.rx.tap
+    }
+    
+    var viewInstance: (NewHistoryDataViewApi & UIImagePickerControllerDelegate & UINavigationControllerDelegate) {
+        return self
     }
     
 }
@@ -177,7 +183,7 @@ extension NewHistoryDataView{
         self.view.isUserInteractionEnabled = true
     }
     
-    func displayAction(action view: UIAlertController) {
+    func displayAction(action view: UIViewController) {
         present(view, animated: true, completion: nil)
     }
     

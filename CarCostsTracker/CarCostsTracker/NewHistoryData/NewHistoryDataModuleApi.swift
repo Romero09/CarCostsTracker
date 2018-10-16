@@ -23,6 +23,7 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var selectCostTypeMenu: ControlEvent<Void> { get }
     var submitResults: ControlEvent<Void> { get }
     var deleteEntry: ControlEvent<Void> { get }
+    var attachImage: ControlEvent<Void> { get }
     var disposeBag: DisposeBag { get }
     
     var getSelectedDate: Date? {get}
@@ -35,18 +36,21 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     
     func startActivityIndicaotr()
     func stopActivityIndicaotr()
-    func displayAction(action view: UIAlertController)
+    func displayAction(action view: UIViewController)
     func updateCostTypeButtonLabel(costType text: String)
+    func openCamera()
+    func openLibrary()
     
 }
 
 //MARK: - NewHistoryDataPresenter API
 protocol NewHistoryDataPresenterApi: PresenterProtocol {
-    func viewWillAppear()
     func getImageFromServer()
     func isEditMode()->Bool
     func fillEditData(edit data: HistoryCellData)
     func returnToHistory()
+    func viewDidLoad()
+    func viewWillAppear()
 }
 
 //MARK: - NewHistoryDataInteractor API

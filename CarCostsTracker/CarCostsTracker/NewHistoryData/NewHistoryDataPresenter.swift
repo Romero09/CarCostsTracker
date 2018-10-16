@@ -37,8 +37,11 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
 //MARK: - Connection with View
 extension NewHistoryDataPresenter{
     
-    func viewWillAppear(){
+    func viewDidLoad(){
         bindActions()
+    }
+    
+    func viewWillAppear(){
         if isEditMode(){
             DispatchQueue.main.async(execute: {
                 self.updateEditView()
@@ -89,6 +92,14 @@ extension NewHistoryDataPresenter{
                 _ in
                 self.showDeleteEntryActionAlert()
             }).disposed(by: view.disposeBag)
+        
+        view.attachImage
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                _ in
+                self.showSelectImageSourceActionSheet()
+            }).disposed(by: view.disposeBag)
     }
 }
 
@@ -128,6 +139,30 @@ extension NewHistoryDataPresenter{
         view.displayAction(action: costTypeActionSheet)
     }
     
+    private func showSelectImageSourceActionSheet(){
+        let(actionSheet: imageSourceActionSheet, camera: cameraEvent, library: libraryEvent) = NewHistoryDataActions
+            .showSelectImageSourceActionSheet()
+        
+        cameraEvent
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                _ in
+                self.view.openCamera()
+            }).disposed(by: view.disposeBag)
+        
+        libraryEvent
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: {
+                [unowned self]
+                _ in
+                self.view.openLibrary()
+            }).disposed(by: view.disposeBag)
+        
+        view.displayAction(action: imageSourceActionSheet)
+    }
+    
     func costTypeSelected(costType: CostType){
         view.updateCostTypeButtonLabel(costType: costType.name())
     }
@@ -155,7 +190,6 @@ extension NewHistoryDataPresenter{
     }
     
 }
-
 
 //MARK: - Connection with Interactor
 extension NewHistoryDataPresenter{

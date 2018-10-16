@@ -68,7 +68,7 @@ extension HistoryView: HistoryViewApi {
     //Setting data to a view cell, reciving Observable<[HistoryCellData]
     func setData(drivableData: Observable<[HistoryCellData]>) {
         drivableData.asDriver(onErrorJustReturn: [])
-            .debug("Data driver") // used for debug purpose
+            //.debug("Data driver") // used for debug purpose
             //.drive is same as subscrive bud for drivers that works with UI. Read doc for detailed info about rx.items
             .drive(costTable.rx.items(cellIdentifier: "historyCell", cellType: HistoryCollectionViewCell.self)) {
                 (_, data: HistoryCellData, cell) in
