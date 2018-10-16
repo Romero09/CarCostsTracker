@@ -29,9 +29,10 @@ final class HistoryPresenter: Presenter {
     
     override func viewHasLoaded(){
         view.startActivityIndicator()
-        
         historyData.subscribe(onNext: { (element) in
             self.view.stopActivityIndicator()
+        }, onError: { (Error) in
+            print(Error)
         }).disposed(by: view.disposeBag)
         
         interactor.fetchHistoryData()
@@ -66,7 +67,7 @@ extension HistoryPresenter: HistoryPresenterApi {
             .asObservable()
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onNext: { [unowned self]
-                () in
+                _ in
                 self.router.showNewHistoryData()
             }).disposed(by: view.disposeBag)
         
@@ -74,7 +75,7 @@ extension HistoryPresenter: HistoryPresenterApi {
             .asObservable()
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onNext: { [unowned self]
-                () in
+                _ in
                 sharedUserAuth.authorizedUser = nil
                 self.router.showLogIn()
             }).disposed(by: view.disposeBag)

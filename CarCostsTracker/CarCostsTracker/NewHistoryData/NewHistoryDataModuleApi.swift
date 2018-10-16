@@ -23,7 +23,6 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var selectCostTypeMenu: ControlEvent<Void> { get }
     var submitResults: ControlEvent<Void> { get }
     var deleteEntry: ControlEvent<Void> { get }
-    
     var disposeBag: DisposeBag { get }
     
     var getSelectedDate: Date? {get}
@@ -36,7 +35,6 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     
     func startActivityIndicaotr()
     func stopActivityIndicaotr()
-    func showImageNotFound(alert controller: UIAlertController)
     func displayAction(action view: UIAlertController)
     func updateCostTypeButtonLabel(costType text: String)
     
@@ -45,15 +43,11 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
 //MARK: - NewHistoryDataPresenter API
 protocol NewHistoryDataPresenterApi: PresenterProtocol {
     func viewWillAppear()
-    func openAttachedImage(image data: UIImage)
     func getImageFromServer()
     func updateEditView()
     func isEditMode()->Bool
-    func submitData()
     func fillEditData(edit data: HistoryCellData)
-    func performDataDelete()
     func returnToHistory()
-    func failedToFetchImage(error message: Error)
 }
 
 //MARK: - NewHistoryDataInteractor API
@@ -61,5 +55,5 @@ protocol NewHistoryDataInteractorApi: InteractorProtocol {
     func deleteData(document id: String)
     func storeData(type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?)
     func updateData(document id: String, type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?)
-    func fetchImage(form documentID: String)
+    func fetchImage(form documentID: String) -> Observable<UIImage>
 }

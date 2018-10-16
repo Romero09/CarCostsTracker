@@ -28,6 +28,7 @@ internal class NewHistoryDataActions{
         return (deleteActionView, eventDelete)
     }
     
+    
     static func showSelectCostTypeActionSheet() -> (UIAlertController, AlertActions) {
         let actionSheet = UIAlertController(title: "Type of costs", message: nil, preferredStyle: .actionSheet)
         

@@ -57,26 +57,20 @@ extension NewHistoryDataPresenter{
             view.costTypeButton.setTitle(historyDataToEdit.costType.name(), for: .normal)
         }
     }
-    
-    func failedToFetchImage(error message: Error) {
-        view.stopActivityIndicaotr()
-        let imageNotFoundAlert: UIAlertController = NewHistoryDataActions.showImageNotFound()
-        view.showImageNotFound(alert: imageNotFoundAlert)
-    }
-    
 }
 
 
 //MARK: - View Action Binding
 extension NewHistoryDataPresenter{
     
+    //Bind action listeners on buttons
     func bindActions(){
         
         view.selectCostTypeMenu
             .asObservable()
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onNext: { [unowned self]
-                () in
+                _ in
                 self.showSelectCostTypeActionSheet()
             }).disposed(by: view.disposeBag)
         
@@ -84,7 +78,7 @@ extension NewHistoryDataPresenter{
             .asObservable()
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onNext: { [unowned self]
-                () in
+                _ in
                 self.submitData()
             }).disposed(by: view.disposeBag)
         
@@ -92,7 +86,7 @@ extension NewHistoryDataPresenter{
             .asObservable()
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onNext: { [unowned self]
-                () in
+                _ in
                 self.showDeleteEntryActionAlert()
             }).disposed(by: view.disposeBag)
     }
@@ -109,7 +103,7 @@ extension NewHistoryDataPresenter{
             .asObservable()
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onNext: { [unowned self]
-                () in
+                _ in
                 self.costTypeSelected(costType: CostType.other)
             }).disposed(by: view.disposeBag)
         
@@ -118,7 +112,7 @@ extension NewHistoryDataPresenter{
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onNext: {
                 [unowned self]
-                () in
+                _ in
                 self.costTypeSelected(costType: CostType.fuel)
             }).disposed(by: view.disposeBag)
         
@@ -127,7 +121,7 @@ extension NewHistoryDataPresenter{
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onNext: {
                 [unowned self]
-                () in
+                _ in
                 self.costTypeSelected(costType: CostType.repair)
             }).disposed(by: view.disposeBag)
         
@@ -138,17 +132,27 @@ extension NewHistoryDataPresenter{
         view.updateCostTypeButtonLabel(costType: costType.name())
     }
     
-    
+    //Creates Action Alert, sends it to present in View and subscribes on action events.
     func showDeleteEntryActionAlert(){
         let (deleteEntryActionAlert, actionAlertEvents) =  NewHistoryDataActions
             .showDeleteAction()
         
-        actionAlertEvents.asObservable().observeOn(MainScheduler.asyncInstance).subscribe(onNext: { [unowned self]
-            () in
+        actionAlertEvents
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+            _ in
             self.performDataDelete()
         }).disposed(by: view.disposeBag)
         
+        
         view.displayAction(action: deleteEntryActionAlert)
+    }
+    
+    func showAlertOnError(){
+        view.stopActivityIndicaotr()
+        let imageNotFoundAlert: UIAlertController = NewHistoryDataActions.showImageNotFound()
+        self.view.displayAction(action: imageNotFoundAlert)
     }
     
 }
@@ -192,9 +196,13 @@ extension NewHistoryDataPresenter{
         if let historyDataToEdit = historyDataToEdit {
             view.startActivityIndicaotr()
             interactor.fetchImage(form: historyDataToEdit.documentID)
+                .subscribe(onNext: { (fetchedImage) in
+                    self.openAttachedImage(image: fetchedImage)
+                }, onError:{ _ in
+                    self.showAlertOnError()
+                }).disposed(by: view.disposeBag)
         }
     }
-    
 }
 
 

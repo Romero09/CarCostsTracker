@@ -42,14 +42,13 @@ final class NewHistoryDataView: UserInterface {
     @IBOutlet weak var openImageButtonOutlet: UIButton!
     
     private let deleteEntryButton = UIBarButtonItem(image: UIImage(named: "delete_item.png"), style: UIBarButtonItem.Style.plain, target: self, action: nil)
-    var imagePicked: UIImage?
-    var selectedDate: Date?
-    var datePicker: UIDatePicker?
+    private var selectedDate: Date?
+    private var datePicker: UIDatePicker?
     private let activityIndicator = CustomActivityIndicator()
     private let bag = DisposeBag()
+    var imagePicked: UIImage?
     
 }
-
 
 
 //MARK: Lifecycle
@@ -161,10 +160,6 @@ extension NewHistoryDataView{
         return deleteEntryButton.rx.tap
     }
     
-    
-    @objc func showDeleteAction(){
-        
-    }
 }
 
 
@@ -180,10 +175,6 @@ extension NewHistoryDataView{
     func stopActivityIndicaotr(){
         activityIndicator.removeFromSuperview()
         self.view.isUserInteractionEnabled = true
-    }
-    
-    func showImageNotFound(alert controller: UIAlertController){
-        present(controller, animated: true, completion: nil)
     }
     
     func displayAction(action view: UIAlertController) {

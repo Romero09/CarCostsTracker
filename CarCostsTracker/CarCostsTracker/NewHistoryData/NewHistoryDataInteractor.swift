@@ -10,6 +10,7 @@ import Foundation
 import Viperit
 import Firebase
 import RxSwift
+import RxCocoa
 
 // MARK: - NewHistoryDataInteractor Class
 final class NewHistoryDataInteractor: Interactor {
@@ -36,7 +37,7 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             }
         }
         
-        // Create a reference to the file to delete
+        // Create a reference to the file for deletion
         let storageRef = storage.reference().child(userUID).child("\(id).jpg")
         // Delete the file
         storageRef.delete { error in
@@ -122,22 +123,25 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
         }
     }
     
-    func fetchImage(form documentID: String){
-        guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
-            return print("Error user not Authorized")
-        }
-        
-        let storageRef = storage.reference().child(userUID).child("\(documentID).jpg")
-        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-        storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
-            if let error = error {
-                print(error)
-                self.presenter.failedToFetchImage(error: error)
-            } else {
-                // Data for "images/island.jpg" is returned
-                let image = UIImage(data: data!)
-                self.presenter.openAttachedImage(image: image!)
+    func fetchImage(form documentID: String) -> Observable<UIImage>{
+        return Observable.create() { [unowned self]
+            (observer) -> Disposable in
+            guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
+                observer.onError("User unautohrized")
+                return Disposables.create()
             }
+            let storageRef = self.storage.reference().child(userUID).child("\(documentID).jpg")
+            // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+            storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                if let error = error {
+                    observer.onError(error)
+                } else {
+                    // Data for "images/island.jpg" is returned
+                    let image = UIImage(data: data!)!
+                    observer.onNext(image)
+                }
+            }
+            return Disposables.create()
         }
     }
 }
