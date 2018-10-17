@@ -38,6 +38,7 @@ extension HistoryInteractor: HistoryInteractorApi {
             costsRef.order(by: "date", descending: true).getDocuments() { (querySnapshot, error) in
                 if let documents = querySnapshot?.documents {
                     observer.onNext(documents)
+                    observer.onCompleted()
                 }
                 else{
                     if let error = error {

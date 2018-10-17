@@ -15,23 +15,22 @@ import RxCocoa
 final class NewHistoryDataPresenter: Presenter {
     var historyDataToEdit: HistoryCellData?
     
+    override func setupView(data: Any) {
+        historyDataToEdit = (data as? HistoryCellData)
+    }
+    
 }
+
 
 // MARK: - NewHistoryDataPresenter API
 extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
-    
     func isEditMode() -> Bool {
         if historyDataToEdit != nil {
             return true } else {
             return false
         }
     }
-    
-    func fillEditData(edit data: HistoryCellData){
-        historyDataToEdit = data
-    }
 }
-
 
 
 //MARK: - Connection with View
@@ -51,13 +50,18 @@ extension NewHistoryDataPresenter{
     
     private func updateEditView(){
         if let historyDataToEdit = historyDataToEdit{
-            view.costDescriptionTextView.text = historyDataToEdit.description
-            view.costPriceTextField.text = String(historyDataToEdit.price.dropLast())
-            view.milageTextField.text = String(historyDataToEdit.mileage.dropLast().dropLast())
+            
+            let costDescription = historyDataToEdit.description
+            let costPriceText = String(historyDataToEdit.price.dropLast())
+            let milageText = String(historyDataToEdit.mileage.dropLast().dropLast())
             let timeStamp = TimeInterval(historyDataToEdit.costDate)
-            let newDate = Date(timeIntervalSince1970: timeStamp!)
-            view.dateTextField.text = DateFormatter.localizedString(from: newDate, dateStyle: .short, timeStyle: .short)
-            view.costTypeButton.setTitle(historyDataToEdit.costType.name(), for: .normal)
+            let selectedDate = Date(timeIntervalSince1970: timeStamp!)
+            let dateString = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
+            let costType = historyDataToEdit.costType.name()
+            
+            let prefilDrivers = PrefillDrivers(price: costPriceText, milage: milageText, date: dateString, description: costDescription, costType: costType)
+            
+            view.bind(datasources: prefilDrivers)
         }
     }
 }
@@ -199,24 +203,32 @@ extension NewHistoryDataPresenter{
         let costPrice = Double(view.costPriceTextField.text ?? "") ?? 0.0
         let milage = Int(view.milageTextField.text ?? "") ?? 0
         let costDescription = view.costDescriptionTextView.text ?? ""
-        let imagePicked = view.imagePicked?.jpegData(compressionQuality: 0.7)
-        var date = ""
         
-        if let tempDate = view.getSelectedDate {
-            date = String(tempDate.timeIntervalSince1970)
-        } else {
-            date = historyDataToEdit?.costDate ?? ""
-        }
+//        let image = view.imagePicked!
+//        let tempImage = resizeImage(image: image, targetSize: CGSize(width: image.size.height/6, height: image.size.width/6))
+        let imagePicked = view.imagePicked?.jpegData(compressionQuality: 0.01)
+        let timeStampString = getTimeStamp(from: view.getSelectedDate, defaultFrom: historyDataToEdit)
         
         if isEditMode(){
             guard let historyDataToEdit = self.historyDataToEdit else {
                 return print("Error historyDataToEdit is nil")
             }
-            interactor.updateData(document: historyDataToEdit.documentID ,type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription, image: imagePicked)
+            interactor.updateData(document: historyDataToEdit.documentID ,type: costType, price: costPrice, milage: milage, date: timeStampString, costDescription: costDescription, image: imagePicked)
         } else{
-            interactor.storeData(type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription, image: imagePicked)
+            interactor.storeData(type: costType, price: costPrice, milage: milage, date: timeStampString, costDescription: costDescription, image: imagePicked)
         }
     }
+    
+    private func getTimeStamp(from date: Date?, defaultFrom cellData: HistoryCellData?) -> String {
+        if let date = date {
+            return String(date.timeIntervalSince1970)
+        }
+        else if let cellData = cellData {
+            return cellData.costDate
+        }
+        return ""
+    }
+    
     
     private func performDataDelete(){
         guard let historyDataToEdit = self.historyDataToEdit else {

@@ -46,7 +46,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Milage" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FwR-PB-rSY">
-                                <rect key="frame" x="16" y="121" width="51" height="21"/>
+                                <rect key="frame" x="16" y="121" width="50.5" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -110,7 +110,9 @@
                                         <inset key="largeContentSizeImageInsets" minX="1" minY="1" maxX="1" maxY="0.0"/>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="zl8-ym-FD3"/>
-                                    <barButtonItem title="Submit" id="pcQ-Rn-fUg"/>
+                                    <barButtonItem title="Submit" image="delete_item" id="pcQ-Rn-fUg">
+                                        <color key="tintColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                         </subviews>
@@ -152,10 +154,15 @@
                         <outlet property="costDescriptionTextView" destination="3F1-Wj-dcr" id="LuG-2b-61m"/>
                         <outlet property="costPriceTextField" destination="M5s-Mz-ctr" id="fnw-1d-Rfr"/>
                         <outlet property="costTypeButton" destination="8mh-mw-lxu" id="on7-YV-w8h"/>
+                        <outlet property="costTypeLabel" destination="2IQ-ZI-F2O" id="or0-ah-W9A"/>
+                        <outlet property="dateLabel" destination="4iy-DT-YEi" id="Fyq-Cx-tf9"/>
                         <outlet property="dateTextField" destination="0NY-QT-Amb" id="P3l-DF-ebA"/>
+                        <outlet property="deleteEntryButton" destination="pcQ-Rn-fUg" id="5Na-uP-NyK"/>
+                        <outlet property="milageLabel" destination="FwR-PB-rSY" id="Qsv-Wl-lWl"/>
                         <outlet property="milageTextField" destination="rOG-VA-xgh" id="fOZ-VX-xC7"/>
                         <outlet property="openImageButtonOutlet" destination="sj9-Ns-npc" id="Fdk-AQ-6QS"/>
-                        <outlet property="submitButton" destination="pcQ-Rn-fUg" id="5Na-uP-NyK"/>
+                        <outlet property="priceLabel" destination="jr8-1r-4Lv" id="xb1-We-3jE"/>
+                        <outlet property="toolBar" destination="Hso-Pw-A13" id="vao-dZ-1ls"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nXm-AG-NXG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -165,5 +172,6 @@
     </scenes>
     <resources>
         <image name="attach_image_icon" width="36" height="36"/>
+        <image name="delete_item" width="36" height="36"/>
     </resources>
 </document>

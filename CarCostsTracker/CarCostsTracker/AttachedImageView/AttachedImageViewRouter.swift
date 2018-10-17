@@ -18,7 +18,7 @@ extension AttachedImageViewRouter: AttachedImageViewRouterApi {
     
     func showImageView(from view: UserInterface, image data: UIImage) {
         self.show(from: view)
-        presenter.setImageView(image: data)
+        presenter.setupView(data: data)
     }
     
 }

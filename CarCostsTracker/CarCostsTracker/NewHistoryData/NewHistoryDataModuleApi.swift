@@ -34,6 +34,11 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var costDescriptionTextView: UITextView! {get}
     var imagePicked: UIImage? {get}
     
+    
+   // var dateResult: Observable<String?> { get }
+    func bind(datasources: PrefillDrivers)
+    //func setDrivers(datasources: PrefillDrivers)
+    
     func startActivityIndicaotr()
     func stopActivityIndicaotr()
     func displayAction(action view: UIViewController)
@@ -47,7 +52,6 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
 protocol NewHistoryDataPresenterApi: PresenterProtocol {
     func getImageFromServer()
     func isEditMode()->Bool
-    func fillEditData(edit data: HistoryCellData)
     func returnToHistory()
     func viewDidLoad()
     func viewWillAppear()

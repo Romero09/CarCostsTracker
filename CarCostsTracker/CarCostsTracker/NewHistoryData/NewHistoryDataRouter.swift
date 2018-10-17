@@ -28,8 +28,8 @@ extension NewHistoryDataRouter: NewHistoryDataRouterApi {
     }
     
     func showNewHistoryDataEdit(from view: UserInterface, edit data: HistoryCellData){
-        presenter.fillEditData(edit: data)
         self.show(from: view)
+        presenter.setupView(data: data)
     }
     
     func showHistory(){
