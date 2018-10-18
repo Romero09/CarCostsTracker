@@ -26,17 +26,17 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var attachImage: ControlEvent<Void> { get }
     var disposeBag: DisposeBag { get }
     
-    var dateResult: Observable<Date?> { get }
     var selectedCostType: Observable<String?> { get }
     var costPrice: Observable<String?> { get }
     var milage: Observable<String?> { get }
     var costDescription: Observable<String?> { get }
     var pickedImage: Observable<UIImage?> { get }
+    var datePickerResult: Observable<Date> { get }
     
     
     
     func bind(datasources: NewHistoryDataView.Datasource)
-    
+    func updateDateTextLabel(where date: Observable<String>)
     func startActivityIndicator()
     func stopActivityIndicator()
     func displayAction(action view: UIViewController)

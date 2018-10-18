@@ -14,13 +14,13 @@ import RxCocoa
 
 // MARK: - NewHistoryDataPresenter Class
 final class NewHistoryDataPresenter: Presenter {
-    var historyDataToEdit: HistoryCellData?
+    var historyDataToEdit: HistoryCellData? = nil
+    var isEdtiMode: Bool = false
     
     override func setupView(data: Any) {
         historyDataToEdit = (data as? HistoryCellData)
         
     }
-    
 }
 
 
@@ -41,7 +41,7 @@ extension NewHistoryDataPresenter{
     func viewDidLoad(){
         bindActions()
         
-        self.setupView()
+        self.setupView(where: historyDataToEdit)
             .subscribe(onNext:  {
                 (result) in
                 if self.isEditMode(){
@@ -51,9 +51,10 @@ extension NewHistoryDataPresenter{
                 }
                 print(result)
             }).disposed(by: view.disposeBag)
+
     }
     
-    private func setupView() -> Observable<Result>{
+    private func setupView(where historyDataToEdit: HistoryCellData?) -> Observable<Result>{
         
         
         let costDescription: Observable<String?> = Observable.just(historyDataToEdit?.description ?? "Enter costs description...")
@@ -63,9 +64,9 @@ extension NewHistoryDataPresenter{
         let costType: Observable<String?> = Observable.just(historyDataToEdit?.costType.name() ?? "Select Cost Type")
         let documentId: Observable<String?> = Observable.just(historyDataToEdit?.documentID)
         
-        let viewDate = view.dateResult.map({ (date) -> String? in
+        let viewDate = view.datePickerResult.map({ (date) -> String? in
             if date != nil {
-                return String(date!.timeIntervalSince1970)} else { return nil}
+                return String(date.timeIntervalSince1970)} else { return nil}
         })
         
         let mergedDocumentId = documentId
@@ -108,9 +109,15 @@ extension NewHistoryDataPresenter{
             } else { return nil}
         }
         
+        let datePickerResultString = view.datePickerResult.map { (date) -> String in
+            DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .short)
+        }
+        view.updateDateTextLabel(where: datePickerResultString)
+        
         let prefilDrivers = NewHistoryDataView.Datasource(price: costPriceText, milage: milageText, date: displayDate, description: costDescription, costType: costType, enableButton: everythingValid)
         view.bind(datasources: prefilDrivers)
         
+        //first event from view.submitResults acts like a trigger, and result returns as Observable<Result>
         return view.submitResults
             .asObservable()
             .withLatestFrom(result)

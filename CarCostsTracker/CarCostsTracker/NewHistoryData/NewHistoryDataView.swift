@@ -46,8 +46,7 @@ final class NewHistoryDataView: UserInterface {
     @IBOutlet weak var dateLabel: UILabel!
     
     private let submitButton = UIBarButtonItem(title: "Submit", style: UIBarButtonItem.Style.plain, target: self, action: nil)
-    private var selectedDate: BehaviorRelay<Date?> = BehaviorRelay(value: Date())
-    private var datePicker: UIDatePicker?
+    private var datePicker: UIDatePicker = UIDatePicker()
     private let activityIndicator = CustomActivityIndicator()
     private var bag = DisposeBag()
     private var imagePicked: BehaviorSubject<UIImage?> = BehaviorSubject(value: nil)
@@ -109,9 +108,7 @@ extension NewHistoryDataView{
     }
     
     func setUpDatePicker(){
-        datePicker = UIDatePicker()
-        datePicker?.datePickerMode = .dateAndTime
-        datePicker?.addTarget(self, action: #selector(NewHistoryDataView.dateChanged(datePicker:)), for: .valueChanged)
+        datePicker.datePickerMode = .dateAndTime
         dateTextField.inputView = datePicker
     }
     
@@ -161,12 +158,6 @@ extension NewHistoryDataView{
         view.endEditing(true)
     }
     
-    @objc func dateChanged(datePicker: UIDatePicker){
-        selectedDate.accept(datePicker.date)
-        dateTextField.text = DateFormatter.localizedString(from: selectedDate.value!, dateStyle: .short, timeStyle: .short)
-        
-    }
-    
     var selectCostTypeMenu : ControlEvent<Void> {
         return costTypeButton.rx.tap
     }
@@ -188,6 +179,12 @@ extension NewHistoryDataView{
 
 //MARK: - View updates and modal present
 extension NewHistoryDataView{
+    
+    func updateDateTextLabel(where date: Observable<String>){
+        date.asDriver(onErrorJustReturn: "")
+            .drive(dateTextField.rx.text)
+            .disposed(by: bag)
+    }
     
     func startActivityIndicator(){
         activityIndicator.center = self.view.center
@@ -254,9 +251,10 @@ extension NewHistoryDataView: NewHistoryDataViewApi {
     var pickedImage: Observable<UIImage?> {
         return imagePicked.asObservable()
     }
-
-    var dateResult: Observable<Date?> {
-        return selectedDate.asObservable()
+    
+    var datePickerResult: Observable<Date>{
+       let date = datePicker.rx.date
+        return date.asObservable()
     }
     
     var selectedCostType: Observable<String?> {
