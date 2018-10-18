@@ -26,21 +26,19 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var attachImage: ControlEvent<Void> { get }
     var disposeBag: DisposeBag { get }
     
-    var getSelectedDate: Date? {get}
-    var costTypeButton: UIButton! {get}
-    var costPriceTextField: UITextField! {get}
-    var milageTextField: UITextField! {get}
-    var dateTextField: UITextField! {get set}
-    var costDescriptionTextView: UITextView! {get}
-    var imagePicked: UIImage? {get}
+    var dateResult: Observable<Date?> { get }
+    var selectedCostType: Observable<String?> { get }
+    var costPrice: Observable<String?> { get }
+    var milage: Observable<String?> { get }
+    var costDescription: Observable<String?> { get }
+    var pickedImage: Observable<UIImage?> { get }
     
     
-   // var dateResult: Observable<String?> { get }
-    func bind(datasources: PrefillDrivers)
-    //func setDrivers(datasources: PrefillDrivers)
     
-    func startActivityIndicaotr()
-    func stopActivityIndicaotr()
+    func bind(datasources: NewHistoryDataView.Datasource)
+    
+    func startActivityIndicator()
+    func stopActivityIndicator()
     func displayAction(action view: UIViewController)
     func updateCostTypeButtonLabel(costType text: String)
     func openCamera()
@@ -54,13 +52,12 @@ protocol NewHistoryDataPresenterApi: PresenterProtocol {
     func isEditMode()->Bool
     func returnToHistory()
     func viewDidLoad()
-    func viewWillAppear()
 }
 
 //MARK: - NewHistoryDataInteractor API
 protocol NewHistoryDataInteractorApi: InteractorProtocol {
     func deleteData(document id: String)
-    func storeData(type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?)
-    func updateData(document id: String, type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?)
+    func storeData(where result: NewHistoryDataPresenter.Result)
+    func updateData(where result: NewHistoryDataPresenter.Result)
     func fetchImage(form documentID: String) -> Observable<UIImage>
 }

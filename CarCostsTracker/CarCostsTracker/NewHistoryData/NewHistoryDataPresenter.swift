@@ -11,12 +11,14 @@ import Viperit
 import RxSwift
 import RxCocoa
 
+
 // MARK: - NewHistoryDataPresenter Class
 final class NewHistoryDataPresenter: Presenter {
     var historyDataToEdit: HistoryCellData?
     
     override func setupView(data: Any) {
         historyDataToEdit = (data as? HistoryCellData)
+        
     }
     
 }
@@ -38,31 +40,80 @@ extension NewHistoryDataPresenter{
     
     func viewDidLoad(){
         bindActions()
+        
+        self.setupView()
+            .subscribe(onNext:  {
+                (result) in
+                if self.isEditMode(){
+                    self.interactor.updateData(where: result)
+                } else {
+                    self.interactor.storeData(where: result)
+                }
+                print(result)
+            }).disposed(by: view.disposeBag)
     }
     
-    func viewWillAppear(){
-        if isEditMode(){
-            DispatchQueue.main.async(execute: {
-                self.updateEditView()
-            })
+    private func setupView() -> Observable<Result>{
+        
+        
+        let costDescription: Observable<String?> = Observable.just(historyDataToEdit?.description ?? "Enter costs description...")
+        let costPriceText: Observable<String?> = Observable.just(String(historyDataToEdit?.price.dropLast() ?? ""))
+        let milageText: Observable<String?> = Observable.just(String(historyDataToEdit?.mileage.dropLast().dropLast() ?? "") )
+        let dateString: Observable<String?> = Observable.just(historyDataToEdit?.costDate ?? String(Date().timeIntervalSince1970))
+        let costType: Observable<String?> = Observable.just(historyDataToEdit?.costType.name() ?? "Select Cost Type")
+        let documentId: Observable<String?> = Observable.just(historyDataToEdit?.documentID)
+        
+        let viewDate = view.dateResult.map({ (date) -> String? in
+            if date != nil {
+                return String(date!.timeIntervalSince1970)} else { return nil}
+        })
+        
+        let mergedDocumentId = documentId
+        let mergedCostType = Observable.merge([view.selectedCostType, costType])
+        let mergedPrice = Observable.merge([view.costPrice, costPriceText])
+        let mergedMilage = Observable.merge([view.milage, milageText])
+        let mergedDescription = Observable.merge([view.costDescription, costDescription])
+        let mergedPickedImage = view.pickedImage
+        let mergedDate = Observable.merge([viewDate, dateString])
+        
+        
+        let result = Observable<Result>.combineLatest(mergedDocumentId, mergedDate, mergedCostType, mergedPrice, mergedMilage, mergedDescription, mergedPickedImage) { (documentId: String?, date: String?, costType: String?, costPrice: String?, milage: String?, costDescription: String?, pickedImage: UIImage?) -> NewHistoryDataPresenter.Result in
+            
+            return Result(documentId: documentId , price: costPrice, mileage: milage, date: date, costType: costType, description: costDescription, image: pickedImage)
         }
-    }
-    
-    private func updateEditView(){
-        if let historyDataToEdit = historyDataToEdit{
-            
-            let costDescription = historyDataToEdit.description
-            let costPriceText = String(historyDataToEdit.price.dropLast())
-            let milageText = String(historyDataToEdit.mileage.dropLast().dropLast())
-            let timeStamp = TimeInterval(historyDataToEdit.costDate)
-            let selectedDate = Date(timeIntervalSince1970: timeStamp!)
-            let dateString = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
-            let costType = historyDataToEdit.costType.name()
-            
-            let prefilDrivers = PrefillDrivers(price: costPriceText, milage: milageText, date: dateString, description: costDescription, costType: costType)
-            
-            view.bind(datasources: prefilDrivers)
+        
+        let priceValid: Observable<Bool> = mergedPrice.map { (text) -> Bool in
+            text!.count > 0
         }
+        let mileageValid: Observable<Bool> = mergedMilage.map { (text) -> Bool in
+            text!.count > 0
+        }
+        let dateValid: Observable<Bool> = mergedDate.map { (text) -> Bool in
+            text!.count > 0
+        }
+        let costTypeValid: Observable<Bool> = view.selectedCostType.map { (label) -> Bool in
+            if let label = label {
+                return label != "Select Cost Type"
+            }
+            return false
+        }
+        
+        let everythingValid: Observable<Bool> = Observable.combineLatest(priceValid, mileageValid, dateValid, costTypeValid) { $0 && $1 && $2 && $3 }
+        
+        let displayDate = dateString.map { (dateStamp) -> String? in
+            if let dateStamp = dateStamp {
+            let timeStamp = TimeInterval(dateStamp)
+            let newDate = Date(timeIntervalSince1970: timeStamp!)
+            return DateFormatter.localizedString(from: newDate, dateStyle: .short, timeStyle: .short)
+            } else { return nil}
+        }
+        
+        let prefilDrivers = NewHistoryDataView.Datasource(price: costPriceText, milage: milageText, date: displayDate, description: costDescription, costType: costType, enableButton: everythingValid)
+        view.bind(datasources: prefilDrivers)
+        
+        return view.submitResults
+            .asObservable()
+            .withLatestFrom(result)
     }
 }
 
@@ -79,14 +130,6 @@ extension NewHistoryDataPresenter{
             .subscribe(onNext: { [unowned self]
                 _ in
                 self.showSelectCostTypeActionSheet()
-            }).disposed(by: view.disposeBag)
-        
-        view.submitResults
-            .asObservable()
-            .observeOn(MainScheduler.asyncInstance)
-            .subscribe(onNext: { [unowned self]
-                _ in
-                self.submitData()
             }).disposed(by: view.disposeBag)
         
         view.deleteEntry
@@ -188,7 +231,7 @@ extension NewHistoryDataPresenter{
     }
     
     private func showAlertOnError(){
-        view.stopActivityIndicaotr()
+        view.stopActivityIndicator()
         let imageNotFoundAlert: UIAlertController = NewHistoryDataActions.showImageNotFound()
         self.view.displayAction(action: imageNotFoundAlert)
     }
@@ -197,27 +240,7 @@ extension NewHistoryDataPresenter{
 
 //MARK: - Connection with Interactor
 extension NewHistoryDataPresenter{
-    
-    private func submitData() {
-        let costType = view.costTypeButton.titleLabel?.text ?? ""
-        let costPrice = Double(view.costPriceTextField.text ?? "") ?? 0.0
-        let milage = Int(view.milageTextField.text ?? "") ?? 0
-        let costDescription = view.costDescriptionTextView.text ?? ""
-        
-//        let image = view.imagePicked!
-//        let tempImage = resizeImage(image: image, targetSize: CGSize(width: image.size.height/6, height: image.size.width/6))
-        let imagePicked = view.imagePicked?.jpegData(compressionQuality: 0.01)
-        let timeStampString = getTimeStamp(from: view.getSelectedDate, defaultFrom: historyDataToEdit)
-        
-        if isEditMode(){
-            guard let historyDataToEdit = self.historyDataToEdit else {
-                return print("Error historyDataToEdit is nil")
-            }
-            interactor.updateData(document: historyDataToEdit.documentID ,type: costType, price: costPrice, milage: milage, date: timeStampString, costDescription: costDescription, image: imagePicked)
-        } else{
-            interactor.storeData(type: costType, price: costPrice, milage: milage, date: timeStampString, costDescription: costDescription, image: imagePicked)
-        }
-    }
+
     
     private func getTimeStamp(from date: Date?, defaultFrom cellData: HistoryCellData?) -> String {
         if let date = date {
@@ -239,7 +262,7 @@ extension NewHistoryDataPresenter{
     
     func getImageFromServer(){
         if let historyDataToEdit = historyDataToEdit {
-            view.startActivityIndicaotr()
+            view.startActivityIndicator()
             interactor.fetchImage(form: historyDataToEdit.documentID)
                 .subscribe(onNext: { (fetchedImage) in
                     self.openAttachedImage(image: fetchedImage)
@@ -256,13 +279,34 @@ extension NewHistoryDataPresenter{
     
     private func openAttachedImage(image data: UIImage) {
         router.showAttachedImageView(image: data)
-        view.stopActivityIndicaotr()
+        view.stopActivityIndicator()
     }
     
     func returnToHistory(){
         router.showHistory()
     }
     
+    
+    public struct Result{
+        
+        public let documentId: String?
+        public let price: String?
+        public let mileage: String?
+        public let date: String?
+        public let costType: String?
+        public let description: String?
+        public let image: UIImage?
+        
+        init(documentId: String?, price: String?, mileage: String?, date: String?, costType: String?, description: String? = "", image: UIImage? = nil){
+            self.documentId = documentId
+            self.price = price
+            self.mileage = mileage
+            self.date = date
+            self.costType = costType
+            self.description = description
+            self.image = image
+        }
+    }
 }
 
 
@@ -276,5 +320,14 @@ private extension NewHistoryDataPresenter {
     }
     var router: NewHistoryDataRouterApi {
         return _router as! NewHistoryDataRouterApi
+    }
+}
+
+extension Reactive where Base == String? {
+    func isEmpty() -> Observable<Bool> {
+        guard let base = base else {
+            return Observable.just(false)
+        }
+        return Observable.just(base.count > 0)
     }
 }

@@ -46,15 +46,12 @@ final class NewHistoryDataView: UserInterface {
     @IBOutlet weak var dateLabel: UILabel!
     
     private let submitButton = UIBarButtonItem(title: "Submit", style: UIBarButtonItem.Style.plain, target: self, action: nil)
-    private var selectedDate: Date?
+    private var selectedDate: BehaviorRelay<Date?> = BehaviorRelay(value: Date())
     private var datePicker: UIDatePicker?
     private let activityIndicator = CustomActivityIndicator()
     private var bag = DisposeBag()
-    var imagePicked: UIImage?
-    
-    private let prefillDriversPrice = PublishSubject<String?>()
-    private let prefillDriversMileage = PublishSubject<String?>()
-    private let prefillDriversDate = PublishSubject<String?>()
+    private var imagePicked: BehaviorSubject<UIImage?> = BehaviorSubject(value: nil)
+
     
 }
 
@@ -67,24 +64,18 @@ extension NewHistoryDataView{
         setUpDatePicker()
         textFieldLabelsSetUp()
         presenter.viewDidLoad()
-        inputFieldBinding()
         
         if presenter.isEditMode(){
             prepareViewEditMode()
         } else {
             prepareViewAddItemMode()
         }
-        
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NewHistoryDataView.viewTapped(gestureRecognizer:)))
         view.addGestureRecognizer(tapGesture)
-        
-        presenter.viewWillAppear()
-        
     }
 }
 
@@ -92,34 +83,6 @@ extension NewHistoryDataView{
 
 //MARK: View set up
 extension NewHistoryDataView{
-    
-    func inputFieldBinding(){
-        
-        let priceValid: Observable<Bool> = Observable.of((costPriceTextField.rx.text).asObservable(), prefillDriversPrice.asObservable()).merge().map { (text) -> Bool in
-            text!.count > 0
-        }
-        
-        let milageValid: Observable<Bool> = Observable.of((milageTextField.rx.text).asObservable(), prefillDriversMileage.asObservable()).merge().map { (text) -> Bool in
-            text!.count > 0
-        }
-        
-        let dateValid: Observable<Bool> = Observable.of((dateTextField.rx.text).asObservable(), prefillDriversDate.asObservable()).merge().map { (text) -> Bool in
-            text!.count > 0
-        }
-        
-        let costType: Observable<Bool> = costTypeButton.rx.observe(String.self, "titleLabel.text").map { (label) -> Bool in
-            if let label = label {
-                return label != "Select Cost Type"
-            }
-            return false
-        }
-        
-        let everythingValid: Observable<Bool>
-            = Observable.combineLatest(priceValid, milageValid, dateValid, costType) { $0 && $1 && $2 && $3 }
-        
-        everythingValid.bind(to: submitButton.rx.isEnabled).disposed(by: bag)
-        
-    }
     
     func textFieldLabelsSetUp(){
         let asterix = NSAttributedString(string: "*", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
@@ -139,7 +102,6 @@ extension NewHistoryDataView{
     
     func setUpCostDescriptionTextView(){
         costDescriptionTextView.delegate = self
-        costDescriptionTextView.text = "Enter costs description..."
         costDescriptionTextView.textColor = UIColor.lightGray
         costDescriptionTextView.layer.borderWidth = 1
         costDescriptionTextView.layer.cornerRadius = 8
@@ -158,15 +120,12 @@ extension NewHistoryDataView{
         self.openImageButtonOutlet.isHidden = false
         self.navigationItem.setRightBarButton(self.submitButton, animated: true)
         self.submitButton.title = "Save"
-        
     }
     
     func prepareViewAddItemMode(){
         self.openImageButtonOutlet.isHidden = true
         self.title = "Add new data"
         self.costTypeButton.titleLabel?.text = "Select Cost Type"
-        self.selectedDate = Date()
-        self.dateTextField.text = DateFormatter.localizedString(from: self.selectedDate!, dateStyle: .short, timeStyle: .short)
         submitButton.isEnabled = false
         self.navigationItem.setRightBarButton(self.submitButton, animated: true)
         if let deleteEntryButtonIndex = toolBar.items?.lastIndex(of: deleteEntryButton){
@@ -203,11 +162,8 @@ extension NewHistoryDataView{
     }
     
     @objc func dateChanged(datePicker: UIDatePicker){
-        selectedDate = datePicker.date
-        guard let selectedDate = selectedDate else {
-            return print("Selected Date was nil")
-        }
-        dateTextField.text = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
+        selectedDate.accept(datePicker.date)
+        dateTextField.text = DateFormatter.localizedString(from: selectedDate.value!, dateStyle: .short, timeStyle: .short)
         
     }
     
@@ -227,23 +183,19 @@ extension NewHistoryDataView{
         return attachImageButton.rx.tap
     }
     
-    var viewInstance: (NewHistoryDataViewApi & UIImagePickerControllerDelegate & UINavigationControllerDelegate) {
-        return self
-    }
-    
 }
 
 
 //MARK: - View updates and modal present
 extension NewHistoryDataView{
     
-    func startActivityIndicaotr(){
+    func startActivityIndicator(){
         activityIndicator.center = self.view.center
         self.view.addSubview(activityIndicator)
         self.view.isUserInteractionEnabled = false
     }
     
-    func stopActivityIndicaotr(){
+    func stopActivityIndicator(){
         activityIndicator.removeFromSuperview()
         self.view.isUserInteractionEnabled = true
     }
@@ -289,7 +241,7 @@ extension NewHistoryDataView: UIImagePickerControllerDelegate, UINavigationContr
         guard let selectedImage = info[.originalImage] as? UIImage else {
             fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
         }
-        imagePicked = selectedImage
+        imagePicked.onNext(selectedImage)
         dismiss(animated:true, completion: nil)
     }
 }
@@ -299,13 +251,34 @@ extension NewHistoryDataView: UIImagePickerControllerDelegate, UINavigationContr
 //MARK: - NewHistoryDataView API
 extension NewHistoryDataView: NewHistoryDataViewApi {
     
+    var pickedImage: Observable<UIImage?> {
+        return imagePicked.asObservable()
+    }
+
+    var dateResult: Observable<Date?> {
+        return selectedDate.asObservable()
+    }
+    
+    var selectedCostType: Observable<String?> {
+        return costTypeButton.rx.observe(String.self, "titleLabel.text").asObservable()
+    }
+    
+    var costPrice: Observable<String?> {
+        return costPriceTextField.rx.text.asObservable()
+    }
+
+    var milage: Observable<String?> {
+        return milageTextField.rx.text.asObservable()
+    }
+
+    var costDescription: Observable<String?> {
+        return costDescriptionTextView.rx.text.asObservable()
+    }
+
     var disposeBag: DisposeBag {
         return bag
     }
     
-    var getSelectedDate: Date? {
-        return self.selectedDate
-    }
 }
 
 // MARK: - NewHistoryDataView Viper Components API
@@ -320,28 +293,16 @@ private extension NewHistoryDataView {
 
 extension NewHistoryDataView {
     
-    func bind(datasources: PrefillDrivers) {
-        
-        datasources.pricePrefill
-            .bind(to: prefillDriversPrice)
-            .disposed(by: bag)
-        
+    func bind(datasources: Datasource) {
+
         datasources.pricePrefill
             .asDriver(onErrorJustReturn: "")
             .drive(costPriceTextField.rx.text)
             .disposed(by: bag)
         
         datasources.mileagePrefill
-            .bind(to: prefillDriversMileage)
-            .disposed(by: bag)
-        
-        datasources.mileagePrefill
             .asDriver(onErrorJustReturn: "")
             .drive(milageTextField.rx.text)
-            .disposed(by: bag)
-        
-        datasources.datePrefill
-            .bind(to: prefillDriversDate)
             .disposed(by: bag)
         
         datasources.datePrefill
@@ -362,46 +323,36 @@ extension NewHistoryDataView {
             .drive(onNext: { (costType) in
                 self.costTypeButton.setTitle(costType, for: .normal)
         }).disposed(by: bag)
+        
+        datasources.buttonEnabled
+            .asDriver(onErrorJustReturn: false)
+            .drive(submitButton.rx.isEnabled)
+            .disposed(by: bag)
+        
     }
-}
-
-public struct PrefillDrivers {
-    public let pricePrefill: Observable<String>
-    public let mileagePrefill: Observable<String>
-    public let datePrefill: Observable<String>
-    public let descriptionPrefill: Observable<String>
-    public let costTypePrefill: Observable<String>
-
     
-    init(price: String, milage: String, date: String, description: String, costType: String) {
-        pricePrefill = Observable.create( {
-            (observer) -> Disposable in
-            observer.onNext(price)
-            return Disposables.create()
-        })
+    public struct Datasource {
+        public let pricePrefill: Observable<String?>
+        public let mileagePrefill: Observable<String?>
+        public let datePrefill: Observable<String?>
+        public let descriptionPrefill: Observable<String?>
+        public let costTypePrefill: Observable<String?>
+        public let buttonEnabled: Observable<Bool>
         
-        mileagePrefill = Observable.create( {
-            (observer) -> Disposable in
-            observer.onNext(milage)
-            return Disposables.create()
-        })
-        
-        datePrefill = Observable.create( {
-            (observer) -> Disposable in
-            observer.onNext(date)
-            return Disposables.create()
-        })
-        
-        descriptionPrefill = Observable.create( {
-            (observer) -> Disposable in
-            observer.onNext(description)
-            return Disposables.create()
-        })
-        
-        costTypePrefill = Observable.create( {
-            (observer) -> Disposable in
-            observer.onNext(costType)
-            return Disposables.create()
-        })
+        init(price: Observable<String?>,
+             milage: Observable<String?>,
+             date: Observable<String?>,
+             description: Observable<String?>,
+             costType: Observable<String?>,
+             enableButton: Observable<Bool>) {
+            
+            pricePrefill = price
+            mileagePrefill = milage
+            datePrefill = date
+            descriptionPrefill = description
+            costTypePrefill = costType
+            buttonEnabled = enableButton
+        }
     }
+
 }

@@ -51,12 +51,19 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
     }
     
     
-    func storeData(type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?) {
+    func storeData(where result: NewHistoryDataPresenter.Result) {
         
         var ref: DocumentReference? = nil
         guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
             return print("Error user not Authorized")
         }
+        
+        let type = result.costType!
+        let price = Double(result.price!)!
+        let milage = Int(result.mileage!)!
+        let date = result.date!
+        let costDescription = result.description!
+        
         ref = db.collection(userUID).addDocument(data: [
             "costType": type,
             "price": price,
@@ -72,14 +79,16 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             }
         }
         
-        if let image = image {
+        if let image = result.image {
+            
+            let compressedImage = image.jpegData(compressionQuality: 0.01)
             
             let storageRef = storage.reference().child(userUID).child("\(ref!.documentID).jpg")
             // Upload the file to the path "userID/documentID"
             // Create file metadata including the content type
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpeg"
-            storageRef.putData(image, metadata: metadata) { (metadata, error) in
+            storageRef.putData(compressedImage!, metadata: metadata) { (metadata, error) in
                 if let error = error {
                     print("Error adding document: \(error)")
                 }
@@ -87,13 +96,19 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
         }
     }
     
-    func updateData(document id: String, type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?){
+    func updateData(where result: NewHistoryDataPresenter.Result){
         var ref: DocumentReference? = nil
         guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
             return print("Error user not Authorized")
         }
         
-        ref = db.collection(userUID).document(id)
+        let type = result.costType!
+        let price = Double(result.price!)!
+        let milage = Int(result.mileage!)!
+        let date = result.date!
+        let costDescription = result.description!
+        
+        ref = db.collection(userUID).document(result.documentId!)
         ref?.updateData([
             "costType": type,
             "price": price,
@@ -105,17 +120,19 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
                 print("Error updating document: \(err)")
             } else {
                 self.presenter.returnToHistory()
-                print("Document \(id) successfully updated")
+                print("Document \(result.documentId!) successfully updated")
             }
         }
         
-        if let image = image {
+        if let image = result.image {
+            let compressedImage = image.jpegData(compressionQuality: 0.01)
+            
             let storageRef = storage.reference().child(userUID).child("\(ref!.documentID).jpg")
             // Upload the file to the path "userID/documentID"
             // Create file metadata including the content type
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpeg"
-            storageRef.putData(image, metadata: metadata) { (metadata, error) in
+            storageRef.putData(compressedImage!, metadata: metadata) { (metadata, error) in
                 if let error = error {
                     print("Error adding document: \(error)")
                 }

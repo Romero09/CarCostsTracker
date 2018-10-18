@@ -76,7 +76,7 @@ public struct HistoryDataModel {
               let mileage = document.data()["milage"] as? Int,
               let costsType = document.data()["costType"] as? String,
               let costsDescription = document.data()["description"] as? String else {
-            throw "Failed to unwrap data from document"
+                throw "Failed to unwrap data from document documentID: \(documentID)"
         }
         self.date = date
         self.costsPrice = costsPrice
