@@ -16,6 +16,7 @@ protocol NewHistoryDataRouterApi: RouterProtocol {
     func showNewHistoryDataEdit(from view: UserInterface, edit data: HistoryCellData)
     func showHistory()
     func showAttachedImageView(image data: UIImage)
+    func showImagePicker(picker: UIImagePickerController, image: Observable<UIImage>)
 }
 
 //MARK: - NewHistoryDataView API
@@ -30,7 +31,6 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var costPrice: Observable<String> { get }
     var milage: Observable<String> { get }
     var costDescription: Observable<String> { get }
-    var pickedImage: Observable<UIImage?> { get }
     var datePickerResult: Observable<Date> { get }
     
     
@@ -41,8 +41,6 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     func stopActivityIndicator()
     func displayAction(action view: UIViewController)
     func updateCostTypeButtonLabel(costType text: String)
-    func openCamera()
-    func openLibrary()
     
 }
 
@@ -52,6 +50,7 @@ protocol NewHistoryDataPresenterApi: PresenterProtocol {
     func isEditMode()->Bool
     func returnToHistory()
     func viewDidLoad()
+    var disposeBag: DisposeBag { get } //DisposeBag from view
 }
 
 //MARK: - NewHistoryDataInteractor API

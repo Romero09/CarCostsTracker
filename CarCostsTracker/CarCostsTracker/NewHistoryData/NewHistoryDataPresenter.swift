@@ -16,6 +16,7 @@ import RxCocoa
 final class NewHistoryDataPresenter: Presenter {
     var historyDataToEdit: HistoryCellData? = nil
     var isEdtiMode: Bool = false
+    let selectedImage = PublishSubject<UIImage>()
     
     override func setupView(data: Any) {
         historyDataToEdit = (data as? HistoryCellData)
@@ -26,6 +27,11 @@ final class NewHistoryDataPresenter: Presenter {
 
 // MARK: - NewHistoryDataPresenter API
 extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
+    
+    var disposeBag: DisposeBag {
+        return view.disposeBag
+    }
+    
     func isEditMode() -> Bool {
         if historyDataToEdit != nil {
             return true } else {
@@ -35,7 +41,7 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
 }
 
 
-//MARK: - Connection with View
+//MARK: - Set up View and binding Result
 extension NewHistoryDataPresenter{
     
     func viewDidLoad(){
@@ -73,11 +79,11 @@ extension NewHistoryDataPresenter{
         let mergedPrice = Observable.merge([view.costPrice, costPriceText])
         let mergedMilage = Observable.merge([view.milage, milageText])
         let mergedDescription = Observable.merge([view.costDescription, costDescription])
-        let mergedPickedImage = view.pickedImage
+        let mergedPickedImage = selectedImage.asObserver().map { (image) -> UIImage? in return image }
         let mergedDate = Observable.merge([viewDate, dateString])
         
         
-        let result = Observable<Result>.combineLatest(mergedDocumentId, mergedDate, mergedCostType, mergedPrice, mergedMilage, mergedDescription, mergedPickedImage) { (documentId: String?, date: String, costType: String, costPrice: String, milage: String, costDescription: String, pickedImage: UIImage?) -> NewHistoryDataPresenter.Result in
+        let result = Observable<Result>.combineLatest(mergedDocumentId, mergedDate, mergedCostType, mergedPrice, mergedMilage, mergedDescription, mergedPickedImage.startWith(nil)) { (documentId: String?, date: String, costType: String, costPrice: String, milage: String, costDescription: String, pickedImage: UIImage?) -> NewHistoryDataPresenter.Result in
             
             return Result(documentId: documentId , price: costPrice, mileage: milage, date: date, costType: costType, description: costDescription, image: pickedImage)
         }
@@ -188,16 +194,18 @@ extension NewHistoryDataPresenter{
         view.displayAction(action: costTypeActionSheet)
     }
     
-    private func showSelectImageSourceActionSheet(){
+    private func showSelectImageSourceActionSheet() {
         let(actionSheet: imageSourceActionSheet, camera: cameraEvent, library: libraryEvent) = NewHistoryDataActions
             .showSelectImageSourceActionSheet()
+        
         
         cameraEvent
             .asObservable()
             .observeOn(MainScheduler.asyncInstance)
             .subscribe(onNext: { [unowned self]
                 _ in
-                self.view.openCamera()
+                let image = self.openCamera()
+                image.bind(to: self.selectedImage).disposed(by: self.disposeBag)
             }).disposed(by: view.disposeBag)
         
         libraryEvent
@@ -206,10 +214,12 @@ extension NewHistoryDataPresenter{
             .subscribe(onNext: {
                 [unowned self]
                 _ in
-                self.view.openLibrary()
+                let image = self.openLibrary()
+                image.bind(to: self.selectedImage).disposed(by: self.disposeBag)
             }).disposed(by: view.disposeBag)
         
         view.displayAction(action: imageSourceActionSheet)
+        
     }
     
     func costTypeSelected(costType: CostType){
@@ -273,20 +283,6 @@ extension NewHistoryDataPresenter{
                 }).disposed(by: view.disposeBag)
         }
     }
-}
-
-
-//MARK: - Connection with Router
-extension NewHistoryDataPresenter{
-    
-    private func openAttachedImage(image data: UIImage) {
-        router.showAttachedImageView(image: data)
-        view.stopActivityIndicator()
-    }
-    
-    func returnToHistory(){
-        router.showHistory()
-    }
     
     
     public struct Result{
@@ -308,6 +304,53 @@ extension NewHistoryDataPresenter{
             self.description = description
             self.image = image
         }
+    }
+    
+}
+
+
+//MARK: - Connection with Router
+extension NewHistoryDataPresenter{
+    
+    private func openAttachedImage(image data: UIImage) {
+        router.showAttachedImageView(image: data)
+        view.stopActivityIndicator()
+    }
+    
+    func returnToHistory(){
+        router.showHistory()
+    }
+}
+
+
+//MARK: - Camera and Library control
+extension NewHistoryDataPresenter{
+    
+    func openCamera() -> Observable<UIImage>{
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = .camera;
+            imagePicker.allowsEditing = false
+            let resultImage = imagePicker.rx.pickedImage
+            router.showImagePicker(picker: imagePicker, image: resultImage)
+            return resultImage
+        } else {
+            return Observable<UIImage>.error("Camera is not available")
+        }
+    }
+    
+    func openLibrary() -> Observable<UIImage>{
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = .photoLibrary;
+            imagePicker.allowsEditing = false
+            let resultImage = imagePicker.rx.pickedImage
+            router.showImagePicker(picker: imagePicker, image: resultImage)
+            return resultImage
+        } else {
+            return Observable<UIImage>.error("Library is not available")
+        }
+        
     }
 }
 

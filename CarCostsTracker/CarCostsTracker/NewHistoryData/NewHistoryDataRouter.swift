@@ -9,6 +9,8 @@
 import Foundation
 import Viperit
 import UIKit
+import RxCocoa
+import RxSwift
 
 // MARK: - NewHistoryDataRouter class
 final class NewHistoryDataRouter: Router {
@@ -16,6 +18,15 @@ final class NewHistoryDataRouter: Router {
 
 // MARK: - NewHistoryDataRouter API
 extension NewHistoryDataRouter: NewHistoryDataRouterApi {
+    
+    func showImagePicker(picker: UIImagePickerController, image: Observable<UIImage>) {
+        _view.present(picker, animated: true, completion: nil)
+        image.subscribe(onCompleted: {
+            picker.dismiss(animated: true, completion: nil)
+        }).disposed(by: presenter.disposeBag)
+
+    }
+    
     
     func showAttachedImageView(image data: UIImage) {
         let module = AppModules.AttachedImageView.build()
@@ -29,6 +40,7 @@ extension NewHistoryDataRouter: NewHistoryDataRouterApi {
     
     func showNewHistoryDataEdit(from view: UserInterface, edit data: HistoryCellData){
         self.show(from: view)
+        
         presenter.setupView(data: data)
     }
     

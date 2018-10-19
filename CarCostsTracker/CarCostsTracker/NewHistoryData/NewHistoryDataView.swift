@@ -211,41 +211,6 @@ extension NewHistoryDataView{
     
 }
 
-
-//MARK: - Camera and Library control
-extension NewHistoryDataView: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
-    
-    func openCamera(){
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = .camera;
-            imagePicker.allowsEditing = false
-            self.present(imagePicker, animated: true, completion: nil)
-        }
-    }
-    
-    func openLibrary(){
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = .photoLibrary;
-            imagePicker.allowsEditing = false
-            self.present(imagePicker, animated: true, completion: nil)
-        }
-    }
-    
-    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let selectedImage = info[.originalImage] as? UIImage else {
-            fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
-        }
-        imagePicked.onNext(selectedImage)
-        dismiss(animated:true, completion: nil)
-    }
-}
-
-
-
 //MARK: - NewHistoryDataView API
 extension NewHistoryDataView: NewHistoryDataViewApi {
     
@@ -353,5 +318,8 @@ extension NewHistoryDataView {
             buttonEnabled = enableButton
         }
     }
-
+    
 }
+
+
+
