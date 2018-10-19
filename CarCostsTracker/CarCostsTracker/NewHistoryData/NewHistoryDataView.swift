@@ -10,6 +10,7 @@ import UIKit
 import Viperit
 import RxCocoa
 import RxSwift
+import RxOptional
 
 //MARK: NewHistoryDataView Class
 final class NewHistoryDataView: UserInterface {
@@ -257,20 +258,20 @@ extension NewHistoryDataView: NewHistoryDataViewApi {
         return date.asObservable()
     }
     
-    var selectedCostType: Observable<String?> {
-        return costTypeButton.rx.observe(String.self, "titleLabel.text").asObservable()
+    var selectedCostType: Observable<String> {
+        return costTypeButton.rx.observe(String.self, "titleLabel.text").asObservable().filterNil()
     }
     
-    var costPrice: Observable<String?> {
-        return costPriceTextField.rx.text.asObservable()
+    var costPrice: Observable<String> {
+        return costPriceTextField.rx.text.asObservable().filterNil()
     }
 
-    var milage: Observable<String?> {
-        return milageTextField.rx.text.asObservable()
+    var milage: Observable<String> {
+        return milageTextField.rx.text.asObservable().filterNil()
     }
 
-    var costDescription: Observable<String?> {
-        return costDescriptionTextView.rx.text.asObservable()
+    var costDescription: Observable<String> {
+        return costDescriptionTextView.rx.text.asObservable().filterNil()
     }
 
     var disposeBag: DisposeBag {
@@ -330,18 +331,18 @@ extension NewHistoryDataView {
     }
     
     public struct Datasource {
-        public let pricePrefill: Observable<String?>
-        public let mileagePrefill: Observable<String?>
-        public let datePrefill: Observable<String?>
-        public let descriptionPrefill: Observable<String?>
-        public let costTypePrefill: Observable<String?>
+        public let pricePrefill: Observable<String>
+        public let mileagePrefill: Observable<String>
+        public let datePrefill: Observable<String>
+        public let descriptionPrefill: Observable<String>
+        public let costTypePrefill: Observable<String>
         public let buttonEnabled: Observable<Bool>
         
-        init(price: Observable<String?>,
-             milage: Observable<String?>,
-             date: Observable<String?>,
-             description: Observable<String?>,
-             costType: Observable<String?>,
+        init(price: Observable<String>,
+             milage: Observable<String>,
+             date: Observable<String>,
+             description: Observable<String>,
+             costType: Observable<String>,
              enableButton: Observable<Bool>) {
             
             pricePrefill = price

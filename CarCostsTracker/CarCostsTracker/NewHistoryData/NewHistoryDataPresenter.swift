@@ -57,16 +57,15 @@ extension NewHistoryDataPresenter{
     private func setupView(where historyDataToEdit: HistoryCellData?) -> Observable<Result>{
         
         
-        let costDescription: Observable<String?> = Observable.just(historyDataToEdit?.description ?? "Enter costs description...")
-        let costPriceText: Observable<String?> = Observable.just(String(historyDataToEdit?.price.dropLast() ?? ""))
-        let milageText: Observable<String?> = Observable.just(String(historyDataToEdit?.mileage.dropLast().dropLast() ?? "") )
-        let dateString: Observable<String?> = Observable.just(historyDataToEdit?.costDate ?? String(Date().timeIntervalSince1970))
-        let costType: Observable<String?> = Observable.just(historyDataToEdit?.costType.name() ?? "Select Cost Type")
+        let costDescription: Observable<String> = Observable.just(historyDataToEdit?.description ?? "Enter costs description...")
+        let costPriceText: Observable<String> = Observable.just(String(historyDataToEdit?.price.dropLast() ?? ""))
+        let milageText: Observable<String> = Observable.just(String(historyDataToEdit?.mileage.dropLast().dropLast() ?? "") )
+        let dateString: Observable<String> = Observable.just(historyDataToEdit?.costDate ?? String(Date().timeIntervalSince1970))
+        let costType: Observable<String> = Observable.just(historyDataToEdit?.costType.name() ?? "Select Cost Type")
         let documentId: Observable<String?> = Observable.just(historyDataToEdit?.documentID)
         
-        let viewDate = view.datePickerResult.map({ (date) -> String? in
-            if date != nil {
-                return String(date.timeIntervalSince1970)} else { return nil}
+        let viewDate = view.datePickerResult.map({ (date) -> String in
+                return String(date.timeIntervalSince1970)
         })
         
         let mergedDocumentId = documentId
@@ -78,37 +77,33 @@ extension NewHistoryDataPresenter{
         let mergedDate = Observable.merge([viewDate, dateString])
         
         
-        let result = Observable<Result>.combineLatest(mergedDocumentId, mergedDate, mergedCostType, mergedPrice, mergedMilage, mergedDescription, mergedPickedImage) { (documentId: String?, date: String?, costType: String?, costPrice: String?, milage: String?, costDescription: String?, pickedImage: UIImage?) -> NewHistoryDataPresenter.Result in
+        let result = Observable<Result>.combineLatest(mergedDocumentId, mergedDate, mergedCostType, mergedPrice, mergedMilage, mergedDescription, mergedPickedImage) { (documentId: String?, date: String, costType: String, costPrice: String, milage: String, costDescription: String, pickedImage: UIImage?) -> NewHistoryDataPresenter.Result in
             
             return Result(documentId: documentId , price: costPrice, mileage: milage, date: date, costType: costType, description: costDescription, image: pickedImage)
         }
         
         let priceValid: Observable<Bool> = mergedPrice.map { (text) -> Bool in
-            text!.count > 0
+            text.count > 0
         }
         let mileageValid: Observable<Bool> = mergedMilage.map { (text) -> Bool in
-            text!.count > 0
+            text.count > 0
         }
         let dateValid: Observable<Bool> = mergedDate.map { (text) -> Bool in
-            text!.count > 0
+            text.count > 0
         }
         let costTypeValid: Observable<Bool> = view.selectedCostType.map { (label) -> Bool in
-            if let label = label {
                 return label != "Select Cost Type"
-            }
-            return false
         }
         
         let everythingValid: Observable<Bool> = Observable.combineLatest(priceValid, mileageValid, dateValid, costTypeValid) { $0 && $1 && $2 && $3 }
         
-        let displayDate = dateString.map { (dateStamp) -> String? in
-            if let dateStamp = dateStamp {
+        let displayDate = dateString.map { (dateStamp) -> String in
             let timeStamp = TimeInterval(dateStamp)
             let newDate = Date(timeIntervalSince1970: timeStamp!)
             return DateFormatter.localizedString(from: newDate, dateStyle: .short, timeStyle: .short)
-            } else { return nil}
         }
         
+        //Updating dateText field with currently selected date.
         let datePickerResultString = view.datePickerResult.map { (date) -> String in
             DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .short)
         }
@@ -297,14 +292,14 @@ extension NewHistoryDataPresenter{
     public struct Result{
         
         public let documentId: String?
-        public let price: String?
-        public let mileage: String?
-        public let date: String?
-        public let costType: String?
-        public let description: String?
+        public let price: String
+        public let mileage: String
+        public let date: String
+        public let costType: String
+        public let description: String
         public let image: UIImage?
         
-        init(documentId: String?, price: String?, mileage: String?, date: String?, costType: String?, description: String? = "", image: UIImage? = nil){
+        init(documentId: String?, price: String, mileage: String, date: String, costType: String, description: String, image: UIImage? = nil){
             self.documentId = documentId
             self.price = price
             self.mileage = mileage

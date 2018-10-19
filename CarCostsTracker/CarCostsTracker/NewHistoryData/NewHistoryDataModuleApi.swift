@@ -26,10 +26,10 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var attachImage: ControlEvent<Void> { get }
     var disposeBag: DisposeBag { get }
     
-    var selectedCostType: Observable<String?> { get }
-    var costPrice: Observable<String?> { get }
-    var milage: Observable<String?> { get }
-    var costDescription: Observable<String?> { get }
+    var selectedCostType: Observable<String> { get }
+    var costPrice: Observable<String> { get }
+    var milage: Observable<String> { get }
+    var costDescription: Observable<String> { get }
     var pickedImage: Observable<UIImage?> { get }
     var datePickerResult: Observable<Date> { get }
     

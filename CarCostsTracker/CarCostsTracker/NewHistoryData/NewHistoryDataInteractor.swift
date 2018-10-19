@@ -58,16 +58,16 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             return print("Error user not Authorized")
         }
         
-        let type = result.costType!
-        let price = Double(result.price!)!
-        let milage = Int(result.mileage!)!
-        let date = result.date!
-        let costDescription = result.description!
+        let type = result.costType
+        let price = Double(result.price)
+        let milage = Int(result.mileage)
+        let date = result.date
+        let costDescription = result.description
         
         ref = db.collection(userUID).addDocument(data: [
             "costType": type,
-            "price": price,
-            "milage": milage,
+            "price": price!,
+            "milage": milage!,
             "date": date,
             "description": costDescription
         ]) { err in
@@ -102,17 +102,17 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             return print("Error user not Authorized")
         }
         
-        let type = result.costType!
-        let price = Double(result.price!)!
-        let milage = Int(result.mileage!)!
-        let date = result.date!
-        let costDescription = result.description!
+        let type = result.costType
+        let price = Double(result.price)
+        let milage = Int(result.mileage)
+        let date = result.date
+        let costDescription = result.description
         
         ref = db.collection(userUID).document(result.documentId!)
         ref?.updateData([
             "costType": type,
-            "price": price,
-            "milage": milage,
+            "price": price!,
+            "milage": milage!,
             "date": date,
             "description": costDescription
         ]){ err in
