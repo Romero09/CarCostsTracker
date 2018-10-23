@@ -67,7 +67,7 @@ final class UIImagePickerControllerDelegateProxy: DelegateProxy<UIImagePickerCon
     private var didSelectImageSink = PublishSubject<UIImage>()
     
     public var didSelectImage: Observable<UIImage> {
-        return didSelectImageSink.asObservable().debug("Picked Image")
+        return didSelectImageSink.asObservable()
     }
     
     //Func that called by picker it self when imgae is picked.
@@ -77,7 +77,6 @@ final class UIImagePickerControllerDelegateProxy: DelegateProxy<UIImagePickerCon
             return
         }
         didSelectImageSink.onNext(selectedImage)
-        didSelectImageSink.onCompleted()
     }
     
     deinit {

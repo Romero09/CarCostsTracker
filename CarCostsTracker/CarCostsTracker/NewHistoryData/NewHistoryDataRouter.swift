@@ -21,7 +21,7 @@ extension NewHistoryDataRouter: NewHistoryDataRouterApi {
     
     func showImagePicker(picker: UIImagePickerController, image: Observable<UIImage>) {
         _view.present(picker, animated: true, completion: nil)
-        image.subscribe(onCompleted: {
+        image.subscribe(onNext: { _ in
             picker.dismiss(animated: true, completion: nil)
         }).disposed(by: presenter.disposeBag)
 

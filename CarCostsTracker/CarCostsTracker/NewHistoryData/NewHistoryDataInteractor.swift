@@ -37,10 +37,18 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             }
         }
         
-        // Create a reference to the file for deletion
-        let storageRef = storage.reference().child(userUID).child("\(id).jpg")
-        // Delete the file
-        storageRef.delete { error in
+        let normalImageRef = storage.reference().child(userUID).child("\(id).jpg")
+        normalImageRef.delete { error in
+            if let error = error {
+                print(error)
+                // Uh-oh, an error occurred!
+            } else {
+                // File deleted successfully
+            }
+        }
+        
+        let thumbnailImageRef = storage.reference().child(userUID).child("\(id)Thumbnail.jpg")
+        thumbnailImageRef.delete { error in
             if let error = error {
                 print(error)
                 // Uh-oh, an error occurred!
@@ -79,20 +87,8 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             }
         }
         
-        if let image = result.image {
-            
-            let compressedImage = image.jpegData(compressionQuality: 0.01)
-            
-            let storageRef = storage.reference().child(userUID).child("\(ref!.documentID).jpg")
-            // Upload the file to the path "userID/documentID"
-            // Create file metadata including the content type
-            let metadata = StorageMetadata()
-            metadata.contentType = "image/jpeg"
-            storageRef.putData(compressedImage!, metadata: metadata) { (metadata, error) in
-                if let error = error {
-                    print("Error adding document: \(error)")
-                }
-            }
+        if let image = result.image, let ref = ref {
+            uploadImage(where: image, document: ref, user: userUID)
         }
     }
     
@@ -124,23 +120,13 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             }
         }
         
-        if let image = result.image {
-            let compressedImage = image.jpegData(compressionQuality: 0.01)
-            
-            let storageRef = storage.reference().child(userUID).child("\(ref!.documentID).jpg")
-            // Upload the file to the path "userID/documentID"
-            // Create file metadata including the content type
-            let metadata = StorageMetadata()
-            metadata.contentType = "image/jpeg"
-            storageRef.putData(compressedImage!, metadata: metadata) { (metadata, error) in
-                if let error = error {
-                    print("Error adding document: \(error)")
-                }
-            }
+        if let image = result.image, let ref = ref {
+            uploadImage(where: image, document: ref, user: userUID)
         }
+
     }
     
-    func fetchImage(form documentID: String) -> Observable<UIImage>{
+    func fetchImage(from documentID: String) -> Observable<UIImage>{
         return Observable.create() { [unowned self]
             (observer) -> Disposable in
             guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
@@ -159,6 +145,61 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
                 }
             }
             return Disposables.create()
+        }
+    }
+    
+    func fetchThumbNailImage(from documentID: String?) -> Observable<UIImage>{
+        return Observable.create() { [unowned self]
+            (observer) -> Disposable in
+            guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
+                observer.onError("User unautohrized")
+                return Disposables.create()
+            }
+            guard let documentID = documentID else {
+                observer.onError("Document ID was nil")
+                return Disposables.create()
+            }
+            let storageRef = self.storage.reference().child(userUID).child("\(documentID)Thumbnail.jpg")
+            // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+            storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                if let error = error {
+                    observer.onError(error)
+                } else {
+                    // Data for "images/island.jpg" is returned
+                    let image = UIImage(data: data!)!
+                    observer.onNext(image)
+                }
+            }
+            return Disposables.create()
+        }
+    }
+    
+    func uploadImage(where image: UIImage, document ref: DocumentReference, user userUID: String){
+        let normalImage = image.jpegData(compressionQuality: 0.7)
+        
+        let imageNormalStorage = storage.reference().child(userUID).child("\(ref.documentID).jpg")
+        // Upload the file to the path "userID/documentID"
+        // Create file metadata including the content type
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        
+        imageNormalStorage.putData(normalImage!, metadata: metadata) { (metadata, error) in
+            if let error = error {
+                print("Error adding document: \(error)")
+            }
+        }
+        
+        let imageThumbnailStorage = storage.reference().child(userUID).child("\(ref.documentID)Thumbnail.jpg")
+        let imageWidth = image.size.width
+        let imageHeight = image.size.height
+        let resizedImage = resizeImage(image: image, targetSize: CGSize.init(width: imageWidth/6, height: imageHeight/6))
+        let compressedImage = resizedImage.jpegData(compressionQuality: 0.01)
+        
+        
+        imageThumbnailStorage.putData(compressedImage!, metadata: metadata) { (metadata, error) in
+            if let error = error {
+                print("Error adding document: \(error)")
+            }
         }
     }
 

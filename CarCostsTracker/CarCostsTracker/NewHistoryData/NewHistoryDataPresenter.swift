@@ -16,7 +16,7 @@ import RxCocoa
 final class NewHistoryDataPresenter: Presenter {
     var historyDataToEdit: HistoryCellData? = nil
     var isEdtiMode: Bool = false
-    let selectedImage = PublishSubject<UIImage>()
+    let selectedImage = PublishSubject<UIImage?>()
     
     override func setupView(data: Any) {
         historyDataToEdit = (data as? HistoryCellData)
@@ -62,6 +62,19 @@ extension NewHistoryDataPresenter{
     
     private func setupView(where historyDataToEdit: HistoryCellData?) -> Observable<Result>{
         
+        let fetchedPreview = interactor.fetchThumbNailImage(from: historyDataToEdit?.documentID ?? nil).map { (image) -> UIImage? in return image }.catchError { (error) -> Observable<UIImage?> in
+            return Observable<UIImage?>.just(nil)
+        }
+        
+        let imagePreview = Observable.merge([fetchedPreview, selectedImage]).do(onNext: { (image) in
+            if image != nil {
+                self.view.getPreviewImageView.isUserInteractionEnabled = true
+                self.view.displayImagePreview()
+            } else {
+                self.view.displayNoImageFound()
+            }
+            self.view.stopPreviewActivityIndicator()
+        }).filterNil()
         
         let costDescription: Observable<String> = Observable.just(historyDataToEdit?.description ?? "Enter costs description...")
         let costPriceText: Observable<String> = Observable.just(String(historyDataToEdit?.price.dropLast() ?? ""))
@@ -81,7 +94,6 @@ extension NewHistoryDataPresenter{
         let mergedDescription = Observable.merge([view.costDescription, costDescription])
         let mergedPickedImage = selectedImage.asObserver().map { (image) -> UIImage? in return image }
         let mergedDate = Observable.merge([viewDate, dateString])
-        
         
         let result = Observable<Result>.combineLatest(mergedDocumentId, mergedDate, mergedCostType, mergedPrice, mergedMilage, mergedDescription, mergedPickedImage.startWith(nil)) { (documentId: String?, date: String, costType: String, costPrice: String, milage: String, costDescription: String, pickedImage: UIImage?) -> NewHistoryDataPresenter.Result in
             
@@ -115,7 +127,7 @@ extension NewHistoryDataPresenter{
         }
         view.updateDateTextLabel(where: datePickerResultString)
         
-        let prefilDrivers = NewHistoryDataView.Datasource(price: costPriceText, milage: milageText, date: displayDate, description: costDescription, costType: costType, enableButton: everythingValid)
+        let prefilDrivers = NewHistoryDataView.Datasource(price: costPriceText, milage: milageText, date: displayDate, description: costDescription, costType: costType, enableButton: everythingValid, image: imagePreview)
         view.bind(datasources: prefilDrivers)
         
         //first event from view.submitResults acts like a trigger, and result returns as Observable<Result>
@@ -123,6 +135,7 @@ extension NewHistoryDataPresenter{
             .asObservable()
             .withLatestFrom(result)
     }
+    
 }
 
 
@@ -155,6 +168,12 @@ extension NewHistoryDataPresenter{
                 _ in
                 self.showSelectImageSourceActionSheet()
             }).disposed(by: view.disposeBag)
+        
+        view.imgaeTapAction.asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { _ in
+                self.getImageFromServer()
+        }).disposed(by: view.disposeBag)
     }
 }
 
@@ -205,7 +224,7 @@ extension NewHistoryDataPresenter{
             .subscribe(onNext: { [unowned self]
                 _ in
                 let image = self.openCamera()
-                image.bind(to: self.selectedImage).disposed(by: self.disposeBag)
+                image.bind(to: self.selectedImage).disposed(by: self.view.disposeBag)
             }).disposed(by: view.disposeBag)
         
         libraryEvent
@@ -215,7 +234,7 @@ extension NewHistoryDataPresenter{
                 [unowned self]
                 _ in
                 let image = self.openLibrary()
-                image.bind(to: self.selectedImage).disposed(by: self.disposeBag)
+                image.bind(to: self.selectedImage).disposed(by: self.view.disposeBag)
             }).disposed(by: view.disposeBag)
         
         view.displayAction(action: imageSourceActionSheet)
@@ -253,7 +272,6 @@ extension NewHistoryDataPresenter{
 //MARK: - Connection with Interactor
 extension NewHistoryDataPresenter{
 
-    
     private func getTimeStamp(from date: Date?, defaultFrom cellData: HistoryCellData?) -> String {
         if let date = date {
             return String(date.timeIntervalSince1970)
@@ -275,7 +293,7 @@ extension NewHistoryDataPresenter{
     func getImageFromServer(){
         if let historyDataToEdit = historyDataToEdit {
             view.startActivityIndicator()
-            interactor.fetchImage(form: historyDataToEdit.documentID)
+            interactor.fetchImage(from: historyDataToEdit.documentID)
                 .subscribe(onNext: { (fetchedImage) in
                     self.openAttachedImage(image: fetchedImage)
                 }, onError:{ _ in
@@ -283,7 +301,6 @@ extension NewHistoryDataPresenter{
                 }).disposed(by: view.disposeBag)
         }
     }
-    
     
     public struct Result{
         
@@ -368,11 +385,4 @@ private extension NewHistoryDataPresenter {
     }
 }
 
-extension Reactive where Base == String? {
-    func isEmpty() -> Observable<Bool> {
-        guard let base = base else {
-            return Observable.just(false)
-        }
-        return Observable.just(base.count > 0)
-    }
-}
+

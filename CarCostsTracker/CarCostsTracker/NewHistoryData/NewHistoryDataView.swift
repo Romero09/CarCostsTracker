@@ -14,6 +14,7 @@ import RxOptional
 
 //MARK: NewHistoryDataView Class
 final class NewHistoryDataView: UserInterface {
+    
     private weak var acitivityIndicationView: UIView?
     
     @IBOutlet weak var costTypeButton: UIButton!
@@ -26,11 +27,7 @@ final class NewHistoryDataView: UserInterface {
     
     @IBOutlet weak var dateTextField: UITextField!
     
-    @IBAction func openImageButton(_ sender: Any) {
-        presenter.getImageFromServer()
-    }
-    
-    @IBOutlet weak var openImageButtonOutlet: UIButton!
+    @IBOutlet weak var previewImageView: UIImageView!
     
     @IBOutlet weak var deleteEntryButton: UIBarButtonItem!
     
@@ -46,12 +43,14 @@ final class NewHistoryDataView: UserInterface {
     
     @IBOutlet weak var dateLabel: UILabel!
     
+    @IBOutlet weak var noImageLabel: UILabel!
+    
+    
     private let submitButton = UIBarButtonItem(title: "Submit", style: UIBarButtonItem.Style.plain, target: self, action: nil)
     private var datePicker: UIDatePicker = UIDatePicker()
     private let activityIndicator = CustomActivityIndicator()
+    private let previewActivityIndicator = UIActivityIndicatorView()
     private var bag = DisposeBag()
-    private var imagePicked: BehaviorSubject<UIImage?> = BehaviorSubject(value: nil)
-
     
 }
 
@@ -63,19 +62,22 @@ extension NewHistoryDataView{
         setUpCostDescriptionTextView()
         setUpDatePicker()
         textFieldLabelsSetUp()
-        presenter.viewDidLoad()
+        previewActivityIndicatorSetUp()
         
         if presenter.isEditMode(){
             prepareViewEditMode()
         } else {
             prepareViewAddItemMode()
         }
+        
+        presenter.viewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NewHistoryDataView.viewTapped(gestureRecognizer:)))
         view.addGestureRecognizer(tapGesture)
+        noImageLabel.isHidden = true
     }
 }
 
@@ -84,11 +86,22 @@ extension NewHistoryDataView{
 //MARK: View set up
 extension NewHistoryDataView{
     
+    func previewActivityIndicatorSetUp(){
+        previewActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: 40.0, height: 40.0)
+        previewActivityIndicator.center = CGPoint(x: self.previewImageView.center.x,
+                                                  y: self.previewImageView.center.y + 20.0)
+        previewActivityIndicator.clipsToBounds = true
+        previewActivityIndicator.hidesWhenStopped = true
+        previewActivityIndicator.style = UIActivityIndicatorView.Style.gray
+        previewActivityIndicator.startAnimating()
+        self.view.addSubview(previewActivityIndicator)
+    }
+    
     func textFieldLabelsSetUp(){
         let asterix = NSAttributedString(string: "*", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
         let costsTypeAttriburedString = NSMutableAttributedString(string: "Costs Type")
         let priceAttriburedString = NSMutableAttributedString(string: "Price")
-        let milageAttriburedString = NSMutableAttributedString(string: "Milage")
+        let milageAttriburedString = NSMutableAttributedString(string: "Mileage")
         let dateAttriburedString = NSMutableAttributedString(string: "Date")
         costsTypeAttriburedString.append(asterix)
         priceAttriburedString.append(asterix)
@@ -114,14 +127,14 @@ extension NewHistoryDataView{
     }
     
     func prepareViewEditMode(){
+        previewImageView.contentMode = UIView.ContentMode.scaleAspectFit
         self.title = "Edit data"
-        self.openImageButtonOutlet.isHidden = false
         self.navigationItem.setRightBarButton(self.submitButton, animated: true)
         self.submitButton.title = "Save"
     }
     
     func prepareViewAddItemMode(){
-        self.openImageButtonOutlet.isHidden = true
+        previewImageView.contentMode = UIView.ContentMode.scaleAspectFit
         self.title = "Add new data"
         self.costTypeButton.titleLabel?.text = "Select Cost Type"
         submitButton.isEnabled = false
@@ -157,6 +170,12 @@ extension NewHistoryDataView{
     
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
         view.endEditing(true)
+    }
+    
+    var imgaeTapAction: ControlEvent<UITapGestureRecognizer> {
+        let tapGesture = UITapGestureRecognizer()
+        previewImageView.addGestureRecognizer(tapGesture)
+        return tapGesture.rx.event
     }
     
     var selectCostTypeMenu : ControlEvent<Void> {
@@ -198,6 +217,10 @@ extension NewHistoryDataView{
         self.view.isUserInteractionEnabled = true
     }
     
+    func stopPreviewActivityIndicator(){
+        previewActivityIndicator.removeFromSuperview()
+    }
+    
     func displayAction(action view: UIViewController) {
         present(view, animated: true, completion: nil)
     }
@@ -209,13 +232,23 @@ extension NewHistoryDataView{
         })
     }
     
+    func displayNoImageFound(){
+        previewImageView.isHidden = true
+        noImageLabel.isHidden = false
+    }
+    
+    func displayImagePreview(){
+        previewImageView.isHidden = false
+        noImageLabel.isHidden = true
+    }
+    
 }
 
 //MARK: - NewHistoryDataView API
 extension NewHistoryDataView: NewHistoryDataViewApi {
     
-    var pickedImage: Observable<UIImage?> {
-        return imagePicked.asObservable()
+    var getPreviewImageView: UIImageView {
+        return self.previewImageView
     }
     
     var datePickerResult: Observable<Date>{
@@ -255,6 +288,7 @@ private extension NewHistoryDataView {
     }
 }
 
+//Binding data to display in View.
 extension NewHistoryDataView {
     
     func bind(datasources: Datasource) {
@@ -293,6 +327,11 @@ extension NewHistoryDataView {
             .drive(submitButton.rx.isEnabled)
             .disposed(by: bag)
         
+        datasources.imagePreview
+            .asDriver(onErrorJustReturn: UIImage())
+            .drive(previewImageView.rx.image)
+            .disposed(by: bag)
+        
     }
     
     public struct Datasource {
@@ -302,13 +341,15 @@ extension NewHistoryDataView {
         public let descriptionPrefill: Observable<String>
         public let costTypePrefill: Observable<String>
         public let buttonEnabled: Observable<Bool>
+        public let imagePreview: Observable<UIImage>
         
         init(price: Observable<String>,
              milage: Observable<String>,
              date: Observable<String>,
              description: Observable<String>,
              costType: Observable<String>,
-             enableButton: Observable<Bool>) {
+             enableButton: Observable<Bool>,
+             image: Observable<UIImage>) {
             
             pricePrefill = price
             mileagePrefill = milage
@@ -316,6 +357,7 @@ extension NewHistoryDataView {
             descriptionPrefill = description
             costTypePrefill = costType
             buttonEnabled = enableButton
+            imagePreview = image
         }
     }
     

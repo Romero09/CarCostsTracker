@@ -25,7 +25,9 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var submitResults: ControlEvent<Void> { get }
     var deleteEntry: ControlEvent<Void> { get }
     var attachImage: ControlEvent<Void> { get }
+    var imgaeTapAction: ControlEvent<UITapGestureRecognizer> { get }
     var disposeBag: DisposeBag { get }
+    var getPreviewImageView: UIImageView { get }
     
     var selectedCostType: Observable<String> { get }
     var costPrice: Observable<String> { get }
@@ -33,14 +35,15 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var costDescription: Observable<String> { get }
     var datePickerResult: Observable<Date> { get }
     
-    
-    
     func bind(datasources: NewHistoryDataView.Datasource)
     func updateDateTextLabel(where date: Observable<String>)
     func startActivityIndicator()
     func stopActivityIndicator()
+    func stopPreviewActivityIndicator()
     func displayAction(action view: UIViewController)
     func updateCostTypeButtonLabel(costType text: String)
+    func displayNoImageFound()
+    func displayImagePreview()
     
 }
 
@@ -58,5 +61,6 @@ protocol NewHistoryDataInteractorApi: InteractorProtocol {
     func deleteData(document id: String)
     func storeData(where result: NewHistoryDataPresenter.Result)
     func updateData(where result: NewHistoryDataPresenter.Result)
-    func fetchImage(form documentID: String) -> Observable<UIImage>
+    func fetchImage(from documentID: String) -> Observable<UIImage>
+    func fetchThumbNailImage(from documentID: String?) -> Observable<UIImage>
 }
