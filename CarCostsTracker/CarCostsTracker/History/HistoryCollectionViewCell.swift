@@ -13,24 +13,25 @@ import UIKit
 //}
 
 class HistoryCollectionViewCell: UICollectionViewCell {
-    
-    @IBOutlet weak var costsLogo: UIImageView!
-    @IBOutlet weak var costsType: UILabel!
-    @IBOutlet weak var milage: UILabel!
-    @IBOutlet weak var date: UILabel!
+
     @IBOutlet weak var detailedDescription: UILabel!
     @IBOutlet weak var price: UILabel!
+    @IBOutlet weak var costsLogoImageView: UIImageView!
+    @IBOutlet weak var costsTypeLabel: UILabel!
+    @IBOutlet weak var mileageLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+
     
     
-    func fillCellData(historyData: HistoryCellData){
+    func fill(with data: HistoryCellData){
         
-        costsLogo.image = historyData.costType.image()
-        costsType.text = historyData.costType.name()
-        milage.text = historyData.mileage
-        let timeStamp = TimeInterval(historyData.costDate)
+        costsLogoImageView.image = data.costType.image()
+        costsTypeLabel.text = data.costType.name()
+        mileageLabel.text = data.mileage
+        let timeStamp = TimeInterval(data.costDate)
         let newDate = Date(timeIntervalSince1970: timeStamp!)
-        date.text = DateFormatter.localizedString(from: newDate, dateStyle: .short, timeStyle: .short)
-        price.text = historyData.price
+        dateLabel.text = DateFormatter.localizedString(from: newDate, dateStyle: .short, timeStyle: .short)
+        price.text = data.price
         
     }
 }
