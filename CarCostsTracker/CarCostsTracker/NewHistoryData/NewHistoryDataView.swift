@@ -35,6 +35,8 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
     
     
     override func viewDidLoad() {
+        self.title = "Add new data"
+        
         datePicker = UIDatePicker()
         datePicker?.datePickerMode = .date
         datePicker?.addTarget(self, action: #selector(NewHistoryDataView.dateChanged(datePicker:)), for: .valueChanged)

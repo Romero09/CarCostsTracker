@@ -9,18 +9,23 @@
 import UIKit
 
 class HistoryCollectionViewCell: UICollectionViewCell {
+
+    @IBOutlet weak var detailedDescription: UILabel!
+    @IBOutlet weak var price: UILabel!
     @IBOutlet weak var costsLogoImageView: UIImageView!
     @IBOutlet weak var costsTypeLabel: UILabel!
     @IBOutlet weak var mileageLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
+
     
     
     func fill(with data: HistoryCellData){
         
-        costsLogoImageView.image = data.expenseType.image()
-        costsTypeLabel.text = data.expenseType.name()
-        mileageLabel.text = data.mileage
-        dateLabel.text = data.costDate
+        costsLogoImageView.image = historyData.costType.image()
+        costsTypeLabel.text = historyData.costType.name()
+        mileageLabel.text = historyData.mileage
+        dateLabel.text = historyData.costDate
+        price.text = historyData.price
         
     }
 }

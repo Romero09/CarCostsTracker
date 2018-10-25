@@ -38,35 +38,40 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="100000km" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FwN-vt-yjn">
-                                                    <rect key="frame" x="197" y="33" width="79" height="19"/>
+                                                    <rect key="frame" x="187" y="33" width="109" height="19"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="costs_edit_icon" translatesAutoresizingMaskIntoConstraints="NO" id="p1D-lu-BPG">
                                                     <rect key="frame" x="304" y="0.0" width="56" height="56"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="repair_icon" translatesAutoresizingMaskIntoConstraints="NO" id="OYV-Cr-BAh">
                                                     <rect key="frame" x="4" y="4" width="48" height="48"/>
-                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="48" id="XXR-5U-zLj"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="01.01.2018" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvn-qv-xPs">
-                                                    <rect key="frame" x="187" y="4" width="99" height="24"/>
+                                                    <rect key="frame" x="187" y="4" width="101" height="22"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Repair" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f2m-dc-ZAd">
-                                                    <rect key="frame" x="86" y="16" width="68" height="24"/>
+                                                    <rect key="frame" x="68" y="4" width="68" height="24"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="srK-MC-qOY">
+                                                    <rect key="frame" x="69" y="28" width="107" height="24"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -78,10 +83,13 @@
                                             <constraint firstAttribute="bottom" secondItem="OYV-Cr-BAh" secondAttribute="bottom" constant="4" id="zzG-zC-YUG"/>
                                         </constraints>
                                         <connections>
+
+                                            <outlet property="price" destination="srK-MC-qOY" id="72y-mr-xan"/>
                                             <outlet property="costsLogoImageView" destination="OYV-Cr-BAh" id="hiO-bH-MRh"/>
                                             <outlet property="costsTypeLabel" destination="f2m-dc-ZAd" id="tGm-Lo-X0X"/>
                                             <outlet property="dateLabel" destination="Tvn-qv-xPs" id="bkL-a5-e5O"/>
                                             <outlet property="mileageLabel" destination="FwN-vt-yjn" id="9OC-PT-EKI"/>
+
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

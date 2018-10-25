@@ -7,21 +7,21 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>1004282544845-nm45lkkonog43tgosdqvag0bhkr01piq.apps.googleusercontent.com</string>
+	<string>535536254615-b73mbc28udfloqhmbsadcooqbp3jvg77.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1004282544845-nm45lkkonog43tgosdqvag0bhkr01piq</string>
+	<string>com.googleusercontent.apps.535536254615-b73mbc28udfloqhmbsadcooqbp3jvg77</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAmBdgEN5-pCGwqWAPwuwMzbjnkNpkuF0o</string>
+	<string>AIzaSyD7VimbUqZPq2J2S47wj_6U5Ofzv_q1tFs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1004282544845</string>
+	<string>535536254615</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.ilyas-karshigabekov.CarCostsTracker</string>
 	<key>PROJECT_ID</key>
-	<string>carcoststracker</string>
+	<string>carcoststracker-b9063</string>
 	<key>STORAGE_BUCKET</key>
-	<string>carcoststracker.appspot.com</string>
+	<string>carcoststracker-b9063.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,8 +33,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1004282544845:ios:84b951c2e0b5f5de</string>
+	<string>1:535536254615:ios:84b951c2e0b5f5de</string>
 	<key>DATABASE_URL</key>
-	<string>https://carcoststracker.firebaseio.com</string>
+	<string>https://carcoststracker-b9063.firebaseio.com</string>
 </dict>
 </plist>
