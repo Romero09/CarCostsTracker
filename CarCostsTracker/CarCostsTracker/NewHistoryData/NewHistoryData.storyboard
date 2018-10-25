@@ -57,7 +57,7 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rOG-VA-xgh">
                                 <rect key="frame" x="110" y="118" width="222" height="30"/>
@@ -66,7 +66,7 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Pick date" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0NY-QT-Amb">
                                 <rect key="frame" x="110" y="156" width="222" height="30"/>
@@ -82,7 +82,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Submit"/>
                                 <connections>
-                                    <action selector="submitData:" destination="xqD-av-Raz" eventType="touchUpInside" id="zR3-4T-Wmu"/>
+                                    <action selector="submitDataButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="O9K-tt-hx6"/>
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3F1-Wj-dcr">
@@ -99,7 +99,7 @@
                                 <rect key="frame" x="162.5" y="35" width="117" height="30"/>
                                 <state key="normal" title="Select Cost Type"/>
                                 <connections>
-                                    <action selector="costTypeSelection:" destination="xqD-av-Raz" eventType="touchUpInside" id="wXW-gj-Me7"/>
+                                    <action selector="costTypeSelectionButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="J4r-lY-Qz3"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -136,12 +136,12 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="costDescription" destination="3F1-Wj-dcr" id="JbP-Bs-SIM"/>
-                        <outlet property="costPrice" destination="M5s-Mz-ctr" id="Oog-ag-Spp"/>
-                        <outlet property="costType" destination="8mh-mw-lxu" id="4ZK-bK-rgA"/>
-                        <outlet property="date" destination="0NY-QT-Amb" id="nhC-zE-EdE"/>
-                        <outlet property="milage" destination="rOG-VA-xgh" id="3Kv-Xg-ojB"/>
-                        <outlet property="submitOutlet" destination="yGh-9c-lQd" id="LAE-NR-o6o"/>
+                        <outlet property="costDescriptionTextView" destination="3F1-Wj-dcr" id="LuG-2b-61m"/>
+                        <outlet property="costPriceTextField" destination="M5s-Mz-ctr" id="fnw-1d-Rfr"/>
+                        <outlet property="costTypeButton" destination="8mh-mw-lxu" id="on7-YV-w8h"/>
+                        <outlet property="dateTextField" destination="0NY-QT-Amb" id="P3l-DF-ebA"/>
+                        <outlet property="milageTextField" destination="rOG-VA-xgh" id="fOZ-VX-xC7"/>
+                        <outlet property="submitDataButtonOutlet" destination="yGh-9c-lQd" id="Qd4-RD-ETC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nXm-AG-NXG" userLabel="First Responder" sceneMemberID="firstResponder"/>

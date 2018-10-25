@@ -17,12 +17,12 @@ protocol NewHistoryDataRouterApi: RouterProtocol {
 
 //MARK: - NewHistoryDataView API
 protocol NewHistoryDataViewApi: UserInterfaceProtocol {
-    
-    var costType: UIButton! {get}
-    var costPrice: UITextField! {get}
-    var milage: UITextField! {get}
-    var date: UITextField! {get set}
-    var costDescription: UITextView! {get}
+    var getSelectedDate: Date? {get}
+    var costTypeButton: UIButton! {get}
+    var costPriceTextField: UITextField! {get}
+    var milageTextField: UITextField! {get}
+    var dateTextField: UITextField! {get set}
+    var costDescriptionTextView: UITextView! {get}
 }
 
 //MARK: - NewHistoryDataPresenter API

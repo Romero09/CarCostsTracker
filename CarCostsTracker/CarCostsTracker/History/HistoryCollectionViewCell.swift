@@ -28,7 +28,9 @@ class HistoryCollectionViewCell: UICollectionViewCell {
         costsLogoImageView.image = data.costType.image()
         costsTypeLabel.text = data.costType.name()
         mileageLabel.text = data.mileage
-        dateLabel.text = data.costDate
+        let timeStamp = TimeInterval(data.costDate)
+        let newDate = Date(timeIntervalSince1970: timeStamp!)
+        dateLabel.text = DateFormatter.localizedString(from: newDate, dateStyle: .short, timeStyle: .short)
         price.text = data.price
         
     }

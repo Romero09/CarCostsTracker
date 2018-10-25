@@ -27,7 +27,7 @@ extension HistoryInteractor: HistoryInteractorApi {
         }
         let costsRef = db.collection(userUID)
         
-        costsRef.getDocuments() { (querySnapshot, err) in
+        costsRef.order(by: "date", descending: true).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
             } else {

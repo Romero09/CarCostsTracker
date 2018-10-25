@@ -39,21 +39,28 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
     
     func updateEditView(){
         if let historyDataToEdit = historyDataToEdit{
-            view.costDescription.text = historyDataToEdit.description
-            view.costPrice.text = String(historyDataToEdit.price.dropLast())
-            view.milage.text = String(historyDataToEdit.mileage.dropLast().dropLast())
-            view.date.text = historyDataToEdit.costDate
-            view.costType.setTitle(historyDataToEdit.costType.name(), for: .normal)
-            view.date.text = historyDataToEdit.costDate
+            view.costDescriptionTextView.text = historyDataToEdit.description
+            view.costPriceTextField.text = String(historyDataToEdit.price.dropLast())
+            view.milageTextField.text = String(historyDataToEdit.mileage.dropLast().dropLast())
+            let timeStamp = TimeInterval(historyDataToEdit.costDate)
+            let newDate = Date(timeIntervalSince1970: timeStamp!)
+            view.dateTextField.text = DateFormatter.localizedString(from: newDate, dateStyle: .short, timeStyle: .short)
+            view.costTypeButton.setTitle(historyDataToEdit.costType.name(), for: .normal)
         }
     }
     
     func submitData() {
-        let costType = view.costType.titleLabel?.text ?? ""
-        let costPrice = Double(view.costPrice.text ?? "") ?? 0.0
-        let milage = Int(view.milage.text ?? "") ?? 0
-        let date = view.date.text ?? ""
-        let costDescription = view.costDescription.text ?? ""
+        let costType = view.costTypeButton.titleLabel?.text ?? ""
+        let costPrice = Double(view.costPriceTextField.text ?? "") ?? 0.0
+        let milage = Int(view.milageTextField.text ?? "") ?? 0
+        let costDescription = view.costDescriptionTextView.text ?? ""
+        var date = ""
+        
+        if let tempDate = view.getSelectedDate {
+            date = String(tempDate.timeIntervalSince1970)
+        } else {
+            date = historyDataToEdit?.costDate ?? ""
+        }
         
         if isEditMode(){
             guard let historyDataToEdit = self.historyDataToEdit else {
