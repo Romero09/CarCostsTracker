@@ -75,11 +75,12 @@ extension HistoryView: UICollectionViewDataSource, UICollectionViewDelegate{
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let hisotryCell = collectionView.dequeueReusableCell(withReuseIdentifier: "historyCell", for: indexPath) as! HistoryCollectionViewCell
+
+        let historyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "historyCell", for: indexPath) as! HistoryCollectionViewCell
         
-        hisotryCell.fillCellData(historyData: presenter.historyArray[indexPath.row])
-        hisotryCell.isSelected = true
-        return hisotryCell
+        historyCell.fill(with: presenter.historyArray[indexPath.row])
+        historyCell.isSelected = true
+        return historyCell
     }
     
  
