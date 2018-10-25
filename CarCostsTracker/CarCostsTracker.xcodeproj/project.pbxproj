@@ -52,6 +52,7 @@
 		414D041F216F4E860035B3D2 /* AttachedImageViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D0418216F4E860035B3D2 /* AttachedImageViewView.swift */; };
 		41DB53432163A189009C8755 /* HistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */; };
 		41F4FC4321709E5200B43468 /* CustomActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F4FC4221709E5200B43468 /* CustomActivityIndicator.swift */; };
+		41F4FC472170D7C300B43468 /* NewHistoryDataActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F4FC462170D7C300B43468 /* NewHistoryDataActions.swift */; };
 		C9D39AA5E7C49BE4E7E0BD81 /* Pods_CarCostsTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CA281969016F34CF2304D64 /* Pods_CarCostsTracker.framework */; };
 /* End PBXBuildFile section */
 
@@ -118,6 +119,7 @@
 		414D0418216F4E860035B3D2 /* AttachedImageViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachedImageViewView.swift; sourceTree = "<group>"; };
 		41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		41F4FC4221709E5200B43468 /* CustomActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityIndicator.swift; sourceTree = "<group>"; };
+		41F4FC462170D7C300B43468 /* NewHistoryDataActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHistoryDataActions.swift; sourceTree = "<group>"; };
 		53EBE42513C43B80F7DEEB60 /* Pods-CarCostsTrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTrackerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTrackerTests/Pods-CarCostsTrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F92AC99AFDE02AA40EE6A7E4 /* Pods-CarCostsTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CarCostsTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-CarCostsTracker/Pods-CarCostsTracker.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -238,6 +240,7 @@
 				410EB1102164DF3300515C3E /* NewHistoryDataModuleApi.swift */,
 				410EB1112164DF3300515C3E /* NewHistoryDataInteractor.swift */,
 				410EB1122164DF3300515C3E /* NewHistoryDataView.swift */,
+				41F4FC462170D7C300B43468 /* NewHistoryDataActions.swift */,
 			);
 			path = NewHistoryData;
 			sourceTree = "<group>";
@@ -542,6 +545,7 @@
 				414D0401216C87D50035B3D2 /* ChartsPresenter.swift in Sources */,
 				414D0405216C87D50035B3D2 /* ChartsView.swift in Sources */,
 				414D0404216C87D50035B3D2 /* ChartsInteractor.swift in Sources */,
+				41F4FC472170D7C300B43468 /* NewHistoryDataActions.swift in Sources */,
 				414D041A216F4E860035B3D2 /* AttachedImageViewDisplayData.swift in Sources */,
 				410EB1072164A66700515C3E /* LoginInteractor.swift in Sources */,
 				410EB1082164A66700515C3E /* LoginView.swift in Sources */,

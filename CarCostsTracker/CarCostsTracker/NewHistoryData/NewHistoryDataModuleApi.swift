@@ -7,6 +7,8 @@
 //
 
 import Viperit
+import RxCocoa
+import RxSwift
 
 //MARK: - NewHistoryDataRouter API
 protocol NewHistoryDataRouterApi: RouterProtocol {
@@ -18,6 +20,11 @@ protocol NewHistoryDataRouterApi: RouterProtocol {
 
 //MARK: - NewHistoryDataView API
 protocol NewHistoryDataViewApi: UserInterfaceProtocol {
+    var selectCostTypeMenu: ControlEvent<Void> { get }
+    var submitResults: ControlEvent<Void> { get }
+    var deleteEntry: ControlEvent<Void> { get }
+    var disposeBag: DisposeBag { get }
+    
     var getSelectedDate: Date? {get}
     var costTypeButton: UIButton! {get}
     var costPriceTextField: UITextField! {get}
@@ -25,23 +32,21 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var dateTextField: UITextField! {get set}
     var costDescriptionTextView: UITextView! {get}
     var imagePicked: UIImage? {get}
-    var newHistoryDataView: NewHistoryDataView {get}
+    
     func startActivityIndicaotr()
     func stopActivityIndicaotr()
+    func displayAction(action view: UIAlertController)
+    func updateCostTypeButtonLabel(costType text: String)
+    
 }
 
 //MARK: - NewHistoryDataPresenter API
 protocol NewHistoryDataPresenterApi: PresenterProtocol {
     func viewWillAppear()
-    func openAttachedImage(image data: UIImage)
     func getImageFromServer()
-    func updateEditView()
     func isEditMode()->Bool
-    func submitData()
     func fillEditData(edit data: HistoryCellData)
-    func performDataDelete()
     func returnToHistory()
-    func failedToFetchImage(error message: Error)
 }
 
 //MARK: - NewHistoryDataInteractor API
@@ -49,5 +54,5 @@ protocol NewHistoryDataInteractorApi: InteractorProtocol {
     func deleteData(document id: String)
     func storeData(type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?)
     func updateData(document id: String, type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?)
-    func fetchImage(form documentID: String)
+    func fetchImage(form documentID: String) -> Observable<UIImage>
 }

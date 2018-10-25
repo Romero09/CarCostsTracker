@@ -8,42 +8,17 @@
 
 import Foundation
 import Viperit
+import RxSwift
+import RxCocoa
 
 // MARK: - NewHistoryDataPresenter Class
 final class NewHistoryDataPresenter: Presenter {
     var historyDataToEdit: HistoryCellData?
-
+    
 }
 
 // MARK: - NewHistoryDataPresenter API
 extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
-    
-    func viewWillAppear(){
-        if isEditMode(){
-            DispatchQueue.main.async(execute: {
-                self.updateEditView()
-            })
-        }
-    }
-    
-    
-    func failedToFetchImage(error message: Error) {
-        view.stopActivityIndicaotr()
-        let alert = UIAlertController(title: "No image found", message: "No image found for this entry, please attach image", preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        view.newHistoryDataView.present(alert, animated: true, completion: nil)
-    }
-    
-    
-    func openAttachedImage(image data: UIImage) {
-        router.showAttachedImageView(image: data)
-        view.stopActivityIndicaotr()
-    }
-    
-    
-    func returnToHistory(){
-        router.showHistory()
-    }
     
     func isEditMode() -> Bool {
         if historyDataToEdit != nil {
@@ -52,8 +27,26 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
         }
     }
     
+    func fillEditData(edit data: HistoryCellData){
+        historyDataToEdit = data
+    }
+}
+
+
+
+//MARK: - Connection with View
+extension NewHistoryDataPresenter{
     
-    func updateEditView(){
+    func viewWillAppear(){
+        bindActions()
+        if isEditMode(){
+            DispatchQueue.main.async(execute: {
+                self.updateEditView()
+            })
+        }
+    }
+    
+    private func updateEditView(){
         if let historyDataToEdit = historyDataToEdit{
             view.costDescriptionTextView.text = historyDataToEdit.description
             view.costPriceTextField.text = String(historyDataToEdit.price.dropLast())
@@ -64,8 +57,110 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
             view.costTypeButton.setTitle(historyDataToEdit.costType.name(), for: .normal)
         }
     }
+}
+
+
+//MARK: - View Action Binding
+extension NewHistoryDataPresenter{
     
-    func submitData() {
+    //Bind action listeners on buttons
+    private func bindActions(){
+        
+        view.selectCostTypeMenu
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                _ in
+                self.showSelectCostTypeActionSheet()
+            }).disposed(by: view.disposeBag)
+        
+        view.submitResults
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                _ in
+                self.submitData()
+            }).disposed(by: view.disposeBag)
+        
+        view.deleteEntry
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                _ in
+                self.showDeleteEntryActionAlert()
+            }).disposed(by: view.disposeBag)
+    }
+}
+
+//MARK: - View Action Alerts display and selection handling
+extension NewHistoryDataPresenter{
+    
+    private func showSelectCostTypeActionSheet(){
+        let (costTypeActionSheet, actionSheetEvents) =  NewHistoryDataActions
+            .showSelectCostTypeActionSheet()
+        
+        actionSheetEvents.other
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                _ in
+                self.costTypeSelected(costType: CostType.other)
+            }).disposed(by: view.disposeBag)
+        
+        actionSheetEvents.fuel
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: {
+                [unowned self]
+                _ in
+                self.costTypeSelected(costType: CostType.fuel)
+            }).disposed(by: view.disposeBag)
+        
+        actionSheetEvents.repair
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: {
+                [unowned self]
+                _ in
+                self.costTypeSelected(costType: CostType.repair)
+            }).disposed(by: view.disposeBag)
+        
+        view.displayAction(action: costTypeActionSheet)
+    }
+    
+    func costTypeSelected(costType: CostType){
+        view.updateCostTypeButtonLabel(costType: costType.name())
+    }
+    
+    //Creates Action Alert, sends it to present in View and subscribes on action events.
+    private func showDeleteEntryActionAlert(){
+        let (deleteEntryActionAlert, actionAlertEvents) =  NewHistoryDataActions
+            .showDeleteAction()
+        
+        actionAlertEvents
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+            _ in
+            self.performDataDelete()
+        }).disposed(by: view.disposeBag)
+        
+        view.displayAction(action: deleteEntryActionAlert)
+    }
+    
+    private func showAlertOnError(){
+        view.stopActivityIndicaotr()
+        let imageNotFoundAlert: UIAlertController = NewHistoryDataActions.showImageNotFound()
+        self.view.displayAction(action: imageNotFoundAlert)
+    }
+    
+}
+
+
+//MARK: - Connection with Interactor
+extension NewHistoryDataPresenter{
+    
+    private func submitData() {
         let costType = view.costTypeButton.titleLabel?.text ?? ""
         let costPrice = Double(view.costPriceTextField.text ?? "") ?? 0.0
         let milage = Int(view.milageTextField.text ?? "") ?? 0
@@ -89,7 +184,7 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
         }
     }
     
-    func performDataDelete(){
+    private func performDataDelete(){
         guard let historyDataToEdit = self.historyDataToEdit else {
             return print("Error historyDataToEdit is nil")
         }
@@ -98,15 +193,32 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
     
     func getImageFromServer(){
         if let historyDataToEdit = historyDataToEdit {
-           view.startActivityIndicaotr()
-        interactor.fetchImage(form: historyDataToEdit.documentID)
+            view.startActivityIndicaotr()
+            interactor.fetchImage(form: historyDataToEdit.documentID)
+                .subscribe(onNext: { (fetchedImage) in
+                    self.openAttachedImage(image: fetchedImage)
+                }, onError:{ _ in
+                    self.showAlertOnError()
+                }).disposed(by: view.disposeBag)
         }
     }
-    
-    func fillEditData(edit data: HistoryCellData){
-        historyDataToEdit = data
-    }
 }
+
+
+//MARK: - Connection with Router
+extension NewHistoryDataPresenter{
+    
+    private func openAttachedImage(image data: UIImage) {
+        router.showAttachedImageView(image: data)
+        view.stopActivityIndicaotr()
+    }
+    
+    func returnToHistory(){
+        router.showHistory()
+    }
+    
+}
+
 
 // MARK: - NewHistoryData Viper Components
 private extension NewHistoryDataPresenter {

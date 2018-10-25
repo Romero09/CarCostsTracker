@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -81,9 +82,6 @@
                                 <rect key="frame" x="149" y="545" width="77" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Submit"/>
-                                <connections>
-                                    <action selector="submitDataButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="O9K-tt-hx6"/>
-                                </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3F1-Wj-dcr">
                                 <rect key="frame" x="16" y="242" width="343" height="128"/>
@@ -98,9 +96,6 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8mh-mw-lxu">
                                 <rect key="frame" x="162.5" y="35" width="117" height="30"/>
                                 <state key="normal" title="Select Cost Type"/>
-                                <connections>
-                                    <action selector="costTypeSelectionButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="J4r-lY-Qz3"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CTf-yP-NI3">
                                 <rect key="frame" x="57" y="411" width="92" height="30"/>

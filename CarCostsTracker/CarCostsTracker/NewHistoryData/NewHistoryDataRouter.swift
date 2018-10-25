@@ -8,6 +8,7 @@
 
 import Foundation
 import Viperit
+import UIKit
 
 // MARK: - NewHistoryDataRouter class
 final class NewHistoryDataRouter: Router {
