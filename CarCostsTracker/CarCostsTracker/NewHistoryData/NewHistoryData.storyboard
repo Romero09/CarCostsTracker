@@ -77,13 +77,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8mh-mw-lxu">
-                                <rect key="frame" x="110" y="35" width="117" height="30"/>
-                                <state key="normal" title="Select Cost Type"/>
-                                <connections>
-                                    <action selector="costTypeSelection:" destination="xqD-av-Raz" eventType="touchUpInside" id="wXW-gj-Me7"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yGh-9c-lQd">
                                 <rect key="frame" x="149" y="418" width="77" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
@@ -102,6 +95,13 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8mh-mw-lxu">
+                                <rect key="frame" x="162.5" y="35" width="117" height="30"/>
+                                <state key="normal" title="Select Cost Type"/>
+                                <connections>
+                                    <action selector="costTypeSelection:" destination="xqD-av-Raz" eventType="touchUpInside" id="wXW-gj-Me7"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -130,7 +130,7 @@
                             <constraint firstItem="yGh-9c-lQd" firstAttribute="centerX" secondItem="kgt-o0-aP8" secondAttribute="centerX" id="bPI-eV-GHq"/>
                             <constraint firstItem="4iy-DT-YEi" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leadingMargin" id="iT7-Do-BgP"/>
                             <constraint firstItem="jr8-1r-4Lv" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leadingMargin" id="ibh-OA-8FB"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="8mh-mw-lxu" secondAttribute="trailing" constant="132" id="uSG-nS-xIJ"/>
+                            <constraint firstItem="8mh-mw-lxu" firstAttribute="centerX" secondItem="M5s-Mz-ctr" secondAttribute="centerX" id="lLt-HD-PSY"/>
                             <constraint firstItem="8mh-mw-lxu" firstAttribute="top" secondItem="EcR-ye-kTk" secondAttribute="bottom" constant="15" id="w7i-By-vhI"/>
                             <constraint firstAttribute="trailingMargin" secondItem="M5s-Mz-ctr" secondAttribute="trailing" constant="27" id="wYT-bk-rQ5"/>
                         </constraints>
@@ -141,6 +141,7 @@
                         <outlet property="costType" destination="8mh-mw-lxu" id="4ZK-bK-rgA"/>
                         <outlet property="date" destination="0NY-QT-Amb" id="nhC-zE-EdE"/>
                         <outlet property="milage" destination="rOG-VA-xgh" id="3Kv-Xg-ojB"/>
+                        <outlet property="submitOutlet" destination="yGh-9c-lQd" id="LAE-NR-o6o"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nXm-AG-NXG" userLabel="First Responder" sceneMemberID="firstResponder"/>

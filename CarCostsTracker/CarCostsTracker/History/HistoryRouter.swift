@@ -25,6 +25,12 @@ extension HistoryRouter: HistoryRouterApi {
         let newHistoryDataRouter = module.router as! NewHistoryDataRouterApi
         newHistoryDataRouter.showNewHistoryData(from: _view)
     }
+    
+    func showNewHistoryData(edit data: HistoryCellData){
+        let module = AppModules.NewHistoryData.build()
+        let newHistoryDataRouter = module.router as! NewHistoryDataRouterApi
+        newHistoryDataRouter.showNewHistoryDataEdit(from: _view, edit: data)
+    }
 }
 
 // MARK: - History Viper Components

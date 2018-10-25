@@ -11,10 +11,42 @@ import Viperit
 
 // MARK: - NewHistoryDataPresenter Class
 final class NewHistoryDataPresenter: Presenter {
+    var historyDataToEdit: HistoryCellData?
+    
+    override func viewHasLoaded(){
+        if isEditMode(){
+            DispatchQueue.main.async(execute: {
+                self.updateEditView()
+            })
+        }
+    }
 }
 
 // MARK: - NewHistoryDataPresenter API
 extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
+    
+    func returnToHistory(){
+        router.showHistory()
+    }
+    
+    func isEditMode() -> Bool {
+        if historyDataToEdit != nil {
+            return true } else {
+                return false
+        }
+    }
+    
+    
+    func updateEditView(){
+        if let historyDataToEdit = historyDataToEdit{
+            view.costDescription.text = historyDataToEdit.description
+            view.costPrice.text = String(historyDataToEdit.price.dropLast())
+            view.milage.text = String(historyDataToEdit.mileage.dropLast().dropLast())
+            view.date.text = historyDataToEdit.costDate
+            view.costType.setTitle(historyDataToEdit.costType.name(), for: .normal)
+            view.date.text = historyDataToEdit.costDate
+        }
+    }
     
     func submitData() {
         let costType = view.costType.titleLabel?.text ?? ""
@@ -23,7 +55,28 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
         let date = view.date.text ?? ""
         let costDescription = view.costDescription.text ?? ""
         
+        if isEditMode(){
+            guard let historyDataToEdit = self.historyDataToEdit else {
+               return print("Error historyDataToEdit is nil")
+            }
+            interactor.updateData(document: historyDataToEdit.documentID ,type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription)
+        } else{
         interactor.storeData(type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription)
+        }
+    }
+    
+    func performDataDelete(){
+        guard let historyDataToEdit = self.historyDataToEdit else {
+           return print("Error historyDataToEdit is nil")
+        }
+        interactor.deleteData(document: historyDataToEdit.documentID)
+    }
+    
+
+    
+    func fillEditData(edit data: HistoryCellData){
+        historyDataToEdit = data
+        
     }
     
 }

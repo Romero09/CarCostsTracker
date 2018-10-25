@@ -19,13 +19,14 @@ final class HistoryView: UserInterface {
 }
 
 //MARK: - HistoryView API
-extension HistoryView: HistoryViewApi, UICollectionViewDelegate {
+extension HistoryView: HistoryViewApi {
 
     override func viewDidLoad() {
         self.title = "History"
         self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(callSwitchToNewHistoryData)), animated: true)
         
         costTable.delegate = self
+        costTable.allowsSelection = true
         super.viewDidLoad()
         presenter.getData()
     }
@@ -40,7 +41,7 @@ extension HistoryView: HistoryViewApi, UICollectionViewDelegate {
     }
 }
 
-extension HistoryView: UICollectionViewDataSource{
+extension HistoryView: UICollectionViewDataSource, UICollectionViewDelegate{	
     
     func reloadData(){
         costTable.reloadData()
@@ -55,8 +56,18 @@ extension HistoryView: UICollectionViewDataSource{
         let historyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "historyCell", for: indexPath) as! HistoryCollectionViewCell
         
         historyCell.fill(with: presenter.historyArray[indexPath.row])
-        
+        hisotryCell.isSelected = true
         return historyCell
+    }
+    
+ 
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let historyData = presenter.historyArray[indexPath.row]
+        presenter.historyCellSelected(cell: historyData)
+
+    
     }
 }
 

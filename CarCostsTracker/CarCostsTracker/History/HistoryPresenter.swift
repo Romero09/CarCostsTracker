@@ -49,6 +49,10 @@ extension HistoryPresenter: HistoryPresenterApi {
         view.reloadData()
     }
     
+    func historyCellSelected(cell data: HistoryCellData){
+        router.showNewHistoryData(edit: data)
+    }
+    
     func getData(){
         interactor.fetchFromDB()
     }

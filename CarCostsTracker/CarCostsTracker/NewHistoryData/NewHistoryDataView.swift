@@ -29,13 +29,17 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
     @IBAction func submitData(_ sender: Any) {
         presenter.submitData()
     }
+    @IBOutlet weak var submitOutlet: UIButton!
+    
     
     var datePicker: UIDatePicker?
     
     
     
-    override func viewDidLoad() {
+    override func viewWillAppear(_ animated: Bool) {
+        
         self.title = "Add new data"
+        costType.titleLabel?.text = "Select Cost Type"
         
         datePicker = UIDatePicker()
         datePicker?.datePickerMode = .date
@@ -54,6 +58,18 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
         costDescription.layer.borderWidth = 1
         costDescription.layer.cornerRadius = 8
         costDescription.layer.borderColor = UIColor.lightGray.cgColor
+        
+        if presenter.isEditMode(){
+            DispatchQueue.main.async(execute: {
+                self.title = "Edit data"
+                self.submitOutlet.setTitle("Save", for: UIControl.State())
+                self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(self.deleteFromDB)), animated: true)
+                })
+        }
+    }
+    
+    @objc func deleteFromDB(){
+        presenter.performDataDelete()
     }
     
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
@@ -86,15 +102,15 @@ final class NewHistoryDataView: UserInterface, UITextViewDelegate {
         let cancel = UIAlertAction(title: "Cancle", style: .cancel, handler: nil)
         
         let repair = UIAlertAction(title: "Repair", style: .default) {action in
-            self.costType.titleLabel?.text = "Repair"
+            self.costType.setTitle("Repair", for: .normal)
             }
         
         let fuel = UIAlertAction(title: "Fuel", style: .default) {action in
-            self.costType.titleLabel?.text = "Fuel"
+            self.costType.setTitle("Fuel", for: .normal)
         }
         
         let other = UIAlertAction(title: "Other", style: .default) {action in
-            self.costType.titleLabel?.text = "Other"
+            self.costType.setTitle("Other", for: .normal)
         }
         
         actionSheet.addAction(repair)
