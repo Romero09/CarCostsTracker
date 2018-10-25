@@ -18,6 +18,8 @@ final class ChartsPresenter: Presenter {
         barChartUpdate()
     }
     
+    
+    
     lazy var formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 1
@@ -110,7 +112,8 @@ extension ChartsPresenter: ChartsPresenterApi {
         
         view.barChartView.chartDescription?.enabled = false
         
-        view.barChartView.maxVisibleCount = 40
+        view.barChartView.maxVisibleCount = 12
+        view.barChartView.setVisibleXRangeMinimum(Double(12))
         view.barChartView.drawBarShadowEnabled = false
         view.barChartView.drawValueAboveBarEnabled = false
         view.barChartView.highlightFullBarEnabled = false
@@ -124,6 +127,9 @@ extension ChartsPresenter: ChartsPresenterApi {
         xAxis.drawGridLinesEnabled = true
         xAxis.centerAxisLabelsEnabled = true
         xAxis.granularity = 1
+        xAxis.axisMinLabels = months.count
+        xAxis.axisRange = Double(months.count)
+        xAxis.labelCount = months.count
         
         let legend = view.barChartView.legend
         legend.horizontalAlignment = .center
