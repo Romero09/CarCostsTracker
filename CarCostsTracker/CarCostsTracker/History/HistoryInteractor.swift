@@ -38,6 +38,7 @@ extension HistoryInteractor: HistoryInteractorApi {
             costsRef.order(by: "date", descending: true).getDocuments() { (querySnapshot, error) in
                 if let documents = querySnapshot?.documents {
                     observer.onNext(documents)
+                    observer.onCompleted()
                 }
                 else{
                     if let error = error {
@@ -75,7 +76,7 @@ public struct HistoryDataModel {
               let mileage = document.data()["milage"] as? Int,
               let costsType = document.data()["costType"] as? String,
               let costsDescription = document.data()["description"] as? String else {
-            throw "Failed to unwrap data from document"
+                throw "Failed to unwrap data from document documentID: \(documentID)"
         }
         self.date = date
         self.costsPrice = costsPrice

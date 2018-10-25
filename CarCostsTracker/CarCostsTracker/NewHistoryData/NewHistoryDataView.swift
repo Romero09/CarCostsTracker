@@ -10,9 +10,11 @@ import UIKit
 import Viperit
 import RxCocoa
 import RxSwift
+import RxOptional
 
 //MARK: NewHistoryDataView Class
 final class NewHistoryDataView: UserInterface {
+    
     private weak var acitivityIndicationView: UIView?
     
     @IBOutlet weak var costTypeButton: UIButton!
@@ -25,28 +27,30 @@ final class NewHistoryDataView: UserInterface {
     
     @IBOutlet weak var dateTextField: UITextField!
     
-    @IBOutlet weak var submitDataButtonOutlet: UIButton!
+    @IBOutlet weak var previewImageView: UIImageView!
     
-    @IBAction func libraryButton(_ sender: Any) {
-        openLibrary()
-    }
+    @IBOutlet weak var deleteEntryButton: UIBarButtonItem!
     
-    @IBAction func cameraButton(_ sender: Any) {
-        openCamera()
-    }
+    @IBOutlet weak var attachImageButton: UIBarButtonItem!
     
-    @IBAction func openImageButton(_ sender: Any) {
-        presenter.getImageFromServer()
-    }
+    @IBOutlet weak var toolBar: UIToolbar!
     
-    @IBOutlet weak var openImageButtonOutlet: UIButton!
+    @IBOutlet weak var costTypeLabel: UILabel!
     
-    private let deleteEntryButton = UIBarButtonItem(image: UIImage(named: "delete_item.png"), style: UIBarButtonItem.Style.plain, target: self, action: nil)
-    private var selectedDate: Date?
-    private var datePicker: UIDatePicker?
+    @IBOutlet weak var priceLabel: UILabel!
+    
+    @IBOutlet weak var milageLabel: UILabel!
+    
+    @IBOutlet weak var dateLabel: UILabel!
+    
+    @IBOutlet weak var noImageLabel: UILabel!
+    
+    
+    private let submitButton = UIBarButtonItem(title: "Submit", style: UIBarButtonItem.Style.plain, target: self, action: nil)
+    private var datePicker: UIDatePicker = UIDatePicker()
     private let activityIndicator = CustomActivityIndicator()
-    private let bag = DisposeBag()
-    var imagePicked: UIImage?
+    private let previewActivityIndicator = UIActivityIndicatorView()
+    private var bag = DisposeBag()
     
 }
 
@@ -57,20 +61,22 @@ extension NewHistoryDataView{
     override func viewDidLoad() {
         setUpCostDescriptionTextView()
         setUpDatePicker()
+        textFieldLabelsSetUp()
+        previewActivityIndicatorSetUp()
         
         if presenter.isEditMode(){
             prepareViewEditMode()
         } else {
             prepareViewAddItemMode()
         }
+        
+        presenter.viewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NewHistoryDataView.viewTapped(gestureRecognizer:)))
         view.addGestureRecognizer(tapGesture)
-        
-        presenter.viewWillAppear()
+        noImageLabel.isHidden = true
     }
 }
 
@@ -79,9 +85,35 @@ extension NewHistoryDataView{
 //MARK: View set up
 extension NewHistoryDataView{
     
+    func previewActivityIndicatorSetUp(){
+        previewActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: 40.0, height: 40.0)
+        previewActivityIndicator.center = CGPoint(x: self.previewImageView.center.x,
+                                                  y: self.previewImageView.center.y + 20.0)
+        previewActivityIndicator.clipsToBounds = true
+        previewActivityIndicator.hidesWhenStopped = true
+        previewActivityIndicator.style = UIActivityIndicatorView.Style.gray
+        previewActivityIndicator.startAnimating()
+        self.view.addSubview(previewActivityIndicator)
+    }
+    
+    func textFieldLabelsSetUp(){
+        let asterix = NSAttributedString(string: "*", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+        let costsTypeAttriburedString = NSMutableAttributedString(string: "Costs Type")
+        let priceAttriburedString = NSMutableAttributedString(string: "Price")
+        let milageAttriburedString = NSMutableAttributedString(string: "Mileage")
+        let dateAttriburedString = NSMutableAttributedString(string: "Date")
+        costsTypeAttriburedString.append(asterix)
+        priceAttriburedString.append(asterix)
+        milageAttriburedString.append(asterix)
+        dateAttriburedString.append(asterix)
+        costTypeLabel.attributedText = costsTypeAttriburedString
+        priceLabel.attributedText = priceAttriburedString
+        milageLabel.attributedText = milageAttriburedString
+        dateLabel.attributedText = dateAttriburedString
+    }
+    
     func setUpCostDescriptionTextView(){
         costDescriptionTextView.delegate = self
-        costDescriptionTextView.text = "Enter costs description..."
         costDescriptionTextView.textColor = UIColor.lightGray
         costDescriptionTextView.layer.borderWidth = 1
         costDescriptionTextView.layer.cornerRadius = 8
@@ -89,26 +121,26 @@ extension NewHistoryDataView{
     }
     
     func setUpDatePicker(){
-        datePicker = UIDatePicker()
-        datePicker?.datePickerMode = .dateAndTime
-        datePicker?.addTarget(self, action: #selector(NewHistoryDataView.dateChanged(datePicker:)), for: .valueChanged)
+        datePicker.datePickerMode = .dateAndTime
         dateTextField.inputView = datePicker
     }
     
     func prepareViewEditMode(){
-            self.title = "Edit data"
-            self.openImageButtonOutlet.isHidden = false
-            self.submitDataButtonOutlet.setTitle("Save", for: UIControl.State())
-            self.navigationItem.setRightBarButton(self.deleteEntryButton, animated: true)
-            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.red
+        previewImageView.contentMode = UIView.ContentMode.scaleAspectFit
+        self.title = "Edit data"
+        self.navigationItem.setRightBarButton(self.submitButton, animated: true)
+        self.submitButton.title = "Save"
     }
     
     func prepareViewAddItemMode(){
-            self.openImageButtonOutlet.isHidden = true
-            self.title = "Add new data"
-            self.costTypeButton.titleLabel?.text = "Select Cost Type"
-            self.selectedDate = Date()
-            self.dateTextField.text = DateFormatter.localizedString(from: self.selectedDate!, dateStyle: .short, timeStyle: .short)
+        previewImageView.contentMode = UIView.ContentMode.scaleAspectFit
+        self.title = "Add new data"
+        self.costTypeButton.titleLabel?.text = "Select Cost Type"
+        submitButton.isEnabled = false
+        self.navigationItem.setRightBarButton(self.submitButton, animated: true)
+        if let deleteEntryButtonIndex = toolBar.items?.lastIndex(of: deleteEntryButton){
+        self.toolBar.items?.remove(at: deleteEntryButtonIndex)
+        }
     }
 }
 
@@ -139,13 +171,10 @@ extension NewHistoryDataView{
         view.endEditing(true)
     }
     
-    @objc func dateChanged(datePicker: UIDatePicker){
-        selectedDate = datePicker.date
-        guard let selectedDate = selectedDate else {
-            return print("Selected Date was nil")
-        }
-        dateTextField.text = DateFormatter.localizedString(from: selectedDate, dateStyle: .short, timeStyle: .short)
-        
+    var imgaeTapAction: ControlEvent<UITapGestureRecognizer> {
+        let tapGesture = UITapGestureRecognizer()
+        previewImageView.addGestureRecognizer(tapGesture)
+        return tapGesture.rx.event
     }
     
     var selectCostTypeMenu : ControlEvent<Void> {
@@ -153,11 +182,15 @@ extension NewHistoryDataView{
     }
     
     var submitResults : ControlEvent<Void>{
-        return submitDataButtonOutlet.rx.tap
+        return submitButton.rx.tap
     }
     
     var deleteEntry: ControlEvent<Void> {
         return deleteEntryButton.rx.tap
+    }
+    
+    var attachImage: ControlEvent<Void>{
+        return attachImageButton.rx.tap
     }
     
 }
@@ -166,18 +199,28 @@ extension NewHistoryDataView{
 //MARK: - View updates and modal present
 extension NewHistoryDataView{
     
-    func startActivityIndicaotr(){
+    func updateDateTextLabel(where date: Observable<String>){
+        date.asDriver(onErrorJustReturn: "")
+            .drive(dateTextField.rx.text)
+            .disposed(by: bag)
+    }
+    
+    func startActivityIndicator(){
         activityIndicator.center = self.view.center
         self.view.addSubview(activityIndicator)
         self.view.isUserInteractionEnabled = false
     }
     
-    func stopActivityIndicaotr(){
+    func stopActivityIndicator(){
         activityIndicator.removeFromSuperview()
         self.view.isUserInteractionEnabled = true
     }
     
-    func displayAction(action view: UIAlertController) {
+    func stopPreviewActivityIndicator(){
+        previewActivityIndicator.removeFromSuperview()
+    }
+    
+    func displayAction(action view: UIViewController) {
         present(view, animated: true, completion: nil)
     }
     
@@ -188,53 +231,50 @@ extension NewHistoryDataView{
         })
     }
     
+    func displayNoImageFound(){
+        previewImageView.isHidden = true
+        noImageLabel.isHidden = false
+    }
+    
+    func displayImagePreview(){
+        previewImageView.isHidden = false
+        noImageLabel.isHidden = true
+    }
+    
 }
-
-
-//MARK: - Camera and Library control
-extension NewHistoryDataView: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
-    
-    func openCamera(){
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = .camera;
-            imagePicker.allowsEditing = false
-            self.present(imagePicker, animated: true, completion: nil)
-        }
-    }
-    
-    func openLibrary(){
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = .photoLibrary;
-            imagePicker.allowsEditing = true
-            self.present(imagePicker, animated: true, completion: nil)
-        }
-    }
-    
-    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let selectedImage = info[.originalImage] as? UIImage else {
-            fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
-        }
-        imagePicked = selectedImage
-        dismiss(animated:true, completion: nil)
-    }
-}
-
-
 
 //MARK: - NewHistoryDataView API
 extension NewHistoryDataView: NewHistoryDataViewApi {
     
+    var getPreviewImageView: UIImageView {
+        return self.previewImageView
+    }
+    
+    var datePickerResult: Observable<Date>{
+       let date = datePicker.rx.date
+        return date.asObservable()
+    }
+    
+    var selectedCostType: Observable<String> {
+        return costTypeButton.rx.observe(String.self, "titleLabel.text").asObservable().filterNil()
+    }
+    
+    var costPrice: Observable<String> {
+        return costPriceTextField.rx.text.asObservable().filterNil()
+    }
+
+    var milage: Observable<String> {
+        return milageTextField.rx.text.asObservable().filterNil()
+    }
+
+    var costDescription: Observable<String> {
+        return costDescriptionTextView.rx.text.asObservable().filterNil()
+    }
+
     var disposeBag: DisposeBag {
         return bag
     }
     
-    var getSelectedDate: Date? {
-        return self.selectedDate
-    }
 }
 
 // MARK: - NewHistoryDataView Viper Components API
@@ -246,3 +286,81 @@ private extension NewHistoryDataView {
         return _displayData as! NewHistoryDataDisplayData
     }
 }
+
+//Binding data to display in View.
+extension NewHistoryDataView {
+    
+    func bind(datasources: Datasource) {
+
+        datasources.pricePrefill
+            .asDriver(onErrorJustReturn: "")
+            .drive(costPriceTextField.rx.text)
+            .disposed(by: bag)
+        
+        datasources.mileagePrefill
+            .asDriver(onErrorJustReturn: "")
+            .drive(milageTextField.rx.text)
+            .disposed(by: bag)
+        
+        datasources.datePrefill
+            .asDriver(onErrorJustReturn: "")
+            .drive(onNext: {
+                (date) in
+                self.dateTextField.text = date
+            })
+            .disposed(by: bag)
+        
+        datasources.descriptionPrefill
+            .asDriver(onErrorJustReturn: "")
+            .drive(costDescriptionTextView.rx.text)
+            .disposed(by: bag)
+        
+        datasources.costTypePrefill
+            .asDriver(onErrorJustReturn: "")
+            .drive(onNext: { (costType) in
+                self.costTypeButton.setTitle(costType, for: .normal)
+        }).disposed(by: bag)
+        
+        datasources.buttonEnabled
+            .asDriver(onErrorJustReturn: false)
+            .drive(submitButton.rx.isEnabled)
+            .disposed(by: bag)
+        
+        datasources.imagePreview
+            .asDriver(onErrorJustReturn: UIImage())
+            .drive(previewImageView.rx.image)
+            .disposed(by: bag)
+        
+    }
+    
+    public struct Datasource {
+        public let pricePrefill: Observable<String>
+        public let mileagePrefill: Observable<String>
+        public let datePrefill: Observable<String>
+        public let descriptionPrefill: Observable<String>
+        public let costTypePrefill: Observable<String>
+        public let buttonEnabled: Observable<Bool>
+        public let imagePreview: Observable<UIImage>
+        
+        init(price: Observable<String>,
+             milage: Observable<String>,
+             date: Observable<String>,
+             description: Observable<String>,
+             costType: Observable<String>,
+             enableButton: Observable<Bool>,
+             image: Observable<UIImage>) {
+            
+            pricePrefill = price
+            mileagePrefill = milage
+            datePrefill = date
+            descriptionPrefill = description
+            costTypePrefill = costType
+            buttonEnabled = enableButton
+            imagePreview = image
+        }
+    }
+    
+}
+
+
+

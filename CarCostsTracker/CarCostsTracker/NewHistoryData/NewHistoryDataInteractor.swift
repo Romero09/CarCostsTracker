@@ -37,10 +37,18 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             }
         }
         
-        // Create a reference to the file for deletion
-        let storageRef = storage.reference().child(userUID).child("\(id).jpg")
-        // Delete the file
-        storageRef.delete { error in
+        let normalImageRef = storage.reference().child(userUID).child("\(id).jpg")
+        normalImageRef.delete { error in
+            if let error = error {
+                print(error)
+                // Uh-oh, an error occurred!
+            } else {
+                // File deleted successfully
+            }
+        }
+        
+        let thumbnailImageRef = storage.reference().child(userUID).child("\(id)Thumbnail.jpg")
+        thumbnailImageRef.delete { error in
             if let error = error {
                 print(error)
                 // Uh-oh, an error occurred!
@@ -51,16 +59,23 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
     }
     
     
-    func storeData(type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?) {
+    func storeData(where result: NewHistoryDataPresenter.Result) {
         
         var ref: DocumentReference? = nil
         guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
             return print("Error user not Authorized")
         }
+        
+        let type = result.costType
+        let price = Double(result.price)
+        let milage = Int(result.mileage)
+        let date = result.date
+        let costDescription = result.description
+        
         ref = db.collection(userUID).addDocument(data: [
             "costType": type,
-            "price": price,
-            "milage": milage,
+            "price": price!,
+            "milage": milage!,
             "date": date,
             "description": costDescription
         ]) { err in
@@ -72,32 +87,28 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             }
         }
         
-        if let image = image {
-            
-            let storageRef = storage.reference().child(userUID).child("\(ref!.documentID).jpg")
-            // Upload the file to the path "userID/documentID"
-            // Create file metadata including the content type
-            let metadata = StorageMetadata()
-            metadata.contentType = "image/jpeg"
-            storageRef.putData(image, metadata: metadata) { (metadata, error) in
-                if let error = error {
-                    print("Error adding document: \(error)")
-                }
-            }
+        if let image = result.image, let ref = ref {
+            uploadImage(where: image, document: ref, user: userUID)
         }
     }
     
-    func updateData(document id: String, type: String, price: Double, milage: Int, date: String, costDescription: String, image: Data?){
+    func updateData(where result: NewHistoryDataPresenter.Result){
         var ref: DocumentReference? = nil
         guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
             return print("Error user not Authorized")
         }
         
-        ref = db.collection(userUID).document(id)
+        let type = result.costType
+        let price = Double(result.price)
+        let milage = Int(result.mileage)
+        let date = result.date
+        let costDescription = result.description
+        
+        ref = db.collection(userUID).document(result.documentId!)
         ref?.updateData([
             "costType": type,
-            "price": price,
-            "milage": milage,
+            "price": price!,
+            "milage": milage!,
             "date": date,
             "description": costDescription
         ]){ err in
@@ -105,25 +116,17 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
                 print("Error updating document: \(err)")
             } else {
                 self.presenter.returnToHistory()
-                print("Document \(id) successfully updated")
+                print("Document \(result.documentId!) successfully updated")
             }
         }
         
-        if let image = image {
-            let storageRef = storage.reference().child(userUID).child("\(ref!.documentID).jpg")
-            // Upload the file to the path "userID/documentID"
-            // Create file metadata including the content type
-            let metadata = StorageMetadata()
-            metadata.contentType = "image/jpeg"
-            storageRef.putData(image, metadata: metadata) { (metadata, error) in
-                if let error = error {
-                    print("Error adding document: \(error)")
-                }
-            }
+        if let image = result.image, let ref = ref {
+            uploadImage(where: image, document: ref, user: userUID)
         }
+
     }
     
-    func fetchImage(form documentID: String) -> Observable<UIImage>{
+    func fetchImage(from documentID: String) -> Observable<UIImage>{
         return Observable.create() { [unowned self]
             (observer) -> Disposable in
             guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
@@ -144,6 +147,88 @@ extension NewHistoryDataInteractor: NewHistoryDataInteractorApi {
             return Disposables.create()
         }
     }
+    
+    func fetchThumbNailImage(from documentID: String?) -> Observable<UIImage>{
+        return Observable.create() { [unowned self]
+            (observer) -> Disposable in
+            guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
+                observer.onError("User unautohrized")
+                return Disposables.create()
+            }
+            guard let documentID = documentID else {
+                observer.onError("Document ID was nil")
+                return Disposables.create()
+            }
+            let storageRef = self.storage.reference().child(userUID).child("\(documentID)Thumbnail.jpg")
+            // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+            storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                if let error = error {
+                    observer.onError(error)
+                } else {
+                    // Data for "images/island.jpg" is returned
+                    let image = UIImage(data: data!)!
+                    observer.onNext(image)
+                }
+            }
+            return Disposables.create()
+        }
+    }
+    
+    func uploadImage(where image: UIImage, document ref: DocumentReference, user userUID: String){
+        let normalImage = image.jpegData(compressionQuality: 0.7)
+        
+        let imageNormalStorage = storage.reference().child(userUID).child("\(ref.documentID).jpg")
+        // Upload the file to the path "userID/documentID"
+        // Create file metadata including the content type
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        
+        imageNormalStorage.putData(normalImage!, metadata: metadata) { (metadata, error) in
+            if let error = error {
+                print("Error adding document: \(error)")
+            }
+        }
+        
+        let imageThumbnailStorage = storage.reference().child(userUID).child("\(ref.documentID)Thumbnail.jpg")
+        let imageWidth = image.size.width
+        let imageHeight = image.size.height
+        let resizedImage = resizeImage(image: image, targetSize: CGSize.init(width: imageWidth/6, height: imageHeight/6))
+        let compressedImage = resizedImage.jpegData(compressionQuality: 0.01)
+        
+        
+        imageThumbnailStorage.putData(compressedImage!, metadata: metadata) { (metadata, error) in
+            if let error = error {
+                print("Error adding document: \(error)")
+            }
+        }
+    }
+
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+        
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+        
+        // Figure out what our orientation is, and use that to form the rectangle
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
+        }
+        
+        // This is the rect that we've calculated out and this is what is actually used below
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+        
+        // Actually do the resizing to the rect using the ImageContext stuff
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
+    }
+
 }
 
 // MARK: - Interactor Viper Components Api

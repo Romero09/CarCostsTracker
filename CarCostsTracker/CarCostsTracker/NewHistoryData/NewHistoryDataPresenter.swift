@@ -11,14 +11,26 @@ import Viperit
 import RxSwift
 import RxCocoa
 
+
 // MARK: - NewHistoryDataPresenter Class
 final class NewHistoryDataPresenter: Presenter {
-    var historyDataToEdit: HistoryCellData?
+    var historyDataToEdit: HistoryCellData? = nil
+    var isEdtiMode: Bool = false
+    let selectedImage = PublishSubject<UIImage?>()
     
+    override func setupView(data: Any) {
+        historyDataToEdit = (data as? HistoryCellData)
+        
+    }
 }
+
 
 // MARK: - NewHistoryDataPresenter API
 extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
+    
+    var disposeBag: DisposeBag {
+        return view.disposeBag
+    }
     
     func isEditMode() -> Bool {
         if historyDataToEdit != nil {
@@ -26,37 +38,104 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
             return false
         }
     }
-    
-    func fillEditData(edit data: HistoryCellData){
-        historyDataToEdit = data
-    }
 }
 
 
-
-//MARK: - Connection with View
+//MARK: - Set up View and binding Result
 extension NewHistoryDataPresenter{
     
-    func viewWillAppear(){
+    func viewDidLoad(){
         bindActions()
-        if isEditMode(){
-            DispatchQueue.main.async(execute: {
-                self.updateEditView()
-            })
-        }
+        
+        self.setupView(where: historyDataToEdit)
+            .subscribe(onNext:  {
+                (result) in
+                if self.isEditMode(){
+                    self.interactor.updateData(where: result)
+                } else {
+                    self.interactor.storeData(where: result)
+                }
+                print(result)
+            }).disposed(by: view.disposeBag)
+
     }
     
-    private func updateEditView(){
-        if let historyDataToEdit = historyDataToEdit{
-            view.costDescriptionTextView.text = historyDataToEdit.description
-            view.costPriceTextField.text = String(historyDataToEdit.price.dropLast())
-            view.milageTextField.text = String(historyDataToEdit.mileage.dropLast().dropLast())
-            let timeStamp = TimeInterval(historyDataToEdit.costDate)
-            let newDate = Date(timeIntervalSince1970: timeStamp!)
-            view.dateTextField.text = DateFormatter.localizedString(from: newDate, dateStyle: .short, timeStyle: .short)
-            view.costTypeButton.setTitle(historyDataToEdit.costType.name(), for: .normal)
+    private func setupView(where historyDataToEdit: HistoryCellData?) -> Observable<Result>{
+        
+        let fetchedPreview = interactor.fetchThumbNailImage(from: historyDataToEdit?.documentID ?? nil).map { (image) -> UIImage? in return image }.catchError { (error) -> Observable<UIImage?> in
+            return Observable<UIImage?>.just(nil)
         }
+        
+        let imagePreview = Observable.merge([fetchedPreview, selectedImage]).do(onNext: { (image) in
+            if image != nil {
+                self.view.getPreviewImageView.isUserInteractionEnabled = true
+                self.view.displayImagePreview()
+            } else {
+                self.view.displayNoImageFound()
+            }
+            self.view.stopPreviewActivityIndicator()
+        }).filterNil()
+        
+        let costDescription: Observable<String> = Observable.just(historyDataToEdit?.description ?? "Enter costs description...")
+        let costPriceText: Observable<String> = Observable.just(String(historyDataToEdit?.price.dropLast() ?? ""))
+        let milageText: Observable<String> = Observable.just(String(historyDataToEdit?.mileage.dropLast().dropLast() ?? "") )
+        let dateString: Observable<String> = Observable.just(historyDataToEdit?.costDate ?? String(Date().timeIntervalSince1970))
+        let costType: Observable<String> = Observable.just(historyDataToEdit?.costType.name() ?? "Select Cost Type")
+        let documentId: Observable<String?> = Observable.just(historyDataToEdit?.documentID)
+        
+        let viewDate = view.datePickerResult.map({ (date) -> String in
+                return String(date.timeIntervalSince1970)
+        })
+        
+        let mergedDocumentId = documentId
+        let mergedCostType = Observable.merge([view.selectedCostType, costType])
+        let mergedPrice = Observable.merge([view.costPrice, costPriceText])
+        let mergedMilage = Observable.merge([view.milage, milageText])
+        let mergedDescription = Observable.merge([view.costDescription, costDescription])
+        let mergedPickedImage = selectedImage.asObserver().map { (image) -> UIImage? in return image }
+        let mergedDate = Observable.merge([viewDate, dateString])
+        
+        let result = Observable<Result>.combineLatest(mergedDocumentId, mergedDate, mergedCostType, mergedPrice, mergedMilage, mergedDescription, mergedPickedImage.startWith(nil)) { (documentId: String?, date: String, costType: String, costPrice: String, milage: String, costDescription: String, pickedImage: UIImage?) -> NewHistoryDataPresenter.Result in
+            
+            return Result(documentId: documentId , price: costPrice, mileage: milage, date: date, costType: costType, description: costDescription, image: pickedImage)
+        }
+        
+        let priceValid: Observable<Bool> = mergedPrice.map { (text) -> Bool in
+            text.count > 0
+        }
+        let mileageValid: Observable<Bool> = mergedMilage.map { (text) -> Bool in
+            text.count > 0
+        }
+        let dateValid: Observable<Bool> = mergedDate.map { (text) -> Bool in
+            text.count > 0
+        }
+        let costTypeValid: Observable<Bool> = view.selectedCostType.map { (label) -> Bool in
+                return label != "Select Cost Type"
+        }
+        
+        let everythingValid: Observable<Bool> = Observable.combineLatest(priceValid, mileageValid, dateValid, costTypeValid) { $0 && $1 && $2 && $3 }
+        
+        let displayDate = dateString.map { (dateStamp) -> String in
+            let timeStamp = TimeInterval(dateStamp)
+            let newDate = Date(timeIntervalSince1970: timeStamp!)
+            return DateFormatter.localizedString(from: newDate, dateStyle: .short, timeStyle: .short)
+        }
+        
+        //Updating dateText field with currently selected date.
+        let datePickerResultString = view.datePickerResult.map { (date) -> String in
+            DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .short)
+        }
+        view.updateDateTextLabel(where: datePickerResultString)
+        
+        let prefilDrivers = NewHistoryDataView.Datasource(price: costPriceText, milage: milageText, date: displayDate, description: costDescription, costType: costType, enableButton: everythingValid, image: imagePreview)
+        view.bind(datasources: prefilDrivers)
+        
+        //first event from view.submitResults acts like a trigger, and result returns as Observable<Result>
+        return view.submitResults
+            .asObservable()
+            .withLatestFrom(result)
     }
+    
 }
 
 
@@ -74,14 +153,6 @@ extension NewHistoryDataPresenter{
                 self.showSelectCostTypeActionSheet()
             }).disposed(by: view.disposeBag)
         
-        view.submitResults
-            .asObservable()
-            .observeOn(MainScheduler.asyncInstance)
-            .subscribe(onNext: { [unowned self]
-                _ in
-                self.submitData()
-            }).disposed(by: view.disposeBag)
-        
         view.deleteEntry
             .asObservable()
             .observeOn(MainScheduler.asyncInstance)
@@ -89,6 +160,20 @@ extension NewHistoryDataPresenter{
                 _ in
                 self.showDeleteEntryActionAlert()
             }).disposed(by: view.disposeBag)
+        
+        view.attachImage
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                _ in
+                self.showSelectImageSourceActionSheet()
+            }).disposed(by: view.disposeBag)
+        
+        view.imgaeTapAction.asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { _ in
+                self.getImageFromServer()
+        }).disposed(by: view.disposeBag)
     }
 }
 
@@ -128,6 +213,34 @@ extension NewHistoryDataPresenter{
         view.displayAction(action: costTypeActionSheet)
     }
     
+    private func showSelectImageSourceActionSheet() {
+        let(actionSheet: imageSourceActionSheet, camera: cameraEvent, library: libraryEvent) = NewHistoryDataActions
+            .showSelectImageSourceActionSheet()
+        
+        
+        cameraEvent
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                _ in
+                let image = self.openCamera()
+                image.bind(to: self.selectedImage).disposed(by: self.view.disposeBag)
+            }).disposed(by: view.disposeBag)
+        
+        libraryEvent
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: {
+                [unowned self]
+                _ in
+                let image = self.openLibrary()
+                image.bind(to: self.selectedImage).disposed(by: self.view.disposeBag)
+            }).disposed(by: view.disposeBag)
+        
+        view.displayAction(action: imageSourceActionSheet)
+        
+    }
+    
     func costTypeSelected(costType: CostType){
         view.updateCostTypeButtonLabel(costType: costType.name())
     }
@@ -149,40 +262,26 @@ extension NewHistoryDataPresenter{
     }
     
     private func showAlertOnError(){
-        view.stopActivityIndicaotr()
+        view.stopActivityIndicator()
         let imageNotFoundAlert: UIAlertController = NewHistoryDataActions.showImageNotFound()
         self.view.displayAction(action: imageNotFoundAlert)
     }
     
 }
 
-
 //MARK: - Connection with Interactor
 extension NewHistoryDataPresenter{
-    
-    private func submitData() {
-        let costType = view.costTypeButton.titleLabel?.text ?? ""
-        let costPrice = Double(view.costPriceTextField.text ?? "") ?? 0.0
-        let milage = Int(view.milageTextField.text ?? "") ?? 0
-        let costDescription = view.costDescriptionTextView.text ?? ""
-        let imagePicked = view.imagePicked?.jpegData(compressionQuality: 0.7)
-        var date = ""
-        
-        if let tempDate = view.getSelectedDate {
-            date = String(tempDate.timeIntervalSince1970)
-        } else {
-            date = historyDataToEdit?.costDate ?? ""
+
+    private func getTimeStamp(from date: Date?, defaultFrom cellData: HistoryCellData?) -> String {
+        if let date = date {
+            return String(date.timeIntervalSince1970)
         }
-        
-        if isEditMode(){
-            guard let historyDataToEdit = self.historyDataToEdit else {
-                return print("Error historyDataToEdit is nil")
-            }
-            interactor.updateData(document: historyDataToEdit.documentID ,type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription, image: imagePicked)
-        } else{
-            interactor.storeData(type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription, image: imagePicked)
+        else if let cellData = cellData {
+            return cellData.costDate
         }
+        return ""
     }
+    
     
     private func performDataDelete(){
         guard let historyDataToEdit = self.historyDataToEdit else {
@@ -193,8 +292,8 @@ extension NewHistoryDataPresenter{
     
     func getImageFromServer(){
         if let historyDataToEdit = historyDataToEdit {
-            view.startActivityIndicaotr()
-            interactor.fetchImage(form: historyDataToEdit.documentID)
+            view.startActivityIndicator()
+            interactor.fetchImage(from: historyDataToEdit.documentID)
                 .subscribe(onNext: { (fetchedImage) in
                     self.openAttachedImage(image: fetchedImage)
                 }, onError:{ _ in
@@ -202,6 +301,28 @@ extension NewHistoryDataPresenter{
                 }).disposed(by: view.disposeBag)
         }
     }
+    
+    public struct Result{
+        
+        public let documentId: String?
+        public let price: String
+        public let mileage: String
+        public let date: String
+        public let costType: String
+        public let description: String
+        public let image: UIImage?
+        
+        init(documentId: String?, price: String, mileage: String, date: String, costType: String, description: String, image: UIImage? = nil){
+            self.documentId = documentId
+            self.price = price
+            self.mileage = mileage
+            self.date = date
+            self.costType = costType
+            self.description = description
+            self.image = image
+        }
+    }
+    
 }
 
 
@@ -210,13 +331,44 @@ extension NewHistoryDataPresenter{
     
     private func openAttachedImage(image data: UIImage) {
         router.showAttachedImageView(image: data)
-        view.stopActivityIndicaotr()
+        view.stopActivityIndicator()
     }
     
     func returnToHistory(){
         router.showHistory()
     }
+}
+
+
+//MARK: - Camera and Library control
+extension NewHistoryDataPresenter{
     
+    func openCamera() -> Observable<UIImage>{
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = .camera;
+            imagePicker.allowsEditing = false
+            let resultImage = imagePicker.rx.pickedImage
+            router.showImagePicker(picker: imagePicker, image: resultImage)
+            return resultImage
+        } else {
+            return Observable<UIImage>.error("Camera is not available")
+        }
+    }
+    
+    func openLibrary() -> Observable<UIImage>{
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = .photoLibrary;
+            imagePicker.allowsEditing = false
+            let resultImage = imagePicker.rx.pickedImage
+            router.showImagePicker(picker: imagePicker, image: resultImage)
+            return resultImage
+        } else {
+            return Observable<UIImage>.error("Library is not available")
+        }
+        
+    }
 }
 
 
@@ -232,3 +384,5 @@ private extension NewHistoryDataPresenter {
         return _router as! NewHistoryDataRouterApi
     }
 }
+
+

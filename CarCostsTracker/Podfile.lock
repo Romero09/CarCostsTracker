@@ -146,6 +146,9 @@ PODS:
   - Protobuf (3.5.0)
   - RxCocoa (4.3.1):
     - RxSwift (~> 4.0)
+  - RxOptional (3.5.0):
+    - RxCocoa (~> 4.0)
+    - RxSwift (~> 4.0)
   - RxSwift (4.3.1)
   - SDWebImage (4.4.2):
     - SDWebImage/Core (= 4.4.2)
@@ -162,6 +165,7 @@ DEPENDENCIES:
   - Firebase/Firestore
   - FirebaseUI
   - RxCocoa
+  - RxOptional
   - RxSwift
   - Viperit
 
@@ -193,6 +197,7 @@ SPEC REPOS:
     - nanopb
     - Protobuf
     - RxCocoa
+    - RxOptional
     - RxSwift
     - SDWebImage
     - TwitterCore
@@ -226,12 +231,13 @@ SPEC CHECKSUMS:
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
   RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
+  RxOptional: bd32ff8ca9df4177683d56ffeb618a9d4d5d5cad
   RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
   TwitterKit: bc7bd086b9b724a1d888745a054e1d0b1ecc4f3f
   Viperit: 276b9f0943edb5436fbff008abd8756004149814
 
-PODFILE CHECKSUM: e438d6c84a705562dcc64ed968bc795230c69d29
+PODFILE CHECKSUM: 43fda92507926ab217fea2288bcd248a6e2d0186
 
 COCOAPODS: 1.5.3

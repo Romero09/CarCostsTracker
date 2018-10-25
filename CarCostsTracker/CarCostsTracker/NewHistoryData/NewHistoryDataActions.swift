@@ -28,6 +28,24 @@ internal class NewHistoryDataActions{
         return (deleteActionView, eventDelete)
     }
     
+    static func showSelectImageSourceActionSheet() -> (actionSheet: UIAlertController, camera: ControlEvent<Void>, library: ControlEvent<Void>) {
+        let actionSheet = UIAlertController(title: "Select image source", message: nil, preferredStyle: .actionSheet)
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        let (camera, cameraObservable) = UIAlertAction.createAction(with: "Camera", style: .default)
+        
+        let (library, libraryObservable) = UIAlertAction.createAction(with: "Library", style: .default)
+        
+        let cameraEvents = ControlEvent<Void>(events: cameraObservable)
+        let libraryEvents = ControlEvent<Void>(events: libraryObservable)
+        
+        actionSheet.addAction(camera)
+        actionSheet.addAction(library)
+        actionSheet.addAction(cancel)
+        
+        return (actionSheet, cameraEvents, libraryEvents)
+    }
     
     static func showSelectCostTypeActionSheet() -> (UIAlertController, AlertActions) {
         let actionSheet = UIAlertController(title: "Type of costs", message: nil, preferredStyle: .actionSheet)

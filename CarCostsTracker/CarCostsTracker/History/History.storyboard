@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -18,13 +18,13 @@
                         <viewControllerLayoutGuide type="bottom" id="vb6-4r-Epx"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kgt-o0-aP8">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="X1I-1V-X69">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" indicatorStyle="white" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="X1I-1V-X69">
+                                <rect key="frame" x="8" y="28" width="398" height="708"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="0.0" id="Phh-hm-YCP">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="0.0" sectionInsetReference="safeArea" id="Phh-hm-YCP">
                                     <size key="itemSize" width="360" height="56"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -32,7 +32,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" contentMode="center" reuseIdentifier="historyCell" id="p7u-Gf-vWQ" customClass="HistoryCollectionViewCell" customModule="CarCostsTracker" customModuleProvider="target">
-                                        <rect key="frame" x="7.5" y="10" width="360" height="56"/>
+                                        <rect key="frame" x="19" y="10" width="360" height="56"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="360" height="56"/>
@@ -52,13 +52,13 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Repair" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f2m-dc-ZAd">
-                                                    <rect key="frame" x="60" y="4" width="52" height="21.5"/>
+                                                    <rect key="frame" x="60" y="4" width="52" height="21.666666666666668"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="srK-MC-qOY">
-                                                    <rect key="frame" x="60" y="33.5" width="80" height="18.5"/>
+                                                    <rect key="frame" x="60" y="33.666666666666664" width="80" height="18.333333333333336"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="80" id="hY5-Sk-ux8"/>
                                                     </constraints>
@@ -67,13 +67,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="01.01.2018, 00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvn-qv-xPs">
-                                                    <rect key="frame" x="132" y="4" width="143.5" height="23"/>
+                                                    <rect key="frame" x="132" y="4" width="143.66666666666663" height="23"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="100000km" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FwN-vt-yjn">
-                                                    <rect key="frame" x="160" y="35" width="69.5" height="17"/>
+                                                    <rect key="frame" x="160" y="35" width="69.666666666666686" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -115,7 +115,7 @@
                                 </cells>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NG4-6C-Te9">
-                                <rect key="frame" x="297" y="605" width="54" height="54"/>
+                                <rect key="frame" x="332" y="674" width="54" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="54" id="HxY-HS-xrV"/>
                                     <constraint firstAttribute="height" constant="54" id="bID-cK-gGy"/>
@@ -128,11 +128,11 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="vb6-4r-Epx" firstAttribute="top" secondItem="NG4-6C-Te9" secondAttribute="bottom" constant="8" id="AGC-qQ-Kif"/>
-                            <constraint firstItem="X1I-1V-X69" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leading" id="ASl-XD-470"/>
-                            <constraint firstItem="X1I-1V-X69" firstAttribute="top" secondItem="EcR-ye-kTk" secondAttribute="bottom" id="Q3b-pP-W32"/>
+                            <constraint firstItem="X1I-1V-X69" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leading" constant="8" id="ASl-XD-470"/>
+                            <constraint firstItem="X1I-1V-X69" firstAttribute="top" secondItem="EcR-ye-kTk" secondAttribute="bottom" constant="8" id="Q3b-pP-W32"/>
                             <constraint firstItem="X1I-1V-X69" firstAttribute="bottom" secondItem="vb6-4r-Epx" secondAttribute="top" id="hIw-ZY-Ok7"/>
                             <constraint firstAttribute="trailingMargin" secondItem="NG4-6C-Te9" secondAttribute="trailing" constant="8" id="ofz-AV-FL4"/>
-                            <constraint firstAttribute="trailing" secondItem="X1I-1V-X69" secondAttribute="trailing" id="zib-gn-7Bq"/>
+                            <constraint firstAttribute="trailing" secondItem="X1I-1V-X69" secondAttribute="trailing" constant="8" id="zib-gn-7Bq"/>
                         </constraints>
                     </view>
                     <connections>

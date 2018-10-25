@@ -8,9 +8,6 @@
 
 import UIKit
 
-//protocol HistoryCellDelegate {
-//    func selectedCell(post: Posts)
-//}
 
 class HistoryCollectionViewCell: UICollectionViewCell {
 
