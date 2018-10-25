@@ -26,8 +26,8 @@ extension NewHistoryDataRouter: NewHistoryDataRouterApi {
     
     func showHistory(){
         let module = AppModules.History.build()
-        let newHistoryDataRouter = module.router as! HistoryRouterApi
-        newHistoryDataRouter.showHistory(from: _view)
+        let historyRouter = module.router as! HistoryRouterApi
+        historyRouter.showHistory(from: _view)
     }
 }
 

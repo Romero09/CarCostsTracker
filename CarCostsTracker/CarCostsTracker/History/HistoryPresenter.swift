@@ -13,10 +13,22 @@ import Viperit
 final class HistoryPresenter: Presenter {
     
     var historyArray: Array<HistoryCellData> = []
+    var historyDataModel: Array<HistoryDataModel> = []
+    
+    override func viewIsAboutToAppear() {
+        historyArray = []
+        view.reloadData()
+    }
 }
 
 // MARK: - HistoryPresenter API
 extension HistoryPresenter: HistoryPresenterApi {
+    
+    
+    func switchToCharts() {
+        router.showCharts(data: historyDataModel)
+    }
+    
     
     func performLogOut() {
         if sharedUserAuth.authorizedUser?.currentUser != nil{
@@ -27,7 +39,8 @@ extension HistoryPresenter: HistoryPresenterApi {
     }
     
     func transferData(history data: Array<HistoryDataModel>) {
-
+        
+        historyDataModel = data
         historyArray = []
         
         for history in data {
@@ -65,7 +78,7 @@ extension HistoryPresenter: HistoryPresenterApi {
         interactor.fetchFromDB()
     }
     
-    func switchSwitchToNewHistoryData(){
+    func switchToNewHistoryData(){
         router.showNewHistoryData()
     }
     

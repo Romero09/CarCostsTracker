@@ -16,6 +16,13 @@ final class HistoryRouter: Router {
 // MARK: - HistoryRouter API
 extension HistoryRouter: HistoryRouterApi {
     
+    
+    func showCharts(data array: Array<HistoryDataModel>) {
+        let module = AppModules.Charts.build()
+        let chartsRouter = module.router as! ChartsRouterApi
+        chartsRouter.showCharts(from: _view, data: array)
+    }
+    
     func showLogIn(){
         let module = AppModules.Login.build()
         let LogInRouter = module.router as! LoginRouterApi

@@ -18,7 +18,9 @@ final class HistoryView: UserInterface {
     
     @IBOutlet weak var chartsButtonOutlet: UIButton!
     
-    @IBOutlet weak var chartsButton: UIButton!
+    @IBAction func chartsButton(_ sender: Any) {
+        presenter.switchToCharts()
+    }
     
 
     
@@ -28,7 +30,6 @@ final class HistoryView: UserInterface {
 extension HistoryView: HistoryViewApi {
 
     override func viewDidLoad() {
-        
         chartsButtonOutlet.layer.cornerRadius = chartsButtonOutlet.frame.width/2
         chartsButtonOutlet.layer.borderWidth = 2.0
         chartsButtonOutlet.layer.borderColor = self.view.tintColor.cgColor
@@ -58,7 +59,7 @@ extension HistoryView: HistoryViewApi {
     }
     
     @objc func callSwitchToNewHistoryData(){
-        presenter.switchSwitchToNewHistoryData()
+        presenter.switchToNewHistoryData()
     }
 }
 
@@ -88,7 +89,6 @@ extension HistoryView: UICollectionViewDataSource, UICollectionViewDelegate{
         
         let historyData = presenter.historyArray[indexPath.row]
         presenter.historyCellSelected(cell: historyData)
-
     
     }
 }

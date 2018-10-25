@@ -5,7 +5,6 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
-        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -51,58 +50,53 @@
                                                         <constraint firstAttribute="width" constant="48" id="XXR-5U-zLj"/>
                                                     </constraints>
                                                 </imageView>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="FJJ-Ba-KAJ">
-                                                    <rect key="frame" x="60" y="4" width="151" height="48"/>
-                                                    <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="pYT-uw-Y4r">
-                                                            <rect key="frame" x="0.0" y="0.0" width="151" height="20"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Repair" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f2m-dc-ZAd">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="56.5" height="20"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="01.01.2018" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvn-qv-xPs">
-                                                                    <rect key="frame" x="64.5" y="0.0" width="86.5" height="20"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                        </stackView>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ldM-sU-DsR">
-                                                            <rect key="frame" x="0.0" y="28" width="113.5" height="20"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="srK-MC-qOY">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="36" height="20"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100000km" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FwN-vt-yjn">
-                                                                    <rect key="frame" x="44" y="0.0" width="69.5" height="20"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                        </stackView>
-                                                    </subviews>
-                                                </stackView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Repair" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f2m-dc-ZAd">
+                                                    <rect key="frame" x="60" y="4" width="52" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="srK-MC-qOY">
+                                                    <rect key="frame" x="60" y="33.5" width="80" height="18.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="80" id="hY5-Sk-ux8"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="01.01.2018, 00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvn-qv-xPs">
+                                                    <rect key="frame" x="132" y="4" width="143.5" height="23"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="100000km" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FwN-vt-yjn">
+                                                    <rect key="frame" x="160" y="35" width="69.5" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="FJJ-Ba-KAJ" firstAttribute="top" secondItem="p7u-Gf-vWQ" secondAttribute="top" constant="4" id="84b-MV-FcF"/>
+                                            <constraint firstItem="srK-MC-qOY" firstAttribute="top" secondItem="f2m-dc-ZAd" secondAttribute="bottom" constant="8" id="2Xc-Lk-Q6a"/>
+                                            <constraint firstItem="Tvn-qv-xPs" firstAttribute="top" secondItem="p7u-Gf-vWQ" secondAttribute="top" constant="4" id="5Yn-QH-W0t"/>
                                             <constraint firstAttribute="bottom" secondItem="OYV-Cr-BAh" secondAttribute="bottom" constant="4" id="90R-Gy-eKV"/>
-                                            <constraint firstItem="FJJ-Ba-KAJ" firstAttribute="leading" secondItem="OYV-Cr-BAh" secondAttribute="trailing" constant="8" id="FNX-er-xtx"/>
+                                            <constraint firstItem="f2m-dc-ZAd" firstAttribute="top" secondItem="p7u-Gf-vWQ" secondAttribute="top" constant="4" id="BYD-CY-8XL"/>
                                             <constraint firstItem="OYV-Cr-BAh" firstAttribute="leading" secondItem="p7u-Gf-vWQ" secondAttribute="leading" constant="4" id="PNE-m8-GRf"/>
+                                            <constraint firstAttribute="bottom" secondItem="srK-MC-qOY" secondAttribute="bottom" constant="4" id="RO4-j0-5ej"/>
+                                            <constraint firstItem="srK-MC-qOY" firstAttribute="leading" secondItem="OYV-Cr-BAh" secondAttribute="trailing" constant="8" id="Ra7-QJ-gPr"/>
                                             <constraint firstItem="p1D-lu-BPG" firstAttribute="top" secondItem="p7u-Gf-vWQ" secondAttribute="top" constant="4" id="TMX-sn-B4D"/>
                                             <constraint firstAttribute="bottom" secondItem="p1D-lu-BPG" secondAttribute="bottom" constant="4" id="TU2-fH-nIE"/>
-                                            <constraint firstAttribute="bottom" secondItem="FJJ-Ba-KAJ" secondAttribute="bottom" constant="4" id="Tmn-Ge-T26"/>
+                                            <constraint firstAttribute="bottom" secondItem="FwN-vt-yjn" secondAttribute="bottom" constant="4" id="TZ2-cj-Neq"/>
+                                            <constraint firstItem="FwN-vt-yjn" firstAttribute="top" secondItem="Tvn-qv-xPs" secondAttribute="bottom" constant="8" id="USO-c2-tx6"/>
                                             <constraint firstItem="OYV-Cr-BAh" firstAttribute="top" secondItem="p7u-Gf-vWQ" secondAttribute="top" constant="4" id="UqX-sQ-S83"/>
                                             <constraint firstItem="OYV-Cr-BAh" firstAttribute="leading" secondItem="p7u-Gf-vWQ" secondAttribute="leading" constant="4" id="a8H-Vt-B8Q"/>
+                                            <constraint firstItem="Tvn-qv-xPs" firstAttribute="leading" secondItem="f2m-dc-ZAd" secondAttribute="trailing" constant="20" id="d5J-vy-FGA"/>
+                                            <constraint firstItem="f2m-dc-ZAd" firstAttribute="leading" secondItem="OYV-Cr-BAh" secondAttribute="trailing" constant="8" id="g1X-ym-ygE"/>
                                             <constraint firstAttribute="trailing" secondItem="p1D-lu-BPG" secondAttribute="trailing" id="jBd-QU-AoB"/>
+                                            <constraint firstItem="FwN-vt-yjn" firstAttribute="leading" secondItem="srK-MC-qOY" secondAttribute="trailing" constant="20" id="jq9-U8-ccm"/>
                                             <constraint firstItem="OYV-Cr-BAh" firstAttribute="top" secondItem="p7u-Gf-vWQ" secondAttribute="top" constant="4" id="wI0-d1-U2O"/>
                                             <constraint firstAttribute="bottom" secondItem="OYV-Cr-BAh" secondAttribute="bottom" constant="4" id="zzG-zC-YUG"/>
                                         </constraints>
@@ -131,6 +125,9 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <size key="titleShadowOffset" width="15" height="0.0"/>
                                 <state key="normal" image="charts_icon"/>
+                                <connections>
+                                    <action selector="chartsButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="Fmv-N6-K1c"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -144,7 +141,6 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="chartsButton" destination="NG4-6C-Te9" id="EN6-hX-dBQ"/>
                         <outlet property="chartsButtonOutlet" destination="NG4-6C-Te9" id="cNY-lS-cFl"/>
                         <outlet property="costTable" destination="X1I-1V-X69" id="Nka-3f-yHy"/>
                     </connections>
