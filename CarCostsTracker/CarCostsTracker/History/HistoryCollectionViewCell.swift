@@ -21,11 +21,11 @@ class HistoryCollectionViewCell: UICollectionViewCell {
     
     func fill(with data: HistoryCellData){
         
-        costsLogoImageView.image = historyData.costType.image()
-        costsTypeLabel.text = historyData.costType.name()
-        mileageLabel.text = historyData.mileage
-        dateLabel.text = historyData.costDate
-        price.text = historyData.price
+        costsLogoImageView.image = data.costType.image()
+        costsTypeLabel.text = data.costType.name()
+        mileageLabel.text = data.mileage
+        dateLabel.text = data.costDate
+        price.text = data.price
         
     }
 }
