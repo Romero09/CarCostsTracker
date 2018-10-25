@@ -101,11 +101,13 @@
                                             <constraint firstAttribute="bottom" secondItem="OYV-Cr-BAh" secondAttribute="bottom" constant="4" id="zzG-zC-YUG"/>
                                         </constraints>
                                         <connections>
-                                            <outlet property="costsLogo" destination="OYV-Cr-BAh" id="2HP-Tc-gPf"/>
-                                            <outlet property="costsType" destination="f2m-dc-ZAd" id="zMM-sa-BjE"/>
-                                            <outlet property="date" destination="Tvn-qv-xPs" id="Pp3-wQ-wcO"/>
-                                            <outlet property="milage" destination="FwN-vt-yjn" id="zen-Ba-VUG"/>
+
                                             <outlet property="price" destination="srK-MC-qOY" id="72y-mr-xan"/>
+                                            <outlet property="costsLogoImageView" destination="OYV-Cr-BAh" id="hiO-bH-MRh"/>
+                                            <outlet property="costsTypeLabel" destination="f2m-dc-ZAd" id="tGm-Lo-X0X"/>
+                                            <outlet property="dateLabel" destination="Tvn-qv-xPs" id="bkL-a5-e5O"/>
+                                            <outlet property="mileageLabel" destination="FwN-vt-yjn" id="9OC-PT-EKI"/>
+
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
