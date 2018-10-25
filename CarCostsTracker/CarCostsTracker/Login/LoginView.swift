@@ -16,6 +16,7 @@ final class LoginView: UserInterface {
     
     override func viewDidLoad() {
         self.title = "Car Costs Tracker Login"
+        self.navigationItem.setHidesBackButton(true, animated:true)
     }
     
     @IBAction func login(_ sender: Any) {

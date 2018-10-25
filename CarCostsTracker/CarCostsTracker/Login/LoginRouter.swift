@@ -16,6 +16,10 @@ final class LoginRouter: Router {
 // MARK: - LoginRouter API
 extension LoginRouter: LoginRouterApi {
     
+    func showLogIn(from view: UserInterface){
+        self.show(from: view)
+    }
+    
     func showHistory() {
         let module = AppModules.History.build()
         let historyRouter =  module.router as! HistoryRouterApi
