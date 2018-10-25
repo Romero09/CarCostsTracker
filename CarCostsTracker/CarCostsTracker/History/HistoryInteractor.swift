@@ -9,6 +9,9 @@
 import Foundation
 import Viperit
 import Firebase
+import RxSwift
+
+extension String: Error {}
 
 // MARK: - HistoryInteractor Class
 final class HistoryInteractor: Interactor {
@@ -18,38 +21,35 @@ final class HistoryInteractor: Interactor {
 // MARK: - HistoryInteractor API
 extension HistoryInteractor: HistoryInteractorApi {
     
-    func fetchFromDB(){
-        
-        var historyArray: Array<HistoryDataModel> = []
-        
-        guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
-            return print("Error user not Authorized")
-        }
-        let costsRef = db.collection(userUID)
-        
-        costsRef.order(by: "date", descending: true).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    var historyDataModel = HistoryDataModel()
-                    historyDataModel.documentID = document.documentID
-                    historyDataModel.date = (document.data()["date"] as? String)!
-                    historyDataModel.costsPrice = (document.data()["price"] as? Double)!
-                    historyDataModel.milage = (document.data()["milage"] as? Int)!
-                    historyDataModel.costsType = (document.data()["costType"] as? String)!
-                    historyDataModel.costsDescription = (document.data()["description"] as? String)!
-                    
-                    historyArray.append(historyDataModel)
-                    print("\(document.documentID) => \(document.data())")
+    public func fetchHistoryData() -> Observable<[HistoryDataModel]> {
+        return self.fetch()
+            .map { try $0.toHistoryDataModel() }
+    }
+    
+    private func fetch() -> Observable<[QueryDocumentSnapshot]> {
+        return Observable.create() { [unowned self]
+            (observer) -> Disposable in
+            guard  let userUID = sharedUserAuth.authorizedUser?.currentUser?.uid else{
+                observer.onError("User unauthorized")
+                return Disposables.create()
+            }
+            let costsRef = self.db.collection(userUID)
+            
+            costsRef.order(by: "date", descending: true).getDocuments() { (querySnapshot, error) in
+                if let documents = querySnapshot?.documents {
+                    observer.onNext(documents)
+                }
+                else{
+                    if let error = error {
+                        observer.onError(error)
+                    }
+                    else {
+                        observer.onError("Unknows error, nil documents")
+                    }
                 }
             }
-            
-            self.presenter.transferData(history: historyArray)
-            
+            return Disposables.create()
         }
-        
-        
     }
 }
 
@@ -60,11 +60,33 @@ private extension HistoryInteractor {
     }
 }
 
-struct HistoryDataModel {
-    var documentID: String = ""
-    var date: String = ""
-    var costsPrice: Double = 0.0
-    var milage: Int = 0
-    var costsType: String = ""
-    var costsDescription: String = ""
+public struct HistoryDataModel {
+    public let  documentID: String
+    public let date: String
+    public let costsPrice: Double
+    public let mileage: Int
+    public let costsType: String
+    public let costsDescription: String
+    
+    init(with document: QueryDocumentSnapshot) throws {
+        documentID = document.documentID
+        guard let date = document.data()["date"] as? String,
+              let costsPrice = document.data()["price"] as? Double,
+              let mileage = document.data()["milage"] as? Int,
+              let costsType = document.data()["costType"] as? String,
+              let costsDescription = document.data()["description"] as? String else {
+            throw "Failed to unwrap data from document"
+        }
+        self.date = date
+        self.costsPrice = costsPrice
+        self.mileage = mileage
+        self.costsType = costsType
+        self.costsDescription = costsDescription
+    }
+}
+
+extension Array where Element == QueryDocumentSnapshot {
+    func toHistoryDataModel() throws -> [HistoryDataModel] {
+        return try self.map{  try HistoryDataModel(with: $0) }
+    }
 }

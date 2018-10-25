@@ -23,12 +23,32 @@ struct HistoryCellData{
     let description: String
     let price: String
     let documentID: String
+    
+    init(with history: HistoryDataModel) {
+        description = history.costsDescription
+        price = String(format:"%.2f$", history.costsPrice)
+        costType = CostType(raw: history.costsType)
+        costDate = history.date
+        documentID = history.documentID
+        mileage = String(history.mileage)+"km"
+    }
 }
 
 enum CostType{
     case fuel
     case repair
     case other
+    
+    init(raw: String) {
+        switch raw {
+        case "Fuel":
+            self = .fuel
+        case "Repair":
+            self = .repair
+        default:
+            self = .other
+        }
 
+    }
 }
 

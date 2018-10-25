@@ -9,101 +9,110 @@
 import UIKit
 import Viperit
 import Firebase
+import RxSwift
+import RxCocoa
 
 //MARK: HistoryView Class
 final class HistoryView: UserInterface {
-    @IBOutlet weak var costTable: UICollectionView!
     
-    var historyArray: Array<HistoryCellData> = []
+    @IBOutlet private var costTable: UICollectionView!
     
-    @IBOutlet weak var chartsButtonOutlet: UIButton!
+    @IBOutlet private var chartsButton: UIButton!
     
-    @IBAction func chartsButton(_ sender: Any) {
-        presenter.switchToCharts()
-    }
+    private var activityIndicator = CustomActivityIndicator()
     
-
+    private let bag = DisposeBag()
+    
+    private let addItemButton = UIBarButtonItem(image: UIImage(named: "add_item.png"), style: .done, target: nil, action: nil)
+    
+    private let logOutButton = UIBarButtonItem(title: "Log out", style: .plain, target: nil, action: nil)
     
 }
 
 //MARK: - HistoryView API
 extension HistoryView: HistoryViewApi {
     
+    func startActivityIndicator() {
+        activityIndicator.center = self.view.center
+        self.view.addSubview(activityIndicator)
+        self.view.isUserInteractionEnabled = false
+    }
+    
+    func stopActivityIndicator() {
+        activityIndicator.removeFromSuperview()
+        self.view.isUserInteractionEnabled = true
+    }
+    
+    //Disposebag of this view, bag will be disposed when view will be cleared from memory
+    var disposeBag: DisposeBag {
+        return bag
+    }
+    
+    //Control events on which we can subscribe and use as observable on click events.
+    var selectedCell: ControlEvent<HistoryCellData> {
+        return costTable.rx.modelSelected(HistoryCellData.self)
+    }
+    
+    var createNewEntry: ControlEvent<Void> {
+        return addItemButton.rx.tap
+    }
+    
+    var performLogOut: ControlEvent<Void>{
+        return logOutButton.rx.tap
+    }
+    
+    var showCharts: ControlEvent<Void> {
+        return chartsButton.rx.tap
+    }
+    
+    //Setting data to a view cell, reciving Observable<[HistoryCellData]
+    func setData(drivableData: Observable<[HistoryCellData]>) {
+        drivableData.asDriver(onErrorJustReturn: [])
+            .debug("Data driver") // used for debug purpose
+            //.drive is same as subscrive bud for drivers that works with UI. Read doc for detailed info about rx.items
+            .drive(costTable.rx.items(cellIdentifier: "historyCell", cellType: HistoryCollectionViewCell.self)) {
+                (_, data: HistoryCellData, cell) in
+                cell.fillCellData(historyData: data)
+            }.disposed(by: bag)
+    }
+}
+
+//MARK: View LifeCycle
+extension HistoryView {
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         //Sets default orientagion for this view to portrait
         let value = UIInterfaceOrientation.portrait.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
-        
-        self.presenter.showActivityIndicator(uiView: self.view)
     }
-
+    
     override func viewDidLoad() {
-        chartsButtonOutlet.layer.cornerRadius = chartsButtonOutlet.frame.width/2
-        chartsButtonOutlet.layer.borderWidth = 2.0
-        chartsButtonOutlet.layer.borderColor = self.view.tintColor.cgColor
-        chartsButtonOutlet.backgroundColor = UIColor.white
-
-        self.title = "History"
-        self.navigationItem.setHidesBackButton(true, animated:true)
-        
-        self.navigationItem.setRightBarButton(UIBarButtonItem(image: UIImage(named: "add_item.png"), style: UIBarButtonItem.Style.done, target: self, action: #selector(callSwitchToNewHistoryData)), animated: true)
-        
-        self.navigationItem.setLeftBarButton(UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(callLogOut)), animated: true)
-        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.red
-        
-        costTable.delegate = self
-        costTable.allowsSelection = true
         super.viewDidLoad()
-        presenter.getData()
+        setUpChartsButton()
+        setUpNavigationBar()
     }
     
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        presenter.getData()
-    }
-    
-    @objc func callLogOut(){
-        presenter.performLogOut()
-    }
-    
-    @objc func callSwitchToNewHistoryData(){
-        presenter.switchToNewHistoryData()
-    }
 }
 
-
-extension HistoryView: UICollectionViewDataSource, UICollectionViewDelegate{	
+//MARK: View design
+extension HistoryView {
     
-    func reloadData(){
-        self.presenter.dismissActivityIndicator(uiView: self.view)
-        costTable.reloadData()
+    func setUpChartsButton(){
+        chartsButton.layer.cornerRadius = chartsButton.frame.width/2
+        chartsButton.layer.borderWidth = 2.0
+        chartsButton.layer.borderColor = self.view.tintColor.cgColor
+        chartsButton.backgroundColor = UIColor.white
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return presenter.historyArray.count
+    func setUpNavigationBar(){
+        self.title = "History"
+        self.navigationItem.setHidesBackButton(true, animated:true)
+        self.navigationItem.setRightBarButton(addItemButton, animated: true)
+        self.navigationItem.setLeftBarButton(logOutButton, animated: true)
+        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.red
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        let historyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "historyCell", for: indexPath) as! HistoryCollectionViewCell
-        
-        historyCell.fill(with: presenter.historyArray[indexPath.row])
-        historyCell.isSelected = true
-        return historyCell
-
-    }
-    
- 
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let historyData = presenter.historyArray[indexPath.row]
-        presenter.historyCellSelected(cell: historyData)
-    
-    }
 }
 
 // MARK: - HistoryView Viper Components API

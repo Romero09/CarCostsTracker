@@ -5,8 +5,11 @@ target 'CarCostsTracker' do
 	pod 'Firebase/Core'
 	pod 'Firebase/Auth'
 	pod 'Firebase/Firestore'
+	pod 'FirebaseUI'
 	pod 'Viperit'
 	pod 'Charts'
+	pod 'RxSwift'
+	pod 'RxCocoa'
 	
 	target 'CarCostsTrackerTests' do
 		    inherit! :search_paths

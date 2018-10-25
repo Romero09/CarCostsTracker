@@ -12,18 +12,34 @@ import Viperit
 // MARK: - NewHistoryDataPresenter Class
 final class NewHistoryDataPresenter: Presenter {
     var historyDataToEdit: HistoryCellData?
+
+}
+
+// MARK: - NewHistoryDataPresenter API
+extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
     
-    override func viewHasLoaded(){
+    func viewWillAppear(){
         if isEditMode(){
             DispatchQueue.main.async(execute: {
                 self.updateEditView()
             })
         }
     }
-}
-
-// MARK: - NewHistoryDataPresenter API
-extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
+    
+    
+    func failedToFetchImage(error message: Error) {
+        view.stopActivityIndicaotr()
+        let alert = UIAlertController(title: "No image found", message: "No image found for this entry, please attach image", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        view.newHistoryDataView.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    func openAttachedImage(image data: UIImage) {
+        router.showAttachedImageView(image: data)
+        view.stopActivityIndicaotr()
+    }
+    
     
     func returnToHistory(){
         router.showHistory()
@@ -32,7 +48,7 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
     func isEditMode() -> Bool {
         if historyDataToEdit != nil {
             return true } else {
-                return false
+            return false
         }
     }
     
@@ -54,6 +70,7 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
         let costPrice = Double(view.costPriceTextField.text ?? "") ?? 0.0
         let milage = Int(view.milageTextField.text ?? "") ?? 0
         let costDescription = view.costDescriptionTextView.text ?? ""
+        let imagePicked = view.imagePicked?.jpegData(compressionQuality: 0.7)
         var date = ""
         
         if let tempDate = view.getSelectedDate {
@@ -64,25 +81,31 @@ extension NewHistoryDataPresenter: NewHistoryDataPresenterApi {
         
         if isEditMode(){
             guard let historyDataToEdit = self.historyDataToEdit else {
-               return print("Error historyDataToEdit is nil")
+                return print("Error historyDataToEdit is nil")
             }
-            interactor.updateData(document: historyDataToEdit.documentID ,type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription)
+            interactor.updateData(document: historyDataToEdit.documentID ,type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription, image: imagePicked)
         } else{
-        interactor.storeData(type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription)
+            interactor.storeData(type: costType, price: costPrice, milage: milage, date: date, costDescription: costDescription, image: imagePicked)
         }
     }
     
     func performDataDelete(){
         guard let historyDataToEdit = self.historyDataToEdit else {
-           return print("Error historyDataToEdit is nil")
+            return print("Error historyDataToEdit is nil")
         }
         interactor.deleteData(document: historyDataToEdit.documentID)
+    }
+    
+    func getImageFromServer(){
+        if let historyDataToEdit = historyDataToEdit {
+           view.startActivityIndicaotr()
+        interactor.fetchImage(form: historyDataToEdit.documentID)
+        }
     }
     
     func fillEditData(edit data: HistoryCellData){
         historyDataToEdit = data
     }
-    
 }
 
 // MARK: - NewHistoryData Viper Components

@@ -13,4 +13,5 @@ enum AppModules: String, ViperitModule {
     case Login
     case NewHistoryData
     case Charts
+    case AttachedImageView
 }

@@ -8,117 +8,88 @@
 
 import Foundation
 import Viperit
+import RxSwift
+import RxCocoa
 
 // MARK: - HistoryPresenter Class
 final class HistoryPresenter: Presenter {
     
-    var historyArray: Array<HistoryCellData> = []
-    var historyDataModel: Array<HistoryDataModel> = []
+    //1.Creating observable as global value so it can be subscribed from anywhere.
+    //So when we call historyData we will recive stream from historyDataPublisher asObservable
+    var historyData: Observable<[HistoryDataModel]> {
+        return historyDataPublisher
+            .asObservable()
+            //this func. allows us to recive one last event on subscriving to this observable
+            .share(replay: 1)
+    }
+    //2.To do that we are using PublishSubject, so our observable is not nil.
+    private let historyDataPublisher = PublishSubject<[HistoryDataModel]>()
     
-    override func viewIsAboutToAppear() {
-        historyArray = []
-        view.reloadData()
+    
+    
+    override func viewHasLoaded(){
+        view.startActivityIndicator()
+        
+        historyData.subscribe(onNext: { (element) in
+            self.view.stopActivityIndicator()
+        }).disposed(by: view.disposeBag)
+        
+        interactor.fetchHistoryData()
+            //3. we binds data from interactor which comes as Observable to our historyDataPublisher
+            .bind(to: historyDataPublisher)
+            .disposed(by: view.disposeBag)
+
+        view.setData(drivableData: historyData.map{ $0.map { HistoryCellData(with: $0) } })
+        bindActions()
+        
     }
 }
 
 // MARK: - HistoryPresenter API
 extension HistoryPresenter: HistoryPresenterApi {
     
-    func showActivityIndicator(uiView: UIView) {
-        DispatchQueue.main.async(execute: {
-            let container: UIView = UIView()
-            container.frame = uiView.frame
-            container.center = uiView.center
-            container.tag = 100
-            
-            let loadingView: UIView = UIView()
-            loadingView.frame = CGRect(x: 0.0, y: 0.0, width: 80.0, height: 80.0)
-            loadingView.center = uiView.center
-            loadingView.backgroundColor = UIColor(red: 68/255, green: 68/255, blue: 68/255, alpha: 0.7)
-            loadingView.clipsToBounds = true
-            loadingView.layer.cornerRadius = 10
-            
-            let actInd: UIActivityIndicatorView = UIActivityIndicatorView()
-            actInd.frame = CGRect(x: 0.0, y: 0.0, width: 40.0, height: 40.0)
-            actInd.hidesWhenStopped = true
-            actInd.style =
-                UIActivityIndicatorView.Style.whiteLarge
-            actInd.center = CGPoint(x: loadingView.frame.size.width / 2,
-                                    y: loadingView.frame.size.height / 2);
-            loadingView.addSubview(actInd)
-            container.addSubview(loadingView)
-            uiView.addSubview(container)
-            actInd.startAnimating()
-            
-        })
-    }
+    //Action listeners on button that presented in view.
+    private func bindActions() {
+        view.selectedCell
+            //Converting to observable, possible only with types that confirms it as: ControlEvent, ControlProperty, Variable, Driver
+            .asObservable()
+            //Setting observerOn Main thread duea to a work with interface
+            .observeOn(MainScheduler.asyncInstance)
+            //subscribing and handling events.
+            .subscribe(onNext: { [unowned self]
+                (data) in
+            self.router.showNewHistoryData(edit: data)
+                //putting a dispose bag
+        }).disposed(by: view.disposeBag)
+        
+        view.createNewEntry
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                () in
+                self.router.showNewHistoryData()
+            }).disposed(by: view.disposeBag)
+        
+        view.performLogOut
+            .asObservable()
+            .observeOn(MainScheduler.asyncInstance)
+            .subscribe(onNext: { [unowned self]
+                () in
+                sharedUserAuth.authorizedUser = nil
+                self.router.showLogIn()
+            }).disposed(by: view.disposeBag)
     
-    func dismissActivityIndicator(uiView: UIView){
-        DispatchQueue.main.async(execute: {
-            if let viewWithTag = uiView.viewWithTag(100){
-                viewWithTag.removeFromSuperview()
-            }
-        })
-    }
-    
-    
-    func switchToCharts() {
-        router.showCharts(data: historyDataModel)
-    }
-    
-    
-    func performLogOut() {
-        if sharedUserAuth.authorizedUser?.currentUser != nil{
-            sharedUserAuth.authorizedUser = nil
+        //Combining two observebles. Combine is possible only when both have recived events. This calls when view.chowCharts observabel rescives an event from button click.
+        //Returning latest loaded data from historyData Observable
+        let combinedHistoryOnClick = Observable.combineLatest(view.showCharts, historyData) { (_, data: [HistoryDataModel]) -> [HistoryDataModel] in
+            return data
         }
-        
-        router.showLogIn()
+        //Subscribing on combined observable, on event calls router giving to him recived history data.
+        combinedHistoryOnClick.subscribe(onNext: {
+            (history) in
+            self.router.showCharts(data: history)
+        }).disposed(by: view.disposeBag)
     }
-    
-    func transferData(history data: Array<HistoryDataModel>) {
-        
-        historyDataModel = data
-        historyArray = []
-        
-        for history in data {
-            let costsDescription = history.costsDescription
-            let costsPrice = String(format:"%.2f$", history.costsPrice)
-            let costsType = history.costsType
-            var costsTypeEnum: CostType = CostType.other
-            
-            switch costsType {
-            case "Fuel":
-                costsTypeEnum = CostType.fuel
-            case "Repair":
-                costsTypeEnum = CostType.repair
-            case "Other":
-                costsTypeEnum = CostType.other
-            default:
-                print("Error no such costs")
-            }
-            let date = history.date
-            let documentID = history.documentID
-            let milage = String(history.milage)+"km"
-        
-            let historyCellData = HistoryCellData(costType: costsTypeEnum, costDate: date, mileage: milage, description: costsDescription, price: costsPrice, documentID: documentID)
-        
-            self.historyArray.append(historyCellData)
-        }
-        view.reloadData()
-    }
-    
-    func historyCellSelected(cell data: HistoryCellData){
-        router.showNewHistoryData(edit: data)
-    }
-    
-    func getData(){
-        interactor.fetchFromDB()
-    }
-    
-    func switchToNewHistoryData(){
-        router.showNewHistoryData()
-    }
-    
 }
 
 // MARK: - History Viper Components

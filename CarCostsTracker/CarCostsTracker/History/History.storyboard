@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -102,6 +103,7 @@
                                         </constraints>
                                         <connections>
 
+                                            <outlet property="pointerImage" destination="p1D-lu-BPG" id="mJv-FM-1qV"/>
                                             <outlet property="price" destination="srK-MC-qOY" id="72y-mr-xan"/>
                                             <outlet property="costsLogoImageView" destination="OYV-Cr-BAh" id="hiO-bH-MRh"/>
                                             <outlet property="costsTypeLabel" destination="f2m-dc-ZAd" id="tGm-Lo-X0X"/>
@@ -111,10 +113,6 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <connections>
-                                    <outlet property="dataSource" destination="xqD-av-Raz" id="Rzx-Qf-LqP"/>
-                                    <outlet property="delegate" destination="xqD-av-Raz" id="KuV-al-i66"/>
-                                </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NG4-6C-Te9">
                                 <rect key="frame" x="297" y="605" width="54" height="54"/>
@@ -125,9 +123,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <size key="titleShadowOffset" width="15" height="0.0"/>
                                 <state key="normal" image="charts_icon"/>
-                                <connections>
-                                    <action selector="chartsButton:" destination="xqD-av-Raz" eventType="touchUpInside" id="Fmv-N6-K1c"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -141,7 +136,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="chartsButtonOutlet" destination="NG4-6C-Te9" id="cNY-lS-cFl"/>
+                        <outlet property="chartsButton" destination="NG4-6C-Te9" id="upI-fx-fWi"/>
                         <outlet property="costTable" destination="X1I-1V-X69" id="Nka-3f-yHy"/>
                     </connections>
                 </viewController>

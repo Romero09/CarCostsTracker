@@ -14,6 +14,8 @@ import FirebaseUI
 //MARK: LoginView Class
 final class LoginView: UserInterface {
     
+    
+    
     override func viewDidLoad() {
         self.title = "Car Costs Tracker Login"
         self.navigationItem.setHidesBackButton(true, animated:true)
@@ -27,6 +29,7 @@ final class LoginView: UserInterface {
         
     }
 }
+
 
 extension LoginView: FUIAuthDelegate{
     

@@ -15,6 +15,13 @@ final class NewHistoryDataRouter: Router {
 
 // MARK: - NewHistoryDataRouter API
 extension NewHistoryDataRouter: NewHistoryDataRouterApi {
+    
+    func showAttachedImageView(image data: UIImage) {
+        let module = AppModules.AttachedImageView.build()
+        let attachedImageViewRouter = module.router as! AttachedImageViewRouterApi
+        attachedImageViewRouter.showImageView(from: _view, image: data)
+    }
+    
     func showNewHistoryData(from view: UserInterface){
         self.show(from: view)
     }
