@@ -1,11 +1,19 @@
-#Car price tracker
+# Car price tracker
 
-##Goal
+## Goal
 This is a sample app created for internship to showcase VIPER architecture and some design/coding patterns.
 
-##Functionality
+## Functionality
 You can track your expenses on the car.
 
-##Dependencies
+## Dependencies
 
 This app uses [CocoaPods](https://cocoapods.org/) as dependency manager, some of the frameworks used had to be modified for Swift 4.2, so they are part of the project repo.
+
+Frameworks used:
+
+- [Viperit](https://github.com/ferranabello/Viperit)
+- [Firebase/Auth](https://firebase.google.com/)
+- [Firebase/Core](https://firebase.google.com/)
+- [Firebase/Firestore](https://firebase.google.com/)
+- [Charts](https://github.com/danielgindi/Charts)
