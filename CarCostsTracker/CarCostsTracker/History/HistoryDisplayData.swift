@@ -13,3 +13,20 @@ import Viperit
 final class HistoryDisplayData: DisplayData {
     
 }
+
+struct HistoryCellData{
+    let expenseType: CostType
+    let costImage: UIImage
+    let editImage: UIImage
+    let costDate: String
+    let mileage: String
+    let description: String
+}
+
+enum CostType{
+    case fuel
+    case repair
+    case other
+
+}
+
