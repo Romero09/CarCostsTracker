@@ -126,10 +126,7 @@
                                 <rect key="frame" x="26" y="405" width="323" height="183"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="No image found, please attach image" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V9R-Db-Vnp">
-                                <rect key="frame" x="51" y="487" width="272" height="18"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="V9R-Db-Vnp" secondAttribute="height" multiplier="136:9" id="NxR-Lf-rd9"/>
-                                </constraints>
+                                <rect key="frame" x="60.5" y="487" width="254.5" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -154,7 +151,7 @@
                             <constraint firstItem="jr8-1r-4Lv" firstAttribute="top" secondItem="2IQ-ZI-F2O" secondAttribute="bottom" constant="21" id="DIx-oB-e92"/>
                             <constraint firstAttribute="trailingMargin" secondItem="0NY-QT-Amb" secondAttribute="trailing" constant="27" id="DY0-Xy-ZCa"/>
                             <constraint firstItem="3F1-Wj-dcr" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leadingMargin" id="F2T-Pg-2Vy"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="V9R-Db-Vnp" secondAttribute="trailing" constant="36" id="O13-wE-upO"/>
+                            <constraint firstItem="V9R-Db-Vnp" firstAttribute="centerX" secondItem="kgt-o0-aP8" secondAttribute="centerX" id="FXM-S2-XZh"/>
                             <constraint firstAttribute="trailing" secondItem="Hso-Pw-A13" secondAttribute="trailing" id="Ofh-lJ-XxU"/>
                             <constraint firstItem="vb6-4r-Epx" firstAttribute="top" secondItem="Hso-Pw-A13" secondAttribute="bottom" id="PmW-az-PeA"/>
                             <constraint firstItem="FwR-PB-rSY" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leadingMargin" id="QhY-NC-3Jd"/>
@@ -168,7 +165,6 @@
                             <constraint firstItem="8mh-mw-lxu" firstAttribute="centerX" secondItem="M5s-Mz-ctr" secondAttribute="centerX" id="lLt-HD-PSY"/>
                             <constraint firstItem="V9R-Db-Vnp" firstAttribute="top" relation="lessThanOrEqual" secondItem="3F1-Wj-dcr" secondAttribute="bottom" constant="117" id="pl6-Za-eAo"/>
                             <constraint firstItem="Hso-Pw-A13" firstAttribute="top" secondItem="tcY-NB-WZe" secondAttribute="bottom" constant="35" id="rNz-WV-JfU"/>
-                            <constraint firstItem="V9R-Db-Vnp" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leadingMargin" constant="35" id="tTv-Xq-SoS"/>
                             <constraint firstItem="tcY-NB-WZe" firstAttribute="top" secondItem="3F1-Wj-dcr" secondAttribute="bottom" constant="35" id="vNa-36-1hZ"/>
                             <constraint firstItem="8mh-mw-lxu" firstAttribute="top" secondItem="EcR-ye-kTk" secondAttribute="bottom" constant="15" id="w7i-By-vhI"/>
                             <constraint firstAttribute="trailingMargin" secondItem="M5s-Mz-ctr" secondAttribute="trailing" constant="27" id="wYT-bk-rQ5"/>

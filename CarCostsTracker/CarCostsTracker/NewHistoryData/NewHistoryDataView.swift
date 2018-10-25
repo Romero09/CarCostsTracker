@@ -74,7 +74,6 @@ extension NewHistoryDataView{
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(NewHistoryDataView.viewTapped(gestureRecognizer:)))
         view.addGestureRecognizer(tapGesture)
         noImageLabel.isHidden = true

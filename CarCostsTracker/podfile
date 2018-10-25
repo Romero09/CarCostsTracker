@@ -10,6 +10,7 @@ target 'CarCostsTracker' do
 	pod 'Charts'
 	pod 'RxSwift'
 	pod 'RxCocoa'
+	pod 'RxOptional'
 	
 	target 'CarCostsTrackerTests' do
 		    inherit! :search_paths

@@ -91,12 +91,41 @@ extension HistoryView {
         super.viewDidLoad()
         setUpChartsButton()
         setUpNavigationBar()
+        setUpTableInsets(to: self.view.frame.size)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        setUpTableInsets(to: size)
     }
     
 }
 
 //MARK: View design
 extension HistoryView {
+    
+    func setUpTableInsets(to frame: CGSize){
+
+        let frameWidth = frame.width
+        let collectionViewWidth = (self.costTable.collectionViewLayout as! UICollectionViewFlowLayout).itemSize.width
+        var insets: CGFloat = (frameWidth - (collectionViewWidth)) * 0.5
+        
+        while (insets * 2) > collectionViewWidth {
+            insets -= collectionViewWidth * 0.5
+        }
+        if insets <= 0 {
+            insets = 0
+        }
+        for constraint in costTable.superview!.constraints {
+            if constraint.firstAttribute == .trailing {
+                constraint.constant = insets
+            }
+            if constraint.firstAttribute == .leading {
+                constraint.constant = insets
+            }
+        }
+        updateViewConstraints()
+    }
     
     func setUpChartsButton(){
         chartsButton.layer.cornerRadius = chartsButton.frame.width/2
