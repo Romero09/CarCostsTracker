@@ -72,7 +72,7 @@ extension HistoryView: HistoryViewApi {
             //.drive is same as subscrive bud for drivers that works with UI. Read doc for detailed info about rx.items
             .drive(costTable.rx.items(cellIdentifier: "historyCell", cellType: HistoryCollectionViewCell.self)) {
                 (_, data: HistoryCellData, cell) in
-                cell.fillCellData(historyData: data)
+                cell.fill(with: data)
             }.disposed(by: bag)
     }
 }

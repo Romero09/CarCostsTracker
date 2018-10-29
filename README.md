@@ -17,3 +17,5 @@ Frameworks used:
 - [Firebase/Core](https://firebase.google.com/)
 - [Firebase/Firestore](https://firebase.google.com/)
 - [Charts](https://github.com/danielgindi/Charts)
+- [RxSwift/RxCocoa](https://github.com/ReactiveX/RxSwift)
+- [RxOptional](https://github.com/RxSwiftCommunity/RxOptional)

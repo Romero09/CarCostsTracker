@@ -13,7 +13,6 @@ class HistoryCollectionViewCell: UICollectionViewCell {
 
 
     @IBOutlet weak var pointerImage: UIImageView!
-    @IBOutlet weak var detailedDescription: UILabel!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var costsLogoImageView: UIImageView!
     @IBOutlet weak var costsTypeLabel: UILabel!
