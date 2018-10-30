@@ -14,6 +14,8 @@ import RxCocoa
 // MARK: - HistoryPresenter Class
 final class HistoryPresenter: Presenter {
     
+    private var isChartsOpened = false
+    
     //1.Creating observable as global value so it can be subscribed from anywhere.
     //So when we call historyData we will recive stream from historyDataPublisher asObservable
     var historyData: Observable<[HistoryDataModel]> {
@@ -25,9 +27,12 @@ final class HistoryPresenter: Presenter {
     //2.To do that we are using PublishSubject, so our observable is not nil.
     private let historyDataPublisher = PublishSubject<[HistoryDataModel]>()
     
-    
+    override func viewIsAboutToAppear() {
+        isChartsOpened = false
+    }
     
     override func viewHasLoaded(){
+        
         view.startActivityIndicator()
         historyData.subscribe(onNext: { (element) in
             self.view.stopActivityIndicator()
@@ -88,7 +93,12 @@ extension HistoryPresenter: HistoryPresenterApi {
         //Subscribing on combined observable, on event calls router giving to him recived history data.
         combinedHistoryOnClick.subscribe(onNext: {
             (history) in
-            self.router.showCharts(data: history)
+            self.view.addPulseAnimation().subscribe(onNext: { (succes) in
+                if !self.isChartsOpened{
+                self.isChartsOpened = succes
+                self.router.showCharts(data: history)
+                }
+            }).disposed(by: self.view.disposeBag)
         }).disposed(by: view.disposeBag)
     }
 }

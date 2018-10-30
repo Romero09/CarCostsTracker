@@ -25,10 +25,12 @@ protocol HistoryViewApi: UserInterfaceProtocol {
     var selectedCell: ControlEvent<HistoryCellData> { get }
     var createNewEntry: ControlEvent<Void> { get }
     var performLogOut: ControlEvent<Void> { get }
-    func setData(drivableData: Observable<[HistoryCellData]>)
     var showCharts: ControlEvent<Void> { get }
+    
+    func setData(drivableData: Observable<[HistoryCellData]>)
     func startActivityIndicator()
     func stopActivityIndicator()
+    func addPulseAnimation() -> Observable<Bool>
 }
 
 //MARK: - HistoryPresenter API

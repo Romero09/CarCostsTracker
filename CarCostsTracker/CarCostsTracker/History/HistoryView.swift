@@ -144,6 +144,21 @@ extension HistoryView {
     
 }
 
+
+//MARK: - Animations
+extension HistoryView{
+    
+    func addPulseAnimation() -> Observable<Bool>{
+        let pulse = Pulsing(numberOfPulses: 1, componentRadius: chartsButton.layer.cornerRadius, radius: chartsButton.layer.cornerRadius+20, position: chartsButton.center, duration: 2)
+        pulse.backgroundColor = self.view.tintColor.cgColor
+        
+        self.view.layer.insertSublayer(pulse, below: self.chartsButton.layer)
+        
+        return pulse.isCompleted
+    }
+    
+}
+
 // MARK: - HistoryView Viper Components API
 private extension HistoryView {
     var presenter: HistoryPresenterApi {

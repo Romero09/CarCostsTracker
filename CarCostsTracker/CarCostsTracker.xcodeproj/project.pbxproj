@@ -50,6 +50,7 @@
 		414D041D216F4E860035B3D2 /* AttachedImageViewModuleApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D0416216F4E860035B3D2 /* AttachedImageViewModuleApi.swift */; };
 		414D041E216F4E860035B3D2 /* AttachedImageViewInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D0417216F4E860035B3D2 /* AttachedImageViewInteractor.swift */; };
 		414D041F216F4E860035B3D2 /* AttachedImageViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414D0418216F4E860035B3D2 /* AttachedImageViewView.swift */; };
+		41B52207218845E70001A412 /* Pulsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B52206218845E60001A412 /* Pulsing.swift */; };
 		41DB53432163A189009C8755 /* HistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */; };
 		41F4FC4321709E5200B43468 /* CustomActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F4FC4221709E5200B43468 /* CustomActivityIndicator.swift */; };
 		41F4FC472170D7C300B43468 /* NewHistoryDataActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F4FC462170D7C300B43468 /* NewHistoryDataActions.swift */; };
@@ -118,6 +119,7 @@
 		414D0416216F4E860035B3D2 /* AttachedImageViewModuleApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachedImageViewModuleApi.swift; sourceTree = "<group>"; };
 		414D0417216F4E860035B3D2 /* AttachedImageViewInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachedImageViewInteractor.swift; sourceTree = "<group>"; };
 		414D0418216F4E860035B3D2 /* AttachedImageViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachedImageViewView.swift; sourceTree = "<group>"; };
+		41B52206218845E60001A412 /* Pulsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pulsing.swift; sourceTree = "<group>"; };
 		41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		41F4FC4221709E5200B43468 /* CustomActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityIndicator.swift; sourceTree = "<group>"; };
 		41F4FC462170D7C300B43468 /* NewHistoryDataActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHistoryDataActions.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				40940453216265F200002636 /* HistoryModuleApi.swift */,
 				40940454216265F200002636 /* HistoryInteractor.swift */,
 				41DB53422163A189009C8755 /* HistoryCollectionViewCell.swift */,
+				41B52206218845E60001A412 /* Pulsing.swift */,
 			);
 			path = History;
 			sourceTree = "<group>";
@@ -547,6 +550,7 @@
 				414D0403216C87D50035B3D2 /* ChartsModuleApi.swift in Sources */,
 				414D0400216C87D50035B3D2 /* ChartsDisplayData.swift in Sources */,
 				4094042E21624B1F00002636 /* AppDelegate.swift in Sources */,
+				41B52207218845E70001A412 /* Pulsing.swift in Sources */,
 				414D0401216C87D50035B3D2 /* ChartsPresenter.swift in Sources */,
 				414D0405216C87D50035B3D2 /* ChartsView.swift in Sources */,
 				414D0404216C87D50035B3D2 /* ChartsInteractor.swift in Sources */,
