@@ -12,13 +12,11 @@ import Viperit
 // MARK: - HistoryDisplayData class
 final class HistoryDisplayData: DisplayData {
     
-    let data = 1
-    
 }
 
 struct HistoryCellData{
     let costType: CostType
-    let costDate: String
+    let costDate: String //TimeStamp since 1970
     let mileage: String
     let description: String
     let price: String
