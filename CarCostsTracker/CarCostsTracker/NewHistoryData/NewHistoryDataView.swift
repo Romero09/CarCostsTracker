@@ -75,7 +75,6 @@ extension NewHistoryDataView{
 }
 
 
-
 //MARK: View set up
 extension NewHistoryDataView{
     
