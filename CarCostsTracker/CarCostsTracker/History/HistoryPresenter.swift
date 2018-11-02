@@ -15,6 +15,11 @@ import RxCocoa
 final class HistoryPresenter: Presenter {
     
     private var isChartsOpened = false
+    private var cellDelayCount = 0
+    private var didMoveUp = false
+    private var lastPoint: CGFloat = 0.0
+    private var lastVelocity: CGFloat = 0.0
+    private var isScrollByPointTracking = true
     
     //1.Creating observable as global value so it can be subscribed from anywhere.
     //So when we call historyData we will recive stream from historyDataPublisher asObservable
@@ -44,7 +49,7 @@ final class HistoryPresenter: Presenter {
             //3. we binds data from interactor which comes as Observable to our historyDataPublisher
             .bind(to: historyDataPublisher)
             .disposed(by: view.disposeBag)
-
+        
         view.setData(drivableData: historyData.map{ $0.map { HistoryCellData(with: $0) } })
         bindActions()
         
@@ -64,9 +69,9 @@ extension HistoryPresenter: HistoryPresenterApi {
             //subscribing and handling events.
             .subscribe(onNext: { [unowned self]
                 (data) in
-            self.router.showNewHistoryData(edit: data)
+                self.router.showNewHistoryData(edit: data)
                 //putting a dispose bag
-        }).disposed(by: view.disposeBag)
+            }).disposed(by: view.disposeBag)
         
         view.createNewEntry
             .asObservable()
@@ -84,7 +89,7 @@ extension HistoryPresenter: HistoryPresenterApi {
                 sharedUserAuth.authorizedUser = nil
                 self.router.showLogIn()
             }).disposed(by: view.disposeBag)
-    
+        
         //Combining two observebles. Combine is possible only when both have recived events. This calls when view.chowCharts observabel rescives an event from button click.
         //Returning latest loaded data from historyData Observable
         let combinedHistoryOnClick = Observable.combineLatest(view.showCharts, historyData) { (_, data: [HistoryDataModel]) -> [HistoryDataModel] in
@@ -95,11 +100,87 @@ extension HistoryPresenter: HistoryPresenterApi {
             (history) in
             self.view.addPulseAnimation().subscribe(onNext: { (succes) in
                 if !self.isChartsOpened{
-                self.isChartsOpened = succes
-                self.router.showCharts(data: history)
+                    self.isChartsOpened = succes
+                    self.router.showCharts(data: history)
                 }
             }).disposed(by: self.view.disposeBag)
         }).disposed(by: view.disposeBag)
+        
+        view.costTableCellWillApear
+            .asObservable()
+            .subscribe(onNext: { (cell, at) in
+                self.view.animateCollection(toAppear: cell as! HistoryCollectionViewCell, index: at, cellDelay: self.cellDelayCount, didMoveUp: self.didMoveUp)
+                self.cellDelayCount += 1
+            }).disposed(by: view.disposeBag)
+        
+        view.costTableDidScroll.asDriver()
+            .asObservable()
+            .subscribe(onNext: { _ in
+                self.cellDelayCount = 0
+                self.scrollViewMoveDirection()
+            }).disposed(by: view.disposeBag)
+        
+        view.costTableBeginDragging
+            .asObservable()
+            .subscribe(onNext: { _ in
+                self.isScrollByPointTracking = true
+                self.lastPoint = 0
+            }).disposed(by: view.disposeBag)
+        
+        view.costTableEndDragging
+            .asObservable()
+            .subscribe(onNext: { _ in
+                self.isScrollByPointTracking = false
+            }).disposed(by: view.disposeBag)
+        
+        view.tapedCell
+            .asObservable()
+            .subscribe(onNext: { (index) in
+                if let cell = self.view.costTableView.cellForItem(at: index){
+                    self.view.animateSelectedCell(for: cell, dismissAnimation: true)
+                }
+            }).disposed(by: view.disposeBag)
+        
+        view.highlightedCell
+            .asDriver()
+            .drive(onNext: { (index) in
+                if let cell = self.view.costTableView.cellForItem(at: index){
+                    self.view.animateSelectedCell(for: cell, dismissAnimation: false)
+                }
+            }).disposed(by: view.disposeBag)
+        
+        view.unhighlightedCell.asObservable().subscribe(onNext: { (index) in
+            if let cell = self.view.costTableView.cellForItem(at: index){
+                self.view.animateDeselectedCell(for: cell)
+            }
+        }).disposed(by: view.disposeBag)
+        
+    }
+}
+
+//MARK: - View scroll direction recognizer
+extension HistoryPresenter {
+    
+    func scrollViewMoveDirection(){
+        let newPoint = self.view.costTableView.panGestureRecognizer.translation(in: self.view.costTableView.superview).y
+        if self.isScrollByPointTracking {
+            if(newPoint > self.lastPoint)
+            {
+                self.didMoveUp = true
+            }
+            else if ( newPoint < self.lastPoint)
+            {
+                self.didMoveUp = false
+            }
+        } else {
+            if (self.lastVelocity > self.view.costTableView.contentOffset.y) {
+                self.didMoveUp = true
+            } else if (self.lastVelocity < self.view.costTableView.contentOffset.y) {
+                self.didMoveUp = false
+            }
+        }
+        self.lastVelocity = self.view.costTableView.contentOffset.y;
+        self.lastPoint = newPoint
     }
 }
 
