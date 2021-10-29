@@ -22,7 +22,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" indicatorStyle="white" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="X1I-1V-X69">
-                                <rect key="frame" x="8" y="28" width="398" height="708"/>
+                                <rect key="frame" x="8" y="20" width="398" height="716"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="0.0" sectionInsetReference="safeArea" id="Phh-hm-YCP">
                                     <size key="itemSize" width="360" height="56"/>
@@ -102,14 +102,12 @@
                                             <constraint firstAttribute="bottom" secondItem="OYV-Cr-BAh" secondAttribute="bottom" constant="4" id="zzG-zC-YUG"/>
                                         </constraints>
                                         <connections>
-
-                                            <outlet property="pointerImage" destination="p1D-lu-BPG" id="mJv-FM-1qV"/>
-                                            <outlet property="price" destination="srK-MC-qOY" id="72y-mr-xan"/>
                                             <outlet property="costsLogoImageView" destination="OYV-Cr-BAh" id="hiO-bH-MRh"/>
                                             <outlet property="costsTypeLabel" destination="f2m-dc-ZAd" id="tGm-Lo-X0X"/>
                                             <outlet property="dateLabel" destination="Tvn-qv-xPs" id="bkL-a5-e5O"/>
                                             <outlet property="mileageLabel" destination="FwN-vt-yjn" id="9OC-PT-EKI"/>
-
+                                            <outlet property="pointerImage" destination="p1D-lu-BPG" id="mJv-FM-1qV"/>
+                                            <outlet property="price" destination="srK-MC-qOY" id="72y-mr-xan"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -129,7 +127,7 @@
                         <constraints>
                             <constraint firstItem="vb6-4r-Epx" firstAttribute="top" secondItem="NG4-6C-Te9" secondAttribute="bottom" constant="8" id="AGC-qQ-Kif"/>
                             <constraint firstItem="X1I-1V-X69" firstAttribute="leading" secondItem="kgt-o0-aP8" secondAttribute="leading" constant="8" id="ASl-XD-470"/>
-                            <constraint firstItem="X1I-1V-X69" firstAttribute="top" secondItem="EcR-ye-kTk" secondAttribute="bottom" constant="8" id="Q3b-pP-W32"/>
+                            <constraint firstItem="X1I-1V-X69" firstAttribute="top" secondItem="EcR-ye-kTk" secondAttribute="bottom" id="Q3b-pP-W32"/>
                             <constraint firstItem="X1I-1V-X69" firstAttribute="bottom" secondItem="vb6-4r-Epx" secondAttribute="top" id="hIw-ZY-Ok7"/>
                             <constraint firstAttribute="trailingMargin" secondItem="NG4-6C-Te9" secondAttribute="trailing" constant="8" id="ofz-AV-FL4"/>
                             <constraint firstAttribute="trailing" secondItem="X1I-1V-X69" secondAttribute="trailing" constant="8" id="zib-gn-7Bq"/>

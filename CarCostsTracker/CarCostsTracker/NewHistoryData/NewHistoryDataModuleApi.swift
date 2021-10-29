@@ -28,6 +28,7 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     var imgaeTapAction: ControlEvent<UITapGestureRecognizer> { get }
     var disposeBag: DisposeBag { get }
     var getPreviewImageView: UIImageView { get }
+    var dateText: Observable<String> { get }
     
     var selectedCostType: Observable<String> { get }
     var costPrice: Observable<String> { get }
@@ -44,12 +45,13 @@ protocol NewHistoryDataViewApi: UserInterfaceProtocol {
     func updateCostTypeButtonLabel(costType text: String)
     func displayNoImageFound()
     func displayImagePreview()
+    func prepareViewEditMode()
+    func prepareViewAddItemMode()
     
 }
 
 //MARK: - NewHistoryDataPresenter API
 protocol NewHistoryDataPresenterApi: PresenterProtocol {
-    func getImageFromServer()
     func isEditMode()->Bool
     func returnToHistory()
     func viewDidLoad()

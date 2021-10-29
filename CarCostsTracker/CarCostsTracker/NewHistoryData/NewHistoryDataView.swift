@@ -12,7 +12,7 @@ import RxCocoa
 import RxSwift
 import RxOptional
 
-//MARK: NewHistoryDataView Class
+//MARK: NewHistoryDataView Class outlets
 final class NewHistoryDataView: UserInterface {
     
     private weak var acitivityIndicationView: UIView?
@@ -55,7 +55,7 @@ final class NewHistoryDataView: UserInterface {
 }
 
 
-//MARK: Lifecycle
+//MARK: Module Lifecycle
 extension NewHistoryDataView{
     
     override func viewDidLoad() {
@@ -63,12 +63,6 @@ extension NewHistoryDataView{
         setUpDatePicker()
         textFieldLabelsSetUp()
         previewActivityIndicatorSetUp()
-        
-        if presenter.isEditMode(){
-            prepareViewEditMode()
-        } else {
-            prepareViewAddItemMode()
-        }
         
         presenter.viewDidLoad()
     }
@@ -250,6 +244,12 @@ extension NewHistoryDataView: NewHistoryDataViewApi {
         return self.previewImageView
     }
     
+    var dateText: Observable<String>{
+        let dateResult = dateTextField.rx.text
+        let dateResultFiltered = dateResult.filterNil()
+        return dateResultFiltered
+    }
+    
     var datePickerResult: Observable<Date>{
        let date = datePicker.rx.date
         return date.asObservable()
@@ -287,7 +287,7 @@ private extension NewHistoryDataView {
     }
 }
 
-//Binding data to display in View.
+//MARK: - Binding data to display in View.
 extension NewHistoryDataView {
     
     func bind(datasources: Datasource) {
