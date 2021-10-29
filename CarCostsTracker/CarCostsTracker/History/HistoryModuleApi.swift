@@ -25,10 +25,25 @@ protocol HistoryViewApi: UserInterfaceProtocol {
     var selectedCell: ControlEvent<HistoryCellData> { get }
     var createNewEntry: ControlEvent<Void> { get }
     var performLogOut: ControlEvent<Void> { get }
-    func setData(drivableData: Observable<[HistoryCellData]>)
     var showCharts: ControlEvent<Void> { get }
+    
+    var costTableCellWillApear: ControlEvent<(cell:UICollectionViewCell, at:IndexPath)> { get }
+    var costTableDidScroll: ControlEvent<Void> { get }
+    var costTableBeginDragging: ControlEvent<Void> { get }
+    var costTableEndDragging: ControlEvent<Bool> { get }
+    var costTableView: UICollectionView { get }
+    var tapedCell: ControlEvent<IndexPath> { get }
+    var highlightedCell: ControlEvent<IndexPath> { get }
+    var unhighlightedCell: ControlEvent<IndexPath> { get }
+    
+    func animateSelectedCell(for cell: UICollectionViewCell, dismissAnimation: Bool)
+    func animateDeselectedCell(for cell: UICollectionViewCell)
+    func animateCollection(toAppear cell: UICollectionViewCell, index at: IndexPath, cellDelay: Int, didMoveUp: Bool)
+    
+    func setData(drivableData: Observable<[HistoryCellData]>)
     func startActivityIndicator()
     func stopActivityIndicator()
+    func addPulseAnimation() -> Observable<Bool>
 }
 
 //MARK: - HistoryPresenter API

@@ -10,6 +10,8 @@ import UIKit
 import Viperit
 import FirebaseAuth
 import FirebaseUI
+import RxSwift
+import RxCocoa
 
 //MARK: LoginView Class
 final class LoginView: UserInterface {

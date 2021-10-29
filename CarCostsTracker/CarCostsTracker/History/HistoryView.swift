@@ -41,6 +41,7 @@ extension HistoryView: HistoryViewApi {
     func stopActivityIndicator() {
         activityIndicator.removeFromSuperview()
         self.view.isUserInteractionEnabled = true
+        
     }
     
     //Disposebag of this view, bag will be disposed when view will be cleared from memory
@@ -65,13 +66,17 @@ extension HistoryView: HistoryViewApi {
         return chartsButton.rx.tap
     }
     
+    var costTableView: UICollectionView {
+        return costTable
+    }
+    
     //Setting data to a view cell, reciving Observable<[HistoryCellData]
     func setData(drivableData: Observable<[HistoryCellData]>) {
         drivableData.asDriver(onErrorJustReturn: [])
             //.debug("Data driver") // used for debug purpose
             //.drive is same as subscrive bud for drivers that works with UI. Read doc for detailed info about rx.items
             .drive(costTable.rx.items(cellIdentifier: "historyCell", cellType: HistoryCollectionViewCell.self)) {
-                (_, data: HistoryCellData, cell) in
+                (number, data: HistoryCellData, cell) in
                 cell.fill(with: data)
             }.disposed(by: bag)
     }
@@ -88,10 +93,12 @@ extension HistoryView {
     }
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         setUpChartsButton()
         setUpNavigationBar()
         setUpTableInsets(to: self.view.frame.size)
+        
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -105,7 +112,7 @@ extension HistoryView {
 extension HistoryView {
     
     func setUpTableInsets(to frame: CGSize){
-
+        
         let frameWidth = frame.width
         let collectionViewWidth = (self.costTable.collectionViewLayout as! UICollectionViewFlowLayout).itemSize.width
         var insets: CGFloat = (frameWidth - (collectionViewWidth)) * 0.5
@@ -140,6 +147,85 @@ extension HistoryView {
         self.navigationItem.setRightBarButton(addItemButton, animated: true)
         self.navigationItem.setLeftBarButton(logOutButton, animated: true)
         self.navigationItem.leftBarButtonItem?.tintColor = UIColor.red
+    }
+    
+    
+    var tapedCell: ControlEvent<IndexPath>{
+        return costTable.rx.itemSelected
+    }
+    
+    
+    var highlightedCell: ControlEvent<IndexPath>{
+        return costTable.rx.itemHighlighted
+    }
+    
+    var unhighlightedCell: ControlEvent<IndexPath>{
+        return costTable.rx.itemUnhighlighted
+    }
+    
+    var costTableCellWillApear: ControlEvent<(cell:UICollectionViewCell, at:IndexPath)>{
+        return costTable.rx.willDisplayCell
+    }
+    
+    var costTableDidScroll: ControlEvent<Void>{
+        return costTable.rx.didScroll
+    }
+    
+    var costTableBeginDragging: ControlEvent<Void>{
+        return costTable.rx.willBeginDragging
+    }
+    
+    
+    var costTableEndDragging: ControlEvent<Bool>{
+        return costTable.rx.didEndDragging
+    }
+    
+}
+
+
+//MARK: - Animations
+extension HistoryView{
+    
+    func animateSelectedCell(for cell: UICollectionViewCell, dismissAnimation: Bool){
+        UIView.animate(withDuration: 0.2, delay: 0, animations: {
+            cell.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+            cell.layer.cornerRadius = 12
+        }, completion: { _ in
+            if dismissAnimation {
+                self.animateDeselectedCell(for: cell)
+            }
+        })
+    }
+    
+    func animateDeselectedCell(for cell: UICollectionViewCell){
+        UIView.animate(withDuration: 0.2, delay: 0, animations: {
+            cell.backgroundColor = nil
+            cell.layer.cornerRadius = 0
+        })
+    }
+    
+    func animateCollection(toAppear cell: UICollectionViewCell, index at: IndexPath, cellDelay: Int, didMoveUp: Bool){
+        
+        let tableViewHeight = self.costTable.frame.height
+        
+        if didMoveUp {
+            cell.transform = CGAffineTransform(translationX: 0, y: -tableViewHeight)
+        } else {
+            cell.transform = CGAffineTransform(translationX: 0, y: tableViewHeight)
+        }
+        UIView.animate(withDuration: 0.75, delay: Double(cellDelay) * 0.05, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [.curveEaseInOut, .allowUserInteraction], animations: {
+            cell.transform = CGAffineTransform.identity
+        }, completion: nil)
+        
+    }
+    
+    func addPulseAnimation() -> Observable<Bool>{
+        let pulse = Pulsing(numberOfPulses: 1, componentRadius: chartsButton.layer.cornerRadius, radius: chartsButton.layer.cornerRadius+20, position: chartsButton.center, duration: 0.5)
+        pulse.backgroundColor = self.view.tintColor.cgColor
+        
+        self.view.layer.insertSublayer(pulse, below: self.chartsButton.layer)
+        
+        return pulse.isCompleted
     }
     
 }
